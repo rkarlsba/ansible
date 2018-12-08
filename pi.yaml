@@ -7,9 +7,9 @@
     max_clients: 200
   remote_user: root
   tasks:
-  - name: Install sysstat, vim
+  - name: Install sysstat, vim, git, etckeeper
     apt:
-      name: sysstat,vim
+      name: sysstat,vim,git,etckeeper
       update_cache: yes
       state: latest
   - name: Enable sysstat
