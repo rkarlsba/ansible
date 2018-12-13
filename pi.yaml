@@ -7,9 +7,9 @@
     max_clients: 200
   remote_user: root
   tasks:
-  - name: Install sysstat, vim, git, etckeeper
+  - name: Install autoconf,automake,build-essential,etckeeper,git,mlocate,sysstat,tree,ufw,unattended-upgrades,vim
     apt:
-      name: sysstat,vim,git,etckeeper
+      name: autoconf,automake,build-essential,etckeeper,git,mlocate,sysstat,ufw,tree,unattended-upgrades,vim
       update_cache: yes
       state: latest
   - name: Enable sysstat
@@ -24,9 +24,34 @@
       name: sysstat
       state: started
 
-  - name: update bashrc
+  - name: Make sure group roy exists
+    group:
+      name: roy
+      state: present
+      gid: 1999
+
+  - name: Make sure user roy exists
+    user:
+      name: roy
+      comment: Roy Sigurd Karlsbakk
+      uid: 1999
+      group: roy
+
+  - name: update /root/.bashrc
     blockinfile:
       dest: /root/.bashrc
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+
+        set -o vi
+
+  - name: update /home/roy/.bashrc
+    blockinfile:
+      dest: /home/roy/.bashrc
       block: |
         # Ansible was here!!!!
         export LS_OPTIONS='--color=auto'
@@ -62,6 +87,37 @@
   - name: set timezone to Europe/Oslo
     timezone:
       name: Europe/Oslo
+
+  - name: UFW - Allow SSH and HTTP(S)
+    ufw:
+      rule: allow
+      port: '{{ item  }}'
+    with_items:
+      - 22
+      - 80
+      - 443
+      - 8080
+
+# failed: [192.168.1.113] (item=224.0.0.0/4) => {"changed": false, "item": "224.0.0.0/4", "msg": "Unsupported parameters for (ufw) module: dst Supported parameters include: app, comment, default, delete, direction, from_ip, from_port, insert, interface, log, logging, proto, route, rule, state, to_ip, to_port"}
+  - name: UFW - Allow multicast
+    ufw:
+      rule: allow
+      to_ip: '{{ item  }}'
+    with_items:
+      - 224.0.0.0/4
+      - ff00::/8
+
+  - name: UFW - Allow UDP traffic for mosh
+    ufw:
+      rule: allow
+      port: 60000:60049
+      proto: udp
+
+  - name: Enable ufw
+    ufw:
+      state: enabled
+      logging: on
+
   handlers:
     - name: restart sysstat
       service:
