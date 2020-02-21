@@ -40,6 +40,9 @@
   - name: update /root/.bashrc
     blockinfile:
       dest: /root/.bashrc
+      owner: root
+      group: root
+      create: yes
       block: |
         # Ansible was here!!!!
         export LS_OPTIONS='--color=auto'
@@ -48,10 +51,22 @@
         alias l='ls $LS_OPTIONS -l'
 
         set -o vi
+
+  - name: update /root/.vimrc
+    blockinfile:
+      dest: /root/.vimrc
+      owner: root
+      group: root
+      create: yes
+      block: |
+        set modeline
 
   - name: update /home/roy/.bashrc
     blockinfile:
       dest: /home/roy/.bashrc
+      owner: roy
+      group: roy
+      create: yes
       block: |
         # Ansible was here!!!!
         export LS_OPTIONS='--color=auto'
@@ -60,6 +75,39 @@
         alias l='ls $LS_OPTIONS -l'
 
         set -o vi
+
+  - name: update /roy/.vimrc
+    blockinfile:
+      dest: /roy/.vimrc
+      owner: roy
+      group: roy
+      create: yes
+      block: |
+        set modeline
+
+  - name: update /home/pi/.bashrc
+    blockinfile:
+      dest: /home/pi/.bashrc
+      owner: pi
+      group: pi
+      create: yes
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+
+        set -o vi
+
+  - name: update /pi/.vimrc
+    blockinfile:
+      dest: /pi/.vimrc
+      owner: pi
+      group: pi
+      create: yes
+      block: |
+        set modeline
 
   - name: update /etc/vim/vimrc.local
     blockinfile:
@@ -117,6 +165,20 @@
     ufw:
       state: enabled
       logging: on
+
+  - name:
+    git_config:
+      name: user.email
+      repo: /etc
+      scope: local
+      value: roy@karlsbakk.net
+
+  - name:
+    git_config:
+      name: user.name
+      repo: /etc
+      scope: local
+      value: 'Roy Sigurd Karlsbakk'
 
   handlers:
     - name: restart sysstat
