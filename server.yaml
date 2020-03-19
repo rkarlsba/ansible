@@ -1,24 +1,19 @@
 # vim:ts=2:sw=2:sts=2:et:ai
 
-- hosts: kykelipi
+- hosts: servere
   strategy: free
   vars:
     http_port: 80
     max_clients: 200
+
   remote_user: root
   tasks:
-  - name: Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sysstat,tree,ufw,unattended-upgrades,vim
+  - name: Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sysstat,tmux,tree,ufw,unattended-upgrades,vim
     apt:
       name: autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sysstat,ufw,tree,unattended-upgrades,vim
       update_cache: yes
       state: latest
-  - name: Enable sysstat
-    lineinfile:
-      path: /etc/default/sysstat
-      regexp: '^ENABLED='
-      line: 'ENABLED="true"'
-    notify:
-    - restart sysstat
+
   - name: ensure sysstat is running
     service:
       name: sysstat
@@ -54,14 +49,6 @@
       group: roy
       state: directory
 
-  - name: Create ssh dir for pi
-    file:
-      path: /home/pi/.ssh
-      mode: 0700
-      owner: pi
-      group: pi
-      state: directory
-
   - name: Add relevant keys to .ssh/authorized_keys
     blockinfile:
 
@@ -74,7 +61,6 @@
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
     with_items:
     - {path: '/home/roy/.ssh/authorized_keys'}
-    - {path: '/home/pi/.ssh/authorized_keys'}
     - {path: '/root/.ssh/authorized_keys'}
 
   - name: update /root/.bashrc
@@ -102,6 +88,21 @@
       block: |
         set modeline
 
+  - name: update /root/.bashrc
+    blockinfile:
+      dest: /root/.bashrc
+      owner: root
+      group: root
+      create: yes
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+
+        set -o vi
+
   - name: update /home/roy/.bashrc
     blockinfile:
       dest: /home/roy/.bashrc
@@ -117,9 +118,9 @@
 
         set -o vi
 
-  - name: update /roy/.vimrc
+  - name: update /home/roy/.vimrc
     blockinfile:
-      dest: /roy/.vimrc
+      dest: /home/roy/.vimrc
       owner: roy
       group: roy
       create: yes
@@ -127,37 +128,39 @@
       block: |
         set modeline
 
-  - name: update /home/pi/.bashrc
+  - name: update /root/.inputrc
     blockinfile:
-      dest: /home/pi/.bashrc
-      owner: pi
-      group: pi
-      create: yes
-      block: |
-        # Ansible was here!!!!
-        export LS_OPTIONS='--color=auto'
-        eval "`dircolors`"
-        alias ls='ls $LS_OPTIONS'
-        alias l='ls $LS_OPTIONS -l'
-
-        set -o vi
-
-  - name: update /home/{{ item }}/.inputrc
-    blockinfile:
-      dest: /home/{{ item }}/.inputrc
-      owner: "{{ item }}"
-      group: "{{ item }}"
+      dest: /root/.inputrc
+      owner: "root"
+      group: "root"
       create: yes
       block: |
         set editing-mode vi
-    with_items:
-      - pi
 
-  - name: update /pi/.vimrc
+  - name: update /home/roy/.inputrc
     blockinfile:
-      dest: /pi/.vimrc
-      owner: pi
-      group: pi
+      dest: /home/roy/.inputrc
+      owner: "roy"
+      group: "roy"
+      create: yes
+      block: |
+        set editing-mode vi
+
+  - name: update /root/.vimrc
+    blockinfile:
+      dest: /home/root/.vimrc
+      owner: root
+      group: root
+      create: yes
+      marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        set modeline
+
+  - name: update /home/roy/.vimrc
+    blockinfile:
+      dest: /home/roy/.vimrc
+      owner: roy
+      group: roy
       create: yes
       marker: "\" {mark} ANSIBLE MANAGED BLOCK"
       block: |
@@ -172,9 +175,6 @@
         syntax on
         if has("autocmd")
           au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-        endif
-
-        if has("autocmd")
           filetype plugin indent on
         endif
 
@@ -190,36 +190,6 @@
     timezone:
       name: Europe/Oslo
 
-  - name: UFW - Allow SSH and HTTP(S)
-    ufw:
-      rule: allow
-      port: '{{ item  }}'
-    with_items:
-      - 22
-      - 80
-      - 443
-      - 8080
-
-# failed: [192.168.1.113] (item=224.0.0.0/4) => {"changed": false, "item": "224.0.0.0/4", "msg": "Unsupported parameters for (ufw) module: dst Supported parameters include: app, comment, default, delete, direction, from_ip, from_port, insert, interface, log, logging, proto, route, rule, state, to_ip, to_port"}
-  - name: UFW - Allow multicast
-    ufw:
-      rule: allow
-      to_ip: '{{ item  }}'
-    with_items:
-      - 224.0.0.0/4
-      - ff00::/8
-
-  - name: UFW - Allow UDP traffic for mosh
-    ufw:
-      rule: allow
-      port: 60000:60049
-      proto: udp
-
-  - name: Enable ufw
-    ufw:
-      state: enabled
-      logging: on
-
   - name:
     git_config:
       name: user.email
@@ -234,8 +204,3 @@
       scope: local
       value: 'Roy Sigurd Karlsbakk'
 
-  handlers:
-    - name: restart sysstat
-      service:
-        name: sysstat
-        state: restarted
