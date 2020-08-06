@@ -4,13 +4,27 @@
   strategy: free
 
   remote_user: root
+  vars:
+    custom_packages:
+    - autoconf
+    - automake
+    - build-essential
+    - etckeeper
+    - finger
+    - git
+    - mlocate
+    - sudo
+    - sysstat
+    - ufw
+    - tree
+    - unattended-upgrades
+    - vim
   tasks:
-  - name: "Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,tmux,tree,ufw,unattended-upgrades,vim"
+  - name: "Install various packages"
     apt:
-      name: "autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,ufw,tree,unattended-upgrades,vim"
+      name: "{{ custom_packages }}"
       update_cache: yes
       state: latest
-      # Vent litt - skal bare slenge den inn i git først
 
   - name: Enable sysstat
     lineinfile:
