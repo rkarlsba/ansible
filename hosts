@@ -1,7 +1,11 @@
 # vim:ft=dosini
+
 [kykelipi]
 #bluepi
 greenpi
 #redpi
+
 [servere]
-mail.karlsbakk.net
+# mail.karlsbakk.net
+# debian-buster-mal.karlsbakk.net
+cloud.karlsbakk.net

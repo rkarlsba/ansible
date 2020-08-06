@@ -2,35 +2,28 @@
 
 - hosts: servere
   strategy: free
-  vars:
-    http_port: 80
-    max_clients: 200
 
   remote_user: root
   tasks:
-  - name: Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sysstat,tmux,tree,ufw,unattended-upgrades,vim
+  - name: Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,tmux,tree,ufw,unattended-upgrades,vim
     apt:
-      name: autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sysstat,ufw,tree,unattended-upgrades,vim
+      name: autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,ufw,tree,unattended-upgrades,vim
       update_cache: yes
       state: latest
+
+# - name: Fix sudoers
+
+  - name: Enable sysstat
+    lineinfile:
+    # ENABLED="true"
+    path: /etc/default/sysstat
+    regexp: '^ENABLED='
+    line: ENABLED="true"
 
   - name: ensure sysstat is running
     service:
       name: sysstat
       state: started
-
-  - name: Make sure group roy exists
-    group:
-      name: roy
-      state: present
-      gid: 1999
-
-  - name: Make sure user roy exists
-    user:
-      name: roy
-      comment: Roy Sigurd Karlsbakk
-      uid: 1999
-      group: roy
 
 # ssh authorization
   - name: Create ssh dir for root
