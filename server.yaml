@@ -5,11 +5,12 @@
 
   remote_user: root
   tasks:
-  - name: Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,tmux,tree,ufw,unattended-upgrades,vim
+  - name: "Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,tmux,tree,ufw,unattended-upgrades,vim"
     apt:
-      name: autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,ufw,tree,unattended-upgrades,vim
+      name: "autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sudo,sysstat,ufw,tree,unattended-upgrades,vim"
       update_cache: yes
       state: latest
+      # Vent litt - skal bare slenge den inn i git først
 
   - name: Enable sysstat
     lineinfile:
@@ -54,7 +55,10 @@
 
   - name: Add relevant keys to /home/roy/.ssh/authorized_keys
     blockinfile:
-      path: "/home/{{ item.username }}/.ssh/authorized_keys"
+      # ansible har lookup('env','HOME') og om du bruker become så kan du kjøre den for enhver bruker
+      # https://stackoverflow.com/questions/33343215/how-to-get-an-arbitrary-remote-users-home-directory-in-ansible
+      # men kanskje bruke variabler og la ansible bestemme hvordan det skal se ut
+      path: "{{ item.homedir }}/.ssh/authorized_keys"
       create: yes
       owner: "{{ item.username }}"
       group: "{{ item.username }}"
@@ -123,9 +127,9 @@
     with_items:
       - 'roy'
 
-  - name: update /home/{{item}}/.vimrc
+  - name: "update /home/{{ item }}/.vimrc"
     blockinfile:
-      dest: "/home/{{item}}/.vimrc"
+      dest: "/home/{{ item }}/.vimrc"
       owner: "{{ item }}"
       group: "{{ item }}"
       create: yes
