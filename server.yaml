@@ -11,14 +11,11 @@
       update_cache: yes
       state: latest
 
-# - name: Fix sudoers
-
   - name: Enable sysstat
     lineinfile:
-    # ENABLED="true"
-    path: /etc/default/sysstat
-    regexp: '^ENABLED='
-    line: ENABLED="true"
+      path: /etc/default/sysstat
+      regexp: '^ENABLED='
+      line: ENABLED="true"
 
   - name: ensure sysstat is running
     service:
@@ -84,8 +81,6 @@
         alias l='ls $LS_OPTIONS -l'
 
         set -o vi
-      owner: root
-      group: root
 
   - name: update /root/.vimrc
     blockinfile:
@@ -115,8 +110,8 @@
   - name: update .bashrc
     blockinfile:
       dest: /home/"{{ item }}"/.bashrc
-      owner: roy
-      group: roy
+      owner: "{{ item }}"
+      group: "{{ item }}"
       create: yes
       block: |
         # Ansible was here!!!!
@@ -126,8 +121,8 @@
         alias l='ls $LS_OPTIONS -l'
 
         set -o vi
-      owner: "{{ item }}"
-      group: "{{ item }}"
+      with_items:
+        - {name: 'roy'}
 
   - name: update /home/{{item}}/.vimrc
     blockinfile:
@@ -156,14 +151,11 @@
       owner: "{{ item }}"
       group: "{{ item }}"
       create: yes
-      create: yes
       marker: "\" {mark} ANSIBLE MANAGED BLOCK"
       block: |
-        set modeline
+        set editing-mode vi
       with_items:
         - {name: 'roy'}
-      block: |
-        set editing-mode vi
 
   - name: update /root/.vimrc
     blockinfile:
