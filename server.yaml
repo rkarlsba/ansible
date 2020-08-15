@@ -12,6 +12,7 @@
     - etckeeper
     - finger
     - git
+    - locales-all
     - mlocate
     - sudo
     - sysstat
@@ -25,6 +26,11 @@
       name: "{{ custom_packages }}"
       update_cache: yes
       state: latest
+
+  - name: "Set default editor to vim"
+    alternatives:
+      name: editor
+      path: /usr/bin/vim.basic
 
   - name: Enable sysstat
     lineinfile:
@@ -53,6 +59,12 @@
       owner: roy
       group: roy
       state: directory
+
+  - name: "Add roy to sudoers"
+    user:
+      name: "roy"
+      groups: "sudo"
+      append: yes
 
   - name: Add relevant keys to /root/.ssh/authorized_keys
     blockinfile:
@@ -168,7 +180,6 @@
       owner: "{{ item }}"
       group: "{{ item }}"
       create: yes
-      marker: "\" {mark} ANSIBLE MANAGED BLOCK"
       block: |
         set editing-mode vi
     with_items:
