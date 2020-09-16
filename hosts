@@ -1,5 +1,6 @@
 # vim:ft=dosini
 
+
 [kykelipi]
 #bluepi
 greenpi
@@ -7,8 +8,13 @@ greenpi
 
 [servere]
 # mail.karlsbakk.net
-# debian-buster-mal.karlsbakk.net
 # really, it's cloud, just a petname
 # cloud2.karlsbakk.net # really
 # kolab.karlsbakk.net
-debian-bullseye-mal.karlsbakk.net
+grafana.karlsbakk.net
+# Ikke maler her, da!
+# debian-buster-mal.karlsbakk.net
+# debian-bullseye-mal.karlsbakk.net
+
+[servere:vars]
+ansible_python_interpreter=/usr/bin/python3
