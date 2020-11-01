@@ -1,0 +1,249 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: vm-er
+  strategy: free
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: apt-get dist-upgrade
+    apt:
+      update_cache: yes
+      upgrade: dist
+  - name: Install the normal stuff
+    apt:
+      name: apt-transport-https,etckeeper,git,htop,lshw,mlocate,sudo,sysstat,tmux,ufw,vim,zabbix-agent,tshark
+      state: latest
+  - name: Enable sysstat
+    lineinfile:
+      path: /etc/default/sysstat
+      regexp: '^ENABLED='
+      line: 'ENABLED="true"'
+    notify:
+    - restart sysstat
+    - updatedb
+  - name: ensure sysstat is running
+    service:
+      name: sysstat
+      state: started
+# roy {{{
+# - name: Make sure group roy exists
+#   group:
+#     name: roy
+#     state: present
+#     gid: 1999
+#
+# - name: Make sure user roy exists
+#   user:
+#     name: roy
+#     comment: Roy Sigurd Karlsbakk
+#     uid: 1999
+#     group: roy
+# }}}
+  - name: update /root/.bashrc
+    blockinfile:
+      dest: /root/.bashrc
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto -F'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+        alias df='df -x tmpfs -x devtmpfs'
+
+        set -o vi
+
+        [ -f $HOME/.aliases ] && source $HOME/.aliases
+
+  - name: update/create ~/.vimrc
+    blockinfile:
+      dest: /root/.vimrc
+      create: yes
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        set modeline
+        set modelines=5
+        set incsearch
+        set nohlsearch
+        syntax on
+        set background=dark
+        set ruler
+
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        \" ABEL
+        au BufNewFile,BufRead *.gcode setf gcode
+        let g:autoclose_on = 0
+        let g:AutoPairs = {}
+
+  - name: update/create ~/.vimrc
+    blockinfile:
+      dest: /home/roy/.vimrc
+      create: yes
+      owner: roy
+      group: roy
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        set modeline
+        set modelines=5
+        set incsearch
+        set nohlsearch
+        syntax on
+        set background=dark
+        set ruler
+
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        \" ABEL
+        au BufNewFile,BufRead *.gcode setf gcode
+        let g:autoclose_on = 0
+        let g:AutoPairs = {}
+
+  - name: update /home/roy/.bashrc
+    blockinfile:
+      dest: /home/roy/.bashrc
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto -F'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+        alias df='df -x tmpfs -x devtmpfs'
+
+        set -o vi
+
+        [ -f $HOME/.aliases ] && source $HOME/.aliases
+
+  - name: update /etc/vim/vimrc.local
+    blockinfile:
+      dest: /etc/vim/vimrc.local
+      create: yes
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        syntax on
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        set background=dark
+        set incsearch
+        set modeline
+        set foldmethod=marker
+
+        set mouse=
+        set ttymouse=
+
+  - name: set timezone to Europe/Oslo
+    timezone:
+      name: Europe/Oslo
+
+  - name: UFW - Allow SSH
+    ufw:
+      rule: allow
+      port: 22
+      comment: Allow ssh
+
+  - name: UFW - Allow multicast
+    ufw:
+      rule: allow
+      to_ip: '{{ item  }}'
+      comment: Allow multicast to '{{ item }}'
+    with_items:
+      - 224.0.0.0/4
+      - ff00::/8
+
+  - name: UFW - Allow traffic from 192.168.10.0/24
+    ufw:
+      rule: allow
+      from_ip: 192.168.10.0/24
+      comment: Allow IPv4 traffic from local network
+
+  - name: UFW - Allow UDP traffic for mosh
+    ufw:
+      rule: allow
+      port: 60000:60049
+      proto: udp
+      comment: Allow mosh traffic
+
+  - name: UFW - Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)
+    ufw:
+      rule: allow
+      from_ip: 77.40.158.123
+      proto: tcp
+      port: 10050
+      comment: Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)
+
+  - name: UFW - Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)
+    ufw:
+      rule: allow
+      from_ip: 2001:840:4b0b:1000::123
+      proto: tcp
+      port: 10050
+      comment: Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)
+
+  - name: Enable ufw
+    ufw:
+      state: enabled
+      logging: off
+
+  - name: Creates an entry like "PATH=/opt/bin" on top of crontab
+    cron:
+      name: PATH
+      env: yes
+      job: /sbin:/usr/sbin:$PATH
+      state: present
+
+  - name: Crontab for fstrim
+    cron:
+      name: "fstrim for everything supported @ 01:00"
+      minute: "0"
+      hour: "1"
+      job: "fstrim -a"
+      state: present
+
+  - name: Crontab for fstrim
+    cron:
+      name: "fstrim for everything supported @reboot"
+      special_time: reboot
+      job: "fstrim -a"
+      state: present
+
+  - name: Remove ServerActive if present in zabbix agent config
+    lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      regexp: '^ServerActive=.*'
+      state: absent
+    notify:
+    - restart zabbix-agent
+
+  - name: Add smilla to zabbix_agent.conf
+    lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      regexp: '^Server=.*'
+      line: 'Server=77.40.158.123,2001:840:4b0b:1000::123'
+      state: present
+    notify:
+    - restart zabbix-agent
+
+  handlers:
+    - name: restart sysstat
+      service:
+        name: sysstat
+        state: restarted
+
+    - name: restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted
+
+    - name: updatedb
+      command:
+        cmd: /usr/bin/updatedb
