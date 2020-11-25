@@ -39,4 +39,6 @@ ansible_python_interpreter=/usr/bin/python3
 # vpn.karlsbakk.net
 # clam.karlsbakk.net
 # bareos.karlsbakk.net
-haproxy.karlsbakk.net
+# haproxy.karlsbakk.net
+# motion.karlsbakk.net
+restic.karlsbakk.net
