@@ -13,7 +13,21 @@
       upgrade: dist
   - name: Install the normal stuff
     apt:
-      name: apt-transport-https,etckeeper,git,htop,lshw,mlocate,sudo,sysstat,tmux,ufw,vim,zabbix-agent,tshark
+      name:
+        - apt-transport-https
+        - etckeeper
+        - git
+        - htop
+        - locales-all
+        - lshw
+        - mlocate
+        - sudo
+        - sysstat
+        - tmux
+        - tshark
+        - ufw
+        - vim
+        - zabbix-agent
       state: latest
   - name: Enable sysstat
     lineinfile:
@@ -148,7 +162,7 @@
   - name: UFW - Allow SSH
     ufw:
       rule: allow
-      port: 22
+      port: "22"
       comment: Allow ssh
 
   - name: UFW - Allow multicast
@@ -178,7 +192,7 @@
       rule: allow
       from_ip: 77.40.158.123
       proto: tcp
-      port: 10050
+      port: "10050"
       comment: Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)
 
   - name: UFW - Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)
@@ -186,13 +200,13 @@
       rule: allow
       from_ip: 2001:840:4b0b:1000::123
       proto: tcp
-      port: 10050
+      port: "10050"
       comment: Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)
 
   - name: Enable ufw
     ufw:
       state: enabled
-      logging: off
+      logging: "off"
 
   - name: Creates an entry like "PATH=/opt/bin" on top of crontab
     cron:
