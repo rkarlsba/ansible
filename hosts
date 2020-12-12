@@ -1,4 +1,6 @@
 # vim:ft=dosini
+
+
 [kykelipi]
 #bluepi
 #greenpi
@@ -7,4 +9,38 @@
 172.17.16.58
 
 [servere]
-mail.karlsbakk.net
+# mail.karlsbakk.net
+# really, it's cloud, just a petname
+# cloud2.karlsbakk.net # really
+# kolab.karlsbakk.net
+grafana.karlsbakk.net
+# Ikke maler her, da!
+# debian-buster-mal.karlsbakk.net
+# debian-bullseye-mal.karlsbakk.net
+
+[servere:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[vm-er]
+# debian-bullseye-mal
+# debian-buster-mal
+# debian-jessie-mal
+# debian-stretch-mal
+# bcachefs.karlsbakk.net
+# elasticsearch.karlsbakk.net
+# elasticsearch.karlsbakk.net
+# jellyfin.karlsbakk.net
+# jotta.karlsbakk.net
+# openvas.karlsbakk.net
+# plex.karlsbakk.net
+# rclone.karlsbakk.net
+# zabbix-dev2.karlsbakk.net
+# mqtt.karlsbakk.net
+# squid.karlsbakk.net
+# apache.karlsbakk.net
+# vpn.karlsbakk.net
+# clam.karlsbakk.net
+# bareos.karlsbakk.net
+# haproxy.karlsbakk.net
+# motion.karlsbakk.net
+restic.karlsbakk.net

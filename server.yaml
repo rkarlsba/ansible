@@ -2,35 +2,46 @@
 
 - hosts: servere
   strategy: free
-  vars:
-    http_port: 80
-    max_clients: 200
 
   remote_user: root
+  vars:
+    custom_packages:
+    - autoconf
+    - automake
+    - build-essential
+    - etckeeper
+    - finger
+    - git
+    - locales-all
+    - mlocate
+    - sudo
+    - sysstat
+    - ufw
+    - tree
+    - unattended-upgrades
+    - vim
   tasks:
-  - name: Install autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sysstat,tmux,tree,ufw,unattended-upgrades,vim
+  - name: "Install various packages"
     apt:
-      name: autoconf,automake,build-essential,etckeeper,finger,git,mlocate,sysstat,ufw,tree,unattended-upgrades,vim
+      name: "{{ custom_packages }}"
       update_cache: yes
       state: latest
+
+  - name: "Set default editor to vim"
+    alternatives:
+      name: editor
+      path: /usr/bin/vim.basic
+
+  - name: Enable sysstat
+    lineinfile:
+      path: /etc/default/sysstat
+      regexp: '^ENABLED='
+      line: ENABLED="true"
 
   - name: ensure sysstat is running
     service:
       name: sysstat
       state: started
-
-  - name: Make sure group roy exists
-    group:
-      name: roy
-      state: present
-      gid: 1999
-
-  - name: Make sure user roy exists
-    user:
-      name: roy
-      comment: Roy Sigurd Karlsbakk
-      uid: 1999
-      group: roy
 
 # ssh authorization
   - name: Create ssh dir for root
@@ -49,19 +60,41 @@
       group: roy
       state: directory
 
-  - name: Add relevant keys to .ssh/authorized_keys
+  - name: "Add roy to sudoers"
+    user:
+      name: "roy"
+      groups: "sudo"
+      append: yes
+
+  - name: Add relevant keys to /root/.ssh/authorized_keys
     blockinfile:
 
-      path: "{{ item.path }}"
+      path: "/root/.ssh/authorized_keys"
       create: yes
       block: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@hioa.no
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqbzUA7TXuzcYjHnWEA5uWOJfLAUqzTQnDi9HATYeg5xTNoUZ53gkUS2vUK1mpHDWUM7twXiVN9PFKuQHDVC7t2A3xCzi3RVRoLJhOpV3pSGtYRLClWP5SoAzgE0G6kOtRyWjzUKoEm6kL4sOSCHfIloXnrU1+9PbB0bBCdMTA0XBSMYwxvt5HbWJp3T3cqsjdz9OVihZ21thvEHLRSDkcEUcSBpyuxiCpi3xX4hNd5Ek4KgnbktyqqPsTYHIxaBA0wCaRODyqInFmgqGjCtvDOB/IXl1KXHhxngWHuUd1O+Q+OXizVcICsaNLjEDc46XEwTAFT5KfjRWG+Vty1iiX root@smilla.karlsbakk.net
         ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
+      owner: root
+      group: root
+
+  - name: Add relevant keys to /home/roy/.ssh/authorized_keys
+    blockinfile:
+      # ansible har lookup('env','HOME') og om du bruker become så kan du kjøre den for enhver bruker
+      # https://stackoverflow.com/questions/33343215/how-to-get-an-arbitrary-remote-users-home-directory-in-ansible
+      # men kanskje bruke variabler og la ansible bestemme hvordan det skal se ut
+      path: "{{ item.homedir }}/.ssh/authorized_keys"
+      create: yes
+      owner: "{{ item.username }}"
+      group: "{{ item.username }}"
+      block: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@hioa.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqbzUA7TXuzcYjHnWEA5uWOJfLAUqzTQnDi9HATYeg5xTNoUZ53gkUS2vUK1mpHDWUM7twXiVN9PFKuQHDVC7t2A3xCzi3RVRoLJhOpV3pSGtYRLClWP5SoAzgE0G6kOtRyWjzUKoEm6kL4sOSCHfIloXnrU1+9PbB0bBCdMTA0XBSMYwxvt5HbWJp3T3cqsjdz9OVihZ21thvEHLRSDkcEUcSBpyuxiCpi3xX4hNd5Ek4KgnbktyqqPsTYHIxaBA0wCaRODyqInFmgqGjCtvDOB/IXl1KXHhxngWHuUd1O+Q+OXizVcICsaNLjEDc46XEwTAFT5KfjRWG+Vty1iiX root@smilla.karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
     with_items:
-    - {path: '/home/roy/.ssh/authorized_keys'}
-    - {path: '/root/.ssh/authorized_keys'}
+      - { username: 'roy', homedir: '/home/roy' }
 
   - name: update /root/.bashrc
     blockinfile:
@@ -103,11 +136,11 @@
 
         set -o vi
 
-  - name: update /home/roy/.bashrc
+  - name: update .bashrc
     blockinfile:
-      dest: /home/roy/.bashrc
-      owner: roy
-      group: roy
+      dest: "/home/{{ item }}/.bashrc"
+      owner: "{{ item }}"
+      group: "{{ item }}"
       create: yes
       block: |
         # Ansible was here!!!!
@@ -117,16 +150,20 @@
         alias l='ls $LS_OPTIONS -l'
 
         set -o vi
+    with_items:
+      - 'roy'
 
-  - name: update /home/roy/.vimrc
+  - name: "update /home/{{ item }}/.vimrc"
     blockinfile:
-      dest: /home/roy/.vimrc
-      owner: roy
-      group: roy
+      dest: "/home/{{ item }}/.vimrc"
+      owner: "{{ item }}"
+      group: "{{ item }}"
       create: yes
       marker: "\" {mark} ANSIBLE MANAGED BLOCK"
       block: |
         set modeline
+    with_items:
+      - 'roy'
 
   - name: update /root/.inputrc
     blockinfile:
@@ -137,14 +174,16 @@
       block: |
         set editing-mode vi
 
-  - name: update /home/roy/.inputrc
+  - name: update /home/{{ item }}/.inputrc
     blockinfile:
-      dest: /home/roy/.inputrc
-      owner: "roy"
-      group: "roy"
+      dest: "/home/{{ item }}/.inputrc"
+      owner: "{{ item }}"
+      group: "{{ item }}"
       create: yes
       block: |
         set editing-mode vi
+    with_items:
+      - 'roy'
 
   - name: update /root/.vimrc
     blockinfile:
