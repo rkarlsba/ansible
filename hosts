@@ -1,7 +1,10 @@
 # vim:ft=dosini
 [kykelipi]
 #bluepi
-greenpi
+#greenpi
 #redpi
+#yellowpi
+172.17.16.58
+
 [servere]
 mail.karlsbakk.net
