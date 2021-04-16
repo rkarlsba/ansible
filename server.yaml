@@ -69,6 +69,12 @@
       group: root
       state: directory
 
+  - name: Ensure group 'roy' exists with correct gid
+    ansible.builtin.group:
+      name: roy
+      state: present
+      gid: 1000
+
   - name: Add the user 'roy' with a specific uid and a primary group of 'roy'
     ansible.builtin.user:
       name: roy
