@@ -79,7 +79,7 @@
     ansible.builtin.user:
       name: roy
       group: roy
-      groups: ssh,admin
+      groups: ssh,adm
       comment: Roy Sigurd Karlsbakk
       uid: 1000
       generate_ssh_key: yes
