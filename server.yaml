@@ -27,12 +27,15 @@
     - vim
     - zabbix-agent
   tasks:
+  - name: "Do an apt full-upgrade"
+    apt:
+      update_cache: yes
+
   - name: "Install various packages"
     apt:
       name: "{{ custom_packages }}"
       update_cache: yes
-#     state: latest
-      upgrade: full
+      state: latest
 
   - name: Tell zabbix_agent about our server passive server
     lineinfile:
@@ -65,6 +68,15 @@
       owner: root
       group: root
       state: directory
+
+  - name: Add the user 'roy' with a specific uid and a primary group of 'roy'
+    ansible.builtin.user:
+      name: roy
+      group: roy
+      groups: ssh,admin
+      comment: Roy Sigurd Karlsbakk
+      uid: 1000
+      generate_ssh_key: yes
 
   - name: Create ssh dir for roy
     file:
