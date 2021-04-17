@@ -29,3 +29,6 @@ ansible_python_interpreter=/usr/bin/python3
 # haproxy.karlsbakk.net
 # motion.karlsbakk.net
 # restic.karlsbakk.net
+
+[kopano]
+kopano.karlsbakk.net
