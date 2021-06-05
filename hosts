@@ -20,25 +20,26 @@ grafana.karlsbakk.net
 ansible_python_interpreter=/usr/bin/python3
 
 [vm-er]
+# apache.karlsbakk.net
+# bareos.karlsbakk.net
+# bcachefs.karlsbakk.net
+bitwarden.karlsbakk.net
+# clam.karlsbakk.net
 # debian-bullseye-mal
 # debian-buster-mal
 # debian-jessie-mal
 # debian-stretch-mal
-# bcachefs.karlsbakk.net
 # elasticsearch.karlsbakk.net
 # elasticsearch.karlsbakk.net
+# haproxy.karlsbakk.net
 # jellyfin.karlsbakk.net
 # jotta.karlsbakk.net
+# motion.karlsbakk.net
+# mqtt.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
 # rclone.karlsbakk.net
-# zabbix-dev2.karlsbakk.net
-# mqtt.karlsbakk.net
+# restic.karlsbakk.net
 # squid.karlsbakk.net
-# apache.karlsbakk.net
 # vpn.karlsbakk.net
-# clam.karlsbakk.net
-# bareos.karlsbakk.net
-# haproxy.karlsbakk.net
-# motion.karlsbakk.net
-restic.karlsbakk.net
+# zabbix-dev2.karlsbakk.net
