@@ -14,7 +14,7 @@ kopano.karlsbakk.net
 [servere:vars]
 ansible_python_interpreter=/usr/bin/python3
 
-[vm-er]
+[vmer]
 # debian-bullseye-mal
 # debian-buster-mal
 # jellyfin.karlsbakk.net
@@ -32,3 +32,11 @@ ansible_python_interpreter=/usr/bin/python3
 
 [kopano]
 kopano.karlsbakk.net
+
+[restic]
+# apache.karlsbakk.net
+# plex.karlsbakk.net
+# mqtt.karlsbakk.net
+# smtp.karlsbakk.net
+# postgresql.karlsbakk.net
+mariadb.karlsbakk.net
