@@ -1,6 +1,5 @@
 # vim:ft=dosini
 
-
 [kykelipi]
 #bluepi
 #greenpi
@@ -14,30 +13,9 @@ kopano.karlsbakk.net
 [servere:vars]
 ansible_python_interpreter=/usr/bin/python3
 
-[vm-er]
-# apache.karlsbakk.net
-# bareos.karlsbakk.net
-# bcachefs.karlsbakk.net
-bitwarden.karlsbakk.net
-# clam.karlsbakk.net
+[vmer]
 # debian-bullseye-mal
 # debian-buster-mal
-# debian-jessie-mal
-# debian-stretch-mal
-# elasticsearch.karlsbakk.net
-# elasticsearch.karlsbakk.net
-# haproxy.karlsbakk.net
-# jellyfin.karlsbakk.net
-# jotta.karlsbakk.net
-# motion.karlsbakk.net
-# mqtt.karlsbakk.net
-# openvas.karlsbakk.net
-# plex.karlsbakk.net
-# rclone.karlsbakk.net
-# restic.karlsbakk.net
-# squid.karlsbakk.net
-# vpn.karlsbakk.net
-# zabbix-dev2.karlsbakk.net
 # jellyfin.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
@@ -53,3 +31,16 @@ bitwarden.karlsbakk.net
 
 [kopano]
 kopano.karlsbakk.net
+
+[restic]
+# apache.karlsbakk.net
+# mariadb.karlsbakk.net
+# plex.karlsbakk.net
+# postgresql.karlsbakk.net
+# smilla.karlsbakk.net
+# smtp.karlsbakk.net
+# irc.karlsbakk.net
+# mqtt.karlsbakk.net
+# ns2.karlsbakk.net
+# zimbra.karlsbakk.net
+hjemmehjelp.karlsbakk.net
