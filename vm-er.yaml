@@ -55,6 +55,14 @@
 #     uid: 1999
 #     group: roy
 # }}}
+  - name: update /root/.tmux.conf
+    blockinfile:
+      dest: /root/.tmux.conf
+      block: |
+        set -g prefix C-a
+        unbind-key C-b
+        bind-key C-a send-prefix
+        setw -g mode-keys vi
   - name: update /root/.bashrc
     blockinfile:
       dest: /root/.bashrc

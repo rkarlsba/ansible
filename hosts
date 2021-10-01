@@ -3,18 +3,13 @@
 
 [kykelipi]
 #bluepi
-greenpi
+#greenpi
 #redpi
+#yellowpi
 
 [servere]
-# mail.karlsbakk.net
-# really, it's cloud, just a petname
-# cloud2.karlsbakk.net # really
-# kolab.karlsbakk.net
-grafana.karlsbakk.net
-# Ikke maler her, da!
-# debian-buster-mal.karlsbakk.net
-# debian-bullseye-mal.karlsbakk.net
+# zimbra.karlsbakk.net
+kopano.karlsbakk.net
 
 [servere:vars]
 ansible_python_interpreter=/usr/bin/python3
@@ -43,3 +38,18 @@ bitwarden.karlsbakk.net
 # squid.karlsbakk.net
 # vpn.karlsbakk.net
 # zabbix-dev2.karlsbakk.net
+# jellyfin.karlsbakk.net
+# openvas.karlsbakk.net
+# plex.karlsbakk.net
+# rclone.karlsbakk.net
+# mqtt.karlsbakk.net
+## squid.karlsbakk.net
+# apache.karlsbakk.net
+## vpn.karlsbakk.net
+## clam.karlsbakk.net
+# haproxy.karlsbakk.net
+# motion.karlsbakk.net
+# restic.karlsbakk.net
+
+[kopano]
+kopano.karlsbakk.net
