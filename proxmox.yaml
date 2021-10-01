@@ -1,0 +1,309 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: proxmox
+  strategy: free
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: apt-get dist-upgrade
+    apt:
+      update_cache: yes
+      upgrade: dist
+  - name: Install the normal stuff
+    apt:
+      name:
+        - apt-transport-https
+        - etckeeper
+        - git
+        - htop
+        - locales-all
+        - lshw
+        - mlocate
+        - sudo
+        - sysstat
+        - tmux
+        - tshark
+        - ufw
+        - vim
+        - zabbix-agent
+      state: latest
+  - name: Enable sysstat
+    lineinfile:
+      path: /etc/default/sysstat
+      regexp: '^ENABLED='
+      line: 'ENABLED="true"'
+    notify:
+    - restart sysstat
+    - updatedb
+  - name: ensure sysstat is running
+    service:
+      name: sysstat
+      state: started
+# roy {{{
+# - name: Make sure group roy exists
+#   group:
+#     name: roy
+#     state: present
+#     gid: 1999
+#
+# - name: Make sure user roy exists
+#   user:
+#     name: roy
+#     comment: Roy Sigurd Karlsbakk
+#     uid: 1999
+#     group: roy
+# }}}
+  - name: update /root/.bashrc
+    blockinfile:
+      dest: /root/.bashrc
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto -F'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+        alias df='df -x tmpfs -x devtmpfs'
+
+        set -o vi
+        export EDITOR='vi'
+
+        [ -f $HOME/.aliases ] && source $HOME/.aliases
+
+  - name: Add relevant keys to .ssh/authorized_keys
+    blockinfile:
+      path: "{{ item.path }}"
+      create: yes
+      block: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@hioa.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqbzUA7TXuzcYjHnWEA5uWOJfLAUqzTQnDi9HATYeg5xTNoUZ53gkUS2vUK1mpHDWUM7twXiVN9PFKuQHDVC7t2A3xCzi3RVRoLJhOpV3pSGtYRLClWP5SoAzgE0G6kOtRyWjzUKoEm6kL4sOSCHfIloXnrU1+9PbB0bBCdMTA0XBSMYwxvt5HbWJp3T3cqsjdz9OVihZ21thvEHLRSDkcEUcSBpyuxiCpi3xX4hNd5Ek4KgnbktyqqPsTYHIxaBA0wCaRODyqInFmgqGjCtvDOB/IXl1KXHhxngWHuUd1O+Q+OXizVcICsaNLjEDc46XEwTAFT5KfjRWG+Vty1iiX root@smilla.karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
+    with_items:
+    - {path: '/root/.ssh/authorized_keys'}
+# FIXME De under slås sammen
+  - name: update/create ~/.vimrc
+    blockinfile:
+      dest: /root/.vimrc
+      create: yes
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        set modeline
+        set modelines=5
+        set incsearch
+        set nohlsearch
+        syntax on
+        set background=dark
+        set ruler
+
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        \" ABEL
+        au BufNewFile,BufRead *.gcode setf gcode
+        let g:autoclose_on = 0
+        let g:AutoPairs = {}
+
+  - name: update/create ~/.vimrc
+    blockinfile:
+      dest: /home/roy/.vimrc
+      create: yes
+      owner: roy
+      group: roy
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        set modeline
+        set modelines=5
+        set incsearch
+        set nohlsearch
+        syntax on
+        set background=dark
+        set ruler
+
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        \" ABEL
+        au BufNewFile,BufRead *.gcode setf gcode
+        let g:autoclose_on = 0
+        let g:AutoPairs = {}
+
+  - name: update /home/roy/.bashrc
+    blockinfile:
+      dest: /home/roy/.bashrc
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto -F'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+        alias df='df -x tmpfs -x devtmpfs'
+
+        set -o vi
+
+        [ -f $HOME/.aliases ] && source $HOME/.aliases
+
+  - name: update /etc/vim/vimrc.local
+    blockinfile:
+      dest: /etc/vim/vimrc.local
+      create: yes
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        syntax on
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        set background=dark
+        set incsearch
+        set modeline
+        set foldmethod=marker
+
+        set mouse=
+        set ttymouse=
+
+  - name: set timezone to Europe/Oslo
+    timezone:
+      name: Europe/Oslo
+
+  - name: UFW - Allow SSH
+    ufw:
+      rule: allow
+      port: "22"
+      comment: Allow ssh
+
+  - name: UFW - Allow multicast
+    ufw:
+      rule: allow
+      to_ip: '{{ item  }}'
+      comment: Allow multicast to '{{ item }}'
+    with_items:
+      - 224.0.0.0/4
+      - ff00::/8
+
+  - name: UFW - Allow traffic from 192.168.10.0/24
+    ufw:
+      rule: allow
+      from_ip: 192.168.10.0/24
+      comment: Allow IPv4 traffic from local network
+
+  - name: UFW - Allow UDP traffic for mosh
+    ufw:
+      rule: allow
+      port: 60000:60049
+      proto: udp
+      comment: Allow mosh traffic
+
+  - name: UFW - Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)
+    ufw:
+      rule: allow
+      from_ip: 77.40.158.123
+      proto: tcp
+      port: "10050"
+      comment: Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)
+
+  - name: UFW - Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)
+    ufw:
+      rule: allow
+      from_ip: 2001:840:4b0b:1000::123
+      proto: tcp
+      port: "10050"
+      comment: Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)
+
+  - name: Enable ufw
+    ufw:
+      state: enabled
+      logging: "off"
+
+  - name: Creates an entry like "PATH=/opt/bin" on top of crontab
+    cron:
+      name: PATH
+      env: yes
+      job: /sbin:/usr/sbin:$PATH
+      state: present
+
+  - name: Crontab for fstrim
+    cron:
+      name: "fstrim for everything supported @ 01:00"
+      minute: "0"
+      hour: "1"
+      job: "fstrim -a"
+      state: present
+
+  - name: Crontab for fstrim
+    cron:
+      name: "fstrim for everything supported @reboot"
+      special_time: reboot
+      job: "fstrim -a"
+      state: present
+
+  - name: Remove ServerActive if present in zabbix agent config
+    lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      regexp: '^ServerActive=.*'
+      state: absent
+    notify:
+    - restart zabbix-agent
+
+  - name: Add smilla to zabbix_agent.conf
+    lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      regexp: '^Server=.*'
+      line: 'Server=77.40.158.123,2001:840:4b0b:1000::123'
+      state: present
+    notify:
+    - restart zabbix-agent
+
+  # Proxmox-greiene er ikke ferdig - se https://pve.proxmox.com/wiki/Install_Proxmox_VE_on_Debian_Buster
+  - name: Proxmox repo
+    lineinfile:
+      path: /etc/apt/sources.list.d/pve-install-repo.list
+      line: 'deb http://download.proxmox.com/debian/pve buster pve-no-subscription'
+      create: yes
+
+  - name: Update APT
+    apt:
+      update_cache: yes
+      upgrade: dist
+
+  - name: Install ProxMox
+    apt:
+      name:
+        - apt-transport-https
+        - etckeeper
+        - git
+        - htop
+        - locales-all
+        - lshw
+        - mlocate
+        - sudo
+        - sysstat
+        - tmux
+        - tshark
+        - ufw
+        - vim
+        - zabbix-agent
+      state: latest
+
+
+  handlers:
+    - name: restart sysstat
+      service:
+        name: sysstat
+        state: restarted
+
+    - name: restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted
+
+    - name: updatedb
+      command:
+        cmd: /usr/bin/updatedb
+
