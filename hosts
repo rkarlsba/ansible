@@ -1,6 +1,5 @@
 # vim:ft=dosini
 
-
 [kykelipi]
 #bluepi
 #greenpi
@@ -39,4 +38,13 @@ kopano.karlsbakk.net
 # mqtt.karlsbakk.net
 # smtp.karlsbakk.net
 # postgresql.karlsbakk.net
-mariadb.karlsbakk.net
+# mariadb.karlsbakk.net
+# plex.karlsbakk.net
+# postgresql.karlsbakk.net
+# smilla.karlsbakk.net
+# smtp.karlsbakk.net
+# irc.karlsbakk.net
+# mqtt.karlsbakk.net
+# ns2.karlsbakk.net
+# zimbra.karlsbakk.net
+# hjemmehjelp.karlsbakk.net
