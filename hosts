@@ -20,14 +20,20 @@ ansible_python_interpreter=/usr/bin/python3
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
 # rclone.karlsbakk.net
-# mqtt.karlsbakk.net
 ## squid.karlsbakk.net
-# apache.karlsbakk.net
 ## vpn.karlsbakk.net
 ## clam.karlsbakk.net
 # haproxy.karlsbakk.net
-# motion.karlsbakk.net
-# restic.karlsbakk.net
+# els1.karlsbakk.net
+postgresql.karlsbakk.net
+mqtt.karlsbakk.net
+rtorrent.karlsbakk.net
+apache.karlsbakk.net
+mariadb.karlsbakk.net
+smtp.karlsbakk.net
+motion.karlsbakk.net
+restic.karlsbakk.net
+grafana.karlsbakk.net
 
 [kopano]
 kopano.karlsbakk.net
@@ -43,4 +49,4 @@ kopano.karlsbakk.net
 # mqtt.karlsbakk.net
 # ns2.karlsbakk.net
 # zimbra.karlsbakk.net
-hjemmehjelp.karlsbakk.net
+# hjemmehjelp.karlsbakk.net

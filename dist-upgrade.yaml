@@ -1,0 +1,14 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: vmer
+  strategy: free
+  remote_user: root
+  tasks:
+  - name: apt-get dist-upgrade
+    apt:
+      update_cache: yes
+      upgrade: dist
+
+  - name: Reboot
+    reboot:
+      reboot_timeout: 60

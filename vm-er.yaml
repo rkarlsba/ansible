@@ -1,18 +1,18 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: vm-er
+- hosts: vmer
   strategy: free
   vars:
     http_port: 80
     max_clients: 200
   remote_user: root
   tasks:
-  - name: apt-get dist-upgrade
-    apt:
+  - name: apt-get full-upgrade
+    ansible.builtin.apt:
       update_cache: yes
-      upgrade: dist
+      upgrade: full
   - name: Install the normal stuff
-    apt:
+    ansible.builtin.apt:
       name:
         - apt-transport-https
         - etckeeper
@@ -48,13 +48,11 @@
 #     state: present
 #     gid: 1999
 #
-# - name: Make sure user roy exists
-#   user:
-#     name: roy
-#     comment: Roy Sigurd Karlsbakk
-#     uid: 1999
-#     group: roy
 # }}}
+  - name: Make sure roy is member of sudo
+    user:
+      name: roy
+      group: sudo
   - name: update /root/.tmux.conf
     blockinfile:
       dest: /root/.tmux.conf
@@ -63,6 +61,7 @@
         unbind-key C-b
         bind-key C-a send-prefix
         setw -g mode-keys vi
+      create: yes
   - name: update /root/.bashrc
     blockinfile:
       dest: /root/.bashrc
