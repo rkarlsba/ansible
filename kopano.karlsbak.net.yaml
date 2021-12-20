@@ -6,8 +6,18 @@
   remote_user: root
   vars:
     kopano_packages:
+    - kopano-backup
+    - kopano-dagent
+    - kopano-gateway
+    - kopano-ical
+    - kopano-monitor
+    - kopano-search
     - kopano-server
+    - kopano-spamd
+    - kopano-spooler
+    - kopano-utils
     - kopano-webapp-nginx
+    - python3-certbot-nginx
   tasks:
   - name: "Do an apt full-upgrade"
     apt:
