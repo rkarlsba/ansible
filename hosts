@@ -22,15 +22,21 @@ ceph04.karlsbakk.net
 # clam.karlsbakk.net
 # debian-bullseye-mal
 # debian-buster-mal
+# els1.karlsbakk.net
+# grafana.karlsbakk.net
 # haproxy.karlsbakk.net
 # jellyfin.karlsbakk.net
+# mariadb.karlsbakk.net
 # matrix.karlsbakk.net
 # motion.karlsbakk.net
 # mqtt.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
+# postgresql.karlsbakk.net
 # rclone.karlsbakk.net
 # restic.karlsbakk.net
+# rtorrent.karlsbakk.net
+# smtp.karlsbakk.net
 # squid.karlsbakk.net
 # vpn.karlsbakk.net
 
