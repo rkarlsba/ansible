@@ -14,20 +14,25 @@ kopano.karlsbakk.net
 ansible_python_interpreter=/usr/bin/python3
 
 [vmer]
+# apache.karlsbakk.net
+ceph01.karlsbakk.net
+ceph02.karlsbakk.net
+ceph03.karlsbakk.net
+ceph04.karlsbakk.net
+# clam.karlsbakk.net
 # debian-bullseye-mal
 # debian-buster-mal
+# haproxy.karlsbakk.net
 # jellyfin.karlsbakk.net
+# matrix.karlsbakk.net
+# motion.karlsbakk.net
+# mqtt.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
 # rclone.karlsbakk.net
-# mqtt.karlsbakk.net
-## squid.karlsbakk.net
-# apache.karlsbakk.net
-## vpn.karlsbakk.net
-## clam.karlsbakk.net
-# haproxy.karlsbakk.net
-# motion.karlsbakk.net
 # restic.karlsbakk.net
+# squid.karlsbakk.net
+# vpn.karlsbakk.net
 
 [kopano]
 kopano.karlsbakk.net

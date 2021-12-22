@@ -63,6 +63,7 @@
         unbind-key C-b
         bind-key C-a send-prefix
         setw -g mode-keys vi
+      create: yes
   - name: update /root/.bashrc
     blockinfile:
       dest: /root/.bashrc
