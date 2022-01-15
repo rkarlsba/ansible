@@ -1,0 +1,21 @@
+
+  - name: update /home/pi/.bashrc
+    blockinfile:
+      dest: /home/pi/.bashrc
+      owner: pi
+      group: pi
+      create: yes
+      block: |
+        # Ansible was here!!!!
+        set editing-mode vi
+    with_items:
+      - pi
+
+  - name: update /home/pi/.inputrc
+    blockinfile:
+      dest: /home/{{ item  }}/.inputrc
+      owner: {{ item  }}
+      group: {{ item  }}
+      create: yes
+      block: |
+        set modeline

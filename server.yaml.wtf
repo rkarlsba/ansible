@@ -1,0 +1,232 @@
+# vim:ts=2:sw=2:sts=2:et:ai
+
+- hosts: servere
+  strategy: free
+
+  remote_user: root
+  vars:
+    custom_packages:
+    - apt-transport-https
+    - autoconf
+    - automake
+    - build-essential
+    - etckeeper
+    - finger
+    - git
+    - htop
+    - locales-all
+    - lshw
+    - mlocate
+    - sudo
+    - sysstat
+    - tmux
+    - tree
+    - tshark
+    - ufw
+    - unattended-upgrades
+    - vim
+    - zabbix-agent
+  tasks:
+  - name: "Install various packages"
+    apt:
+      name: "{{ custom_packages }}"
+      update_cache: yes
+#     state: latest
+      upgrade: full
+
+  - name: Tell zabbix_agent about our server passive server
+    lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      regexp: '^Server='
+      line: 'Server=zabbix.karlsbakk.net'
+
+  - name: Tell zabbix_agent about our server active server
+    lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      regexp: '^ServerActive='
+      line: 'ServerActive=zabbix.karlsbakk.net'
+
+  - name: Enable sysstat
+    lineinfile:
+      path: /etc/default/sysstat
+      regexp: '^ENABLED='
+      line: ENABLED="true"
+
+  - name: ensure sysstat is running
+    service:
+      name: sysstat
+      state: started
+
+# ssh authorization
+  - name: Create ssh dir for root
+    file:
+      path: /root/.ssh
+      mode: 0700
+      owner: root
+      group: root
+      state: directory
+
+  - name: Create ssh dir for roy
+    file:
+      path: /home/roy/.ssh
+      mode: 0700
+      owner: roy
+      group: roy
+      state: directory
+
+  - name: "Add roy to sudoers"
+    user:
+      name: roy
+      groups: sudo
+      append: yes
+
+  - name: Add relevant keys to /root/.ssh/authorized_keys
+    blockinfile:
+
+      path: "/root/.ssh/authorized_keys"
+      create: yes
+      block: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@oslomet.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
+      owner: root
+      group: root
+
+  - name: Add relevant keys to /home/roy/.ssh/authorized_keys
+    blockinfile:
+      # ansible har lookup('env','HOME') og om du bruker become så kan du kjøre den for enhver bruker
+      # https://stackoverflow.com/questions/33343215/how-to-get-an-arbitrary-remote-users-home-directory-in-ansible
+      # men kanskje bruke variabler og la ansible bestemme hvordan det skal se ut
+      path: "/home/roy/.ssh/authorized_keys"
+      create: yes
+      owner: roy
+      group: roy
+      block: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@oslomet.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
+
+  - name: update /root/.vimrc
+    blockinfile:
+      dest: /root/.vimrc
+      owner: root
+      group: root
+      create: yes
+      marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        syntax on
+        set background=dark
+        set incsearch
+        set modeline
+				set modelines=5
+        set nohlsearch
+        set ruler
+
+				if has("autocmd")
+					au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+					filetype plugin indent on
+				endif
+
+				" ABEL
+				au BufNewFile,BufRead *.gcode setf gcode
+				let g:autoclose_on = 0
+				let g:AutoPairs = {}
+
+  - name: update /root/.bashrc
+    blockinfile:
+      dest: /root/.bashrc
+      owner: root
+      group: root
+      create: yes
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+
+        export EDITOR='vim'
+        set -o vi
+
+  - name: update .bashrc
+    blockinfile:
+      dest: "/home/roy/.bashrc"
+      owner: roy
+      group: roy
+      create: yes
+      block: |
+        export LS_OPTIONS='--color=auto'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+
+        export EDITOR='vim'
+        set -o vi
+
+  - name: "update /home/roy/.vimrc"
+    blockinfile:
+      dest: "/home/roy/.vimrc"
+      owner: roy
+      group: roy
+      create: yes
+      marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        syntax on
+        set modeline
+        set background=dark
+        set incsearch
+        set nohlsearch
+        set ruler
+        set mouse=
+        set ttymouse=
+
+  - name: update /root/.inputrc
+    blockinfile:
+      dest: /root/.inputrc
+      owner: root
+      group: root
+      create: yes
+      block: |
+        set editing-mode vi
+
+  - name: update /home/roy/.inputrc
+    blockinfile:
+      dest: "/home/roy/.inputrc"
+      owner: roy
+      group: roy
+      create: yes
+      block: |
+        set editing-mode vi
+
+  - name: update /root/.vimrc
+    blockinfile:
+      dest: /home/root/.vimrc
+      owner: root
+      group: root
+      create: yes
+      marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        syntax on
+        set modeline
+        set background=dark
+        set incsearch
+        set foldmethod=marker
+        set mouse=
+        set ttymouse=
+
+  - name: set timezone to Europe/Oslo
+    timezone:
+      name: Europe/Oslo
+
+  - name:
+    git_config:
+      name: user.email
+      repo: /etc
+      scope: local
+      value: roy@karlsbakk.net
+
+  - name:
+    git_config:
+      name: user.name
+      repo: /etc
+      scope: local
+      value: 'Roy Sigurd Karlsbakk'
+
