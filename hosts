@@ -25,12 +25,13 @@ ansible_python_interpreter=/usr/bin/python3
 ## clam.karlsbakk.net
 # haproxy.karlsbakk.net
 # els1.karlsbakk.net
+
+#mqtt.karlsbakk.net
+#smtp.karlsbakk.net
 postgresql.karlsbakk.net
-mqtt.karlsbakk.net
 rtorrent.karlsbakk.net
 apache.karlsbakk.net
 mariadb.karlsbakk.net
-smtp.karlsbakk.net
 motion.karlsbakk.net
 restic.karlsbakk.net
 grafana.karlsbakk.net

@@ -5,10 +5,10 @@
   remote_user: root
   tasks:
   - name: apt-get dist-upgrade
-    apt:
+    ansible.builtin.apt:
       update_cache: yes
       upgrade: dist
 
   - name: Reboot
-    reboot:
+    ansible.builtin.reboot:
       reboot_timeout: 60
