@@ -14,20 +14,38 @@ kopano.karlsbakk.net
 ansible_python_interpreter=/usr/bin/python3
 
 [vmer]
+# apache.karlsbakk.net
+# ceph01.karlsbakk.net
+# ceph02.karlsbakk.net
+# ceph03.karlsbakk.net
+# ceph04.karlsbakk.net
+# clam.karlsbakk.net
+# clam.karlsbakk.net
 # debian-bullseye-mal
 # debian-buster-mal
+# els1.karlsbakk.net
+# els1.karlsbakk.net
+# grafana.karlsbakk.net
+# haproxy.karlsbakk.net
+# haproxy.karlsbakk.net
 # jellyfin.karlsbakk.net
+# mariadb.karlsbakk.net
+# matrix.karlsbakk.net
+# motion.karlsbakk.net
+# mqtt.karlsbakk.net
+# mqtt.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
+# postgresql.karlsbakk.net
 # rclone.karlsbakk.net
-## squid.karlsbakk.net
-## vpn.karlsbakk.net
-## clam.karlsbakk.net
-# haproxy.karlsbakk.net
-# els1.karlsbakk.net
-
-#mqtt.karlsbakk.net
-#smtp.karlsbakk.net
+# restic.karlsbakk.net
+# rtorrent.karlsbakk.net
+# smtp.karlsbakk.net
+# smtp.karlsbakk.net
+# squid.karlsbakk.net
+# squid.karlsbakk.net
+# vpn.karlsbakk.net
+# vpn.karlsbakk.net
 postgresql.karlsbakk.net
 rtorrent.karlsbakk.net
 apache.karlsbakk.net
@@ -40,18 +58,17 @@ grafana.karlsbakk.net
 kopano.karlsbakk.net
 
 [restic]
-# apache.karlsbakk.net
-# plex.karlsbakk.net
-# mqtt.karlsbakk.net
-# smtp.karlsbakk.net
-# postgresql.karlsbakk.net
-# mariadb.karlsbakk.net
-# plex.karlsbakk.net
-# postgresql.karlsbakk.net
-# smilla.karlsbakk.net
-# smtp.karlsbakk.net
-# irc.karlsbakk.net
-# mqtt.karlsbakk.net
-# ns2.karlsbakk.net
-# zimbra.karlsbakk.net
-# hjemmehjelp.karlsbakk.net
+apache.karlsbakk.net
+plex.karlsbakk.net
+mqtt.karlsbakk.net
+smtp.karlsbakk.net
+postgresql.karlsbakk.net
+mariadb.karlsbakk.net
+plex.karlsbakk.net
+postgresql.karlsbakk.net
+smtp.karlsbakk.net
+irc.karlsbakk.net
+mqtt.karlsbakk.net
+ns2.karlsbakk.net
+#zimbra.karlsbakk.net
+hjemmehjelp.karlsbakk.net

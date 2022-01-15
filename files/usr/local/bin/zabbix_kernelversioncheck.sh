@@ -1,0 +1,1 @@
+/Users/roy/src/git/rkarlsba/ymse/zabbix/plugins/check-kernel-updates/zabbix_kernelversioncheck.sh
