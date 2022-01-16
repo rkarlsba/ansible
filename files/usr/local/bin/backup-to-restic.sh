@@ -1,1 +1,1 @@
-/Users/roy/src/git/rkarlsba/privat/roy/restic/backup-to-restic.sh
+../../../../../privat/roy/restic/backup-to-restic.sh

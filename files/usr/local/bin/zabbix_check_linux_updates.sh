@@ -1,1 +1,1 @@
-/Users/roy/src/git/rkarlsba/ymse/zabbix/plugins/check-linux-updates/linux/zabbix_check_linux_updates.sh
+../../../../../ymse/zabbix/plugins/check-linux-updates/linux/zabbix_check_linux_updates.sh

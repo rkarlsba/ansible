@@ -1,1 +1,1 @@
-/Users/roy/src/git/rkarlsba/ymse/zabbix/plugins/check-fs-read-only/zabbix_checkro.pl
+../../../../../ymse/zabbix/plugins/check-fs-read-only/zabbix_checkro.pl

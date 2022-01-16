@@ -58,17 +58,17 @@ grafana.karlsbakk.net
 kopano.karlsbakk.net
 
 [restic]
-apache.karlsbakk.net
-plex.karlsbakk.net
+# apache.karlsbakk.net
+# plex.karlsbakk.net
 mqtt.karlsbakk.net
-smtp.karlsbakk.net
-postgresql.karlsbakk.net
-mariadb.karlsbakk.net
-plex.karlsbakk.net
-postgresql.karlsbakk.net
-smtp.karlsbakk.net
-irc.karlsbakk.net
-mqtt.karlsbakk.net
-ns2.karlsbakk.net
-#zimbra.karlsbakk.net
-hjemmehjelp.karlsbakk.net
+# smtp.karlsbakk.net
+# postgresql.karlsbakk.net
+# mariadb.karlsbakk.net
+# plex.karlsbakk.net
+# postgresql.karlsbakk.net
+# smtp.karlsbakk.net
+# irc.karlsbakk.net
+# mqtt.karlsbakk.net
+# ns2.karlsbakk.net
+# #zimbra.karlsbakk.net
+# hjemmehjelp.karlsbakk.net

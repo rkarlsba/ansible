@@ -1,1 +1,1 @@
-/Users/roy/src/git/rkarlsba/ymse/zabbix/plugins/check-linux-distro/zabbix_linux_distro_check.pl
+../../../../../ymse/zabbix/plugins/check-linux-distro/zabbix_linux_distro_check.pl

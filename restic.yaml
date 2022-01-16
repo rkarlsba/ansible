@@ -68,3 +68,13 @@
       hour: "1"
       job: "/usr/local/bin/backup-to-restic.sh"
       state: present
+
+  - name: Add cleanup/rotation to restic-backup-post-exec.sh
+    ansible.builtin.blockinfile:
+      path: /usr/local/bin/restic-backup-post-exec.sh
+      create: yes
+      block: |
+        export RESTIC_REPOSITORY="sftp:restic:restic-repo"
+        export RESTIC_PASSWORD_FILE="/usr/local/etc/restic-password.txt"
+
+        restic forget --keep-daily 14 --keep-weekly 5 --keep-monthly 12 --keep-yearly 1 --prune
