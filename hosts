@@ -13,6 +13,11 @@ kopano.karlsbakk.net
 [servere:vars]
 ansible_python_interpreter=/usr/bin/python3
 
+[gluster]
+gluster01.karlsbakk.net
+gluster02.karlsbakk.net
+gluster03.karlsbakk.net
+
 [vmer]
 # apache.karlsbakk.net
 # ceph01.karlsbakk.net
@@ -24,9 +29,12 @@ ansible_python_interpreter=/usr/bin/python3
 # debian-bullseye-mal
 # debian-buster-mal
 # els1.karlsbakk.net
+# gluster01.karlsbakk.net
+# gluster02.karlsbakk.net
+# gluster03.karlsbakk.net
 # grafana.karlsbakk.net
 # haproxy.karlsbakk.net
-ipa.karlsbakk.net
+# ipa.karlsbakk.net
 # jellyfin.karlsbakk.net
 # mariadb.karlsbakk.net
 # matrix.karlsbakk.net

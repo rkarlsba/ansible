@@ -10,8 +10,8 @@
   - name: apt-get full-upgrade
     ansible.builtin.apt:
       update_cache: yes
-      autoremove: yes
       upgrade: dist
+      autoremove: yes
   - name: Install the normal stuff
     ansible.builtin.apt:
       name:

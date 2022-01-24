@@ -1,0 +1,16 @@
+- hosts: gluster
+  tasks:
+  - name: apt-get full-upgrade
+    ansible.builtin.apt:
+      update_cache: yes
+      upgrade: dist
+      autoremove: yes
+  - name: Install gluster server stuff
+    ansible.builtin.apt:
+      name:
+        - glusterfs-server
+  - name: Enable and start glusterd
+    ansible.builtin.systemd:
+      name: glusterd
+      state: started
+      enabled: yes
