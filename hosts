@@ -49,6 +49,7 @@ gluster03.karlsbakk.net
 # smtp.karlsbakk.net
 # squid.karlsbakk.net
 # vpn.karlsbakk.net
+wg.karlsbakk.net
 
 [kopano]
 kopano.karlsbakk.net
