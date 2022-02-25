@@ -10,6 +10,10 @@
 # zimbra.karlsbakk.net
 mail.karlsbakk.net
 
+[ubuntu-servere]
+# ubuntu-focal-mal.karlsbakk.net
+ubuntu-jammy-mal.karlsbakk.net
+
 [servere:vars]
 ansible_python_interpreter=/usr/bin/python3
 
