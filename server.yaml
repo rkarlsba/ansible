@@ -46,15 +46,23 @@
         let g:autoclose_on = 0
         let g:AutoPairs = {}
   tasks:
-  - name: "Do an apt full-upgrade"
+  - name: "Do an apt dist-upgrade"
     apt:
       update_cache: yes
+      upgrade: dist
 
   - name: "Install various packages"
     apt:
       name: "{{ custom_packages }}"
       update_cache: yes
       state: latest
+
+# - name: "Configure unattended upgrades"
+#   lineinfile:
+#     path: 
+#       search_string: '//      "origin=Debian,codename=${distro_codename}-updates"'
+#       #regex: '^ *//  *"origin=Debian,codename=\${distro_codename}-updates"'
+#       line: "        \"origin=Debian,codename=${distro_codename}-updates\""
 
   - name: Tell zabbix_agent about our server passive server
     lineinfile:

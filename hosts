@@ -8,7 +8,7 @@
 
 [servere]
 # zimbra.karlsbakk.net
-kopano.karlsbakk.net
+mail.karlsbakk.net
 
 [servere:vars]
 ansible_python_interpreter=/usr/bin/python3
