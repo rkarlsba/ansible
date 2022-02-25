@@ -57,12 +57,30 @@
       update_cache: yes
       state: latest
 
-# - name: "Configure unattended upgrades"
-#   lineinfile:
-#     path: 
-#       search_string: '//      "origin=Debian,codename=${distro_codename}-updates"'
-#       #regex: '^ *//  *"origin=Debian,codename=\${distro_codename}-updates"'
-#       line: "        \"origin=Debian,codename=${distro_codename}-updates\""
+  - name: "Enable unattended upgrades for everything except 'proposed'"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'origin=Debian,codename=\${distro_codename}-updates'
+      line: "        \"origin=Debian,codename=${distro_codename}-updates\";"
+
+  - name: "Set email address for unattended upgrades report"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'Unattended-Upgrade::Mail'
+      line: 'Unattended-Upgrade::Mail "roy@karlsbakk.net";'
+
+  - name: "Turn on unattended upgrades"
+    ansible.builtin.blockinfile:
+      path: "/etc/apt/apt.conf.d/20auto-upgrades"
+      create: yes
+      marker: "// {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        // Actually enable unattended upgrades
+        APT::Periodic::Update-Package-Lists "1";
+        APT::Periodic::Unattended-Upgrade "1";
+
+  - name: "Set editor"
+    command: update-alternatives --set editor /usr/bin/vim.basic
 
   - name: Tell zabbix_agent about our server passive server
     lineinfile:
@@ -127,7 +145,6 @@
 
   - name: Add relevant keys to /root/.ssh/authorized_keys
     ansible.builtin.blockinfile:
-
       path: "/root/.ssh/authorized_keys"
       create: yes
       block: |
