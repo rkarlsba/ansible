@@ -8,7 +8,8 @@
 
 [servere]
 # zimbra.karlsbakk.net
-mail.karlsbakk.net
+# mail.karlsbakk.net
+imapsync.karlsbakk.net
 
 [ubuntu-servere]
 # ubuntu-focal-mal.karlsbakk.net

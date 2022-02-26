@@ -66,8 +66,14 @@
   - name: "Set email address for unattended upgrades report"
     lineinfile:
       path: /etc/apt/apt.conf.d/50unattended-upgrades
-      regex: 'Unattended-Upgrade::Mail'
+      regex: 'Unattended-Upgrade::Mail '
       line: 'Unattended-Upgrade::Mail "roy@karlsbakk.net";'
+
+  - name: "Set when to report upgrades"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'Unattended-Upgrade::MailReport '
+      line: 'Unattended-Upgrade::MailReport "only-on-error";'
 
   - name: "Turn on unattended upgrades"
     ansible.builtin.blockinfile:
