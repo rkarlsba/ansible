@@ -1,0 +1,25 @@
+# vim:ts=2:sw=2:sts=2:et:ai
+
+- hosts: homeassistant
+  strategy: free
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: Install the normal stuff
+    apt:
+      name:
+        - dummy
+      update_cache: yes
+      state: latest
+# - name: UFW - Allow SSH and HTTP(S)
+#   ufw:
+#     rule: allow
+#     port: '{{ item.port  }}'
+#     comment: '{{ item.comment  }}'
+#   with_items:
+#     - { port: "22", comment: "Allow SSH" }
+#     - { port: "80", comment: "Allow HTTP" }
+#     - { port: "443", comment: "Allow HTTPS" }
+

@@ -4,6 +4,9 @@
 #francesco.karlsbakk.net
 irc.karlsbakk.net
 
+[homeassistant]
+192.168.10.221 piname=homearse
+
 [kykelipi]
 #bluepi
 #greenpi
