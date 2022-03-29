@@ -218,8 +218,6 @@
     timezone:
       name: Europe/Oslo
 
-# FIXME
-# Legge til kommentar per port - 8080 skal vel ut?
   - name: UFW - Allow SSH and HTTP(S)
     ufw:
       rule: allow

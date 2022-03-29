@@ -4,6 +4,20 @@
   strategy: free
   remote_user: root
   tasks:
+  - name: Install needed stuff for homeassistant
+    ansible.builtin.apt:
+      name:
+        - python3-venv
+        - python3-pip
+      update_cache: yes
+      state: latest
+  - name: UFW - Allow port 8123
+    ufw:
+      rule: allow
+      port: '{{ item.port  }}'
+      comment: '{{ item.comment  }}'
+    with_items:
+      - { port: "8123", comment: "Allow Homeassistant" }
   - name: Make sure group homeassistant exists
     ansible.builtin.group:
       name: homeassistant
@@ -22,12 +36,23 @@
       owner: homeassistant
       group: homeassistant
       state: directory
-# - name: Install the normal stuff
-#   ansible.builtin.apt:
-#     name:
-#       - dummy
-#     update_cache: yes
-#     state: latest
+  - name: Create homeassistant tmp dir
+    file:
+      path: /home/homeassistant/tmp
+      mode: 0750
+      owner: homeassistant
+      group: homeassistant
+      state: directory
+  - name: Create homeassistant install script
+    ansible.builtin.copy:
+      src: files/home/homeassistant/tmp/ha-install.sh
+      dest: /home/homeassistant/tmp/ha-install.sh
+      owner: homeassistant
+      group: homeassistant
+      mode: 0750
+  - name: Install homeassistant
+    ansible.builtin.command: sudo -u homeassistant -H -s /home/homeassistant/tmp/ha-install.sh
+
 # - name: UFW - Allow SSH and HTTP(S)
 #   ufw:
 #     rule: allow
