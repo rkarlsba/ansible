@@ -2,17 +2,32 @@
 
 - hosts: homeassistant
   strategy: free
-  vars:
-    http_port: 80
-    max_clients: 200
   remote_user: root
   tasks:
-  - name: Install the normal stuff
-    apt:
-      name:
-        - dummy
-      update_cache: yes
-      state: latest
+  - name: Make sure group homeassistant exists
+    ansible.builtin.group:
+      name: homeassistant
+      state: present
+  - name: Make sure user homeassistant exists
+    ansible.builtin.user:
+      name: homeassistant
+      state: present
+      comment: "Home Assistant system user"
+      group: homeassistant
+      groups: dialout,gpio,i2c
+  - name: Create homeassistant system dir
+    file:
+      path: /home/homeassistant/.homeassistant
+      mode: 0750
+      owner: homeassistant
+      group: homeassistant
+      state: directory
+# - name: Install the normal stuff
+#   ansible.builtin.apt:
+#     name:
+#       - dummy
+#     update_cache: yes
+#     state: latest
 # - name: UFW - Allow SSH and HTTP(S)
 #   ufw:
 #     rule: allow
