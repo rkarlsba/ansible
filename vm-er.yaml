@@ -236,7 +236,7 @@
       job: /sbin:/usr/sbin:$PATH
       state: present
 
-  - name: Crontab for fstrim
+  - name: Crontab for fstrim - daily
     cron:
       name: "fstrim for everything supported @ 01:00"
       minute: "0"
@@ -244,7 +244,7 @@
       job: "fstrim -a"
       state: present
 
-  - name: Crontab for fstrim
+  - name: Crontab for fstrim at bootup
     cron:
       name: "fstrim for everything supported @reboot"
       special_time: reboot

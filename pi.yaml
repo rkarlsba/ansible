@@ -18,7 +18,7 @@
   - name: Log everything to smilla
     lineinfile:
       dest: /etc/rsyslog.d/01-smilla.conf
-      line: "*.*       @2a01:79c:cebf:61e4:1::1"
+      line: "*.*       @[2a01:79c:cebf:61e4:1::1]"
       create: yes
   - name: Install the normal stuff
     apt:
@@ -32,6 +32,7 @@
         - locales-all
         - mlocate
         - sysstat
+        - tmux
         - tree
         - ufw
         - unattended-upgrades
@@ -222,27 +223,29 @@
   - name: UFW - Allow SSH and HTTP(S)
     ufw:
       rule: allow
-      port: '{{ item  }}'
+      port: '{{ item.port  }}'
+      comment: '{{ item.comment  }}'
     with_items:
-      - 22
-      - 80
-      - 443
-      - 8080
+      - { port: "22", comment: "Allow SSH" }
+      - { port: "80", comment: "Allow HTTP" }
+      - { port: "443", comment: "Allow HTTPS" }
 
 # failed: [192.168.1.113] (item=224.0.0.0/4) => {"changed": false, "item": "224.0.0.0/4", "msg": "Unsupported parameters for (ufw) module: dst Supported parameters include: app, comment, default, delete, direction, from_ip, from_port, insert, interface, log, logging, proto, route, rule, state, to_ip, to_port"}
   - name: UFW - Allow multicast
     ufw:
       rule: allow
-      to_ip: '{{ item  }}'
+      to_ip: '{{ item.address  }}'
+      comment: '{{ item.comment  }}'
     with_items:
-      - 224.0.0.0/4
-      - ff00::/8
+      - { address: "224.0.0.0/4", comment: "Allow IPv4 multicast" }
+      - { address: "ff00::/8", comment: "Allow IPv6 multicast" }
 
   - name: UFW - Allow UDP traffic for mosh
     ufw:
       rule: allow
       port: 60000:60049
       proto: udp
+      comment: "Allow Mosh ports"
 
   - name: Enable ufw
     ufw:
@@ -262,6 +265,21 @@
       repo: /etc
       scope: local
       value: 'Roy Sigurd Karlsbakk'
+
+  - name: Crontab for daily fstrim
+    cron:
+      name: "fstrim for everything supported @ 01:00"
+      minute: "0"
+      hour: "1"
+      job: "fstrim -a"
+      state: present
+
+  - name: Crontab for fstrim at bootup
+    cron:
+      name: "fstrim for everything supported @ reboot"
+      special_time: reboot
+      job: "fstrim -a"
+      state: present
 
   handlers:
     - name: restart sysstat
