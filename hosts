@@ -1,15 +1,21 @@
 # vim:ft=dosini
 
+[fail2ban]
+#francesco.karlsbakk.net
+irc.karlsbakk.net
+
 [kykelipi]
 #bluepi
 #greenpi
 #redpi
 #yellowpi
+192.168.10.221 piname=homearse
 
 [servere]
 # zimbra.karlsbakk.net
 # mail.karlsbakk.net
-imapsync.karlsbakk.net
+# imapsync.karlsbakk.net
+beef.karlsbakk.net
 
 [ubuntu-servere]
 # ubuntu-focal-mal.karlsbakk.net
@@ -23,8 +29,12 @@ gluster01.karlsbakk.net
 gluster02.karlsbakk.net
 gluster03.karlsbakk.net
 
+[trengeroppdatering]
+beef.karlsbakk.net
+
 [vmer]
-# apache.karlsbakk.net
+apache.karlsbakk.net
+beef.karlsbakk.net
 # ceph01.karlsbakk.net
 # ceph02.karlsbakk.net
 # ceph03.karlsbakk.net
@@ -37,21 +47,24 @@ gluster03.karlsbakk.net
 # gluster01.karlsbakk.net
 # gluster02.karlsbakk.net
 # gluster03.karlsbakk.net
-# grafana.karlsbakk.net
+grafana.karlsbakk.net
 # haproxy.karlsbakk.net
+imapsync.karlsbakk.net
 # ipa.karlsbakk.net
 # jellyfin.karlsbakk.net
-# mariadb.karlsbakk.net
+macidtest.karlsbakk.net
+mariadb.karlsbakk.net
 # matrix.karlsbakk.net
-# motion.karlsbakk.net
-# mqtt.karlsbakk.net
+motion.karlsbakk.net
+mqtt.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
-# postgresql.karlsbakk.net
+postgresql.karlsbakk.net
+pox.karlsbakk.net
 # rclone.karlsbakk.net
-# restic.karlsbakk.net
-# rtorrent.karlsbakk.net
-# smtp.karlsbakk.net
+restic.karlsbakk.net
+rtorrent.karlsbakk.net
+smtp.karlsbakk.net
 # squid.karlsbakk.net
 # vpn.karlsbakk.net
 wg.karlsbakk.net

@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai
 
-- hosts: servere
+- hosts: trengeroppdatering
   strategy: free
 
   remote_user: root

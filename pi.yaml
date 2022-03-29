@@ -7,6 +7,19 @@
     max_clients: 200
   remote_user: root
   tasks:
+  - name: Set hostname
+    hostname:
+      name: "{{ piname }}"
+  - name: Replace old hostname from /etc/hosts with the real hostname
+    lineinfile:
+      dest: /etc/hosts
+      regexp: "127.0.1.1.*"
+      line: "127.0.1.1  {{ piname }}"
+  - name: Log everything to smilla
+    lineinfile:
+      dest: /etc/rsyslog.d/01-smilla.conf
+      line: "*.*       @2a01:79c:cebf:61e4:1::1"
+      create: yes
   - name: Install the normal stuff
     apt:
       name:
