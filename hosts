@@ -5,14 +5,14 @@
 irc.karlsbakk.net
 
 [homeassistant]
-192.168.10.221 piname=homearse
+192.168.10.249 piname=homearse
 
 [kykelipi]
 #bluepi
 #greenpi
 #redpi
 #yellowpi
-192.168.10.221 piname=homearse
+192.168.10.249 piname=homearse
 
 [servere]
 # zimbra.karlsbakk.net

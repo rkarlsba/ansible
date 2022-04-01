@@ -218,19 +218,20 @@
     timezone:
       name: Europe/Oslo
 
-  - name: UFW - Allow SSH and HTTP(S)
-    ufw:
+  - name: UFW - Allow some ports
+    community.general.ufw:
       rule: allow
-      port: '{{ item.port  }}'
-      comment: '{{ item.comment  }}'
+      port: '{{ item.port }}'
+      comment: '{{ item.comment }}'
+      proto: '{{item.proto }}'
     with_items:
-      - { port: "22", comment: "Allow SSH" }
-      - { port: "80", comment: "Allow HTTP" }
-      - { port: "443", comment: "Allow HTTPS" }
+      - { port: "22", proto: "tcp", comment: "Allow SSH" }
+      - { port: "80", proto: "tcp", comment: "Allow HTTP" }
+      - { port: "443", proto: "tcp", comment: "Allow HTTPS" }
+      - { port: "60000:60049", proto: "udp", comment: "Allow Mosh ports" }
 
-# failed: [192.168.1.113] (item=224.0.0.0/4) => {"changed": false, "item": "224.0.0.0/4", "msg": "Unsupported parameters for (ufw) module: dst Supported parameters include: app, comment, default, delete, direction, from_ip, from_port, insert, interface, log, logging, proto, route, rule, state, to_ip, to_port"}
   - name: UFW - Allow multicast
-    ufw:
+    community.general.ufw:
       rule: allow
       to_ip: '{{ item.address  }}'
       comment: '{{ item.comment  }}'
@@ -238,15 +239,28 @@
       - { address: "224.0.0.0/4", comment: "Allow IPv4 multicast" }
       - { address: "ff00::/8", comment: "Allow IPv6 multicast" }
 
-  - name: UFW - Allow UDP traffic for mosh
-    ufw:
+  - name: UFW - Allow localnet
+    community.general.ufw:
       rule: allow
-      port: 60000:60049
-      proto: udp
-      comment: "Allow Mosh ports"
+      from_ip: '{{ item.address  }}'
+      comment: '{{ item.comment  }}'
+    with_items:
+      - { address: "192.168.10.0/24", comment: "Allow all from local IPv4" }
+      - { address: "2a01:79c:cebf:61e4::/62", comment: "Allow all from local IPv6" }
+
+  - name: UFW - Allow some specifics
+    community.general.ufw:
+      rule: allow
+      from_ip: '{{ item.address  }}'
+      to_port: '{{ item.port }}'
+      proto: '{{ item.proto }}'
+      comment: '{{ item.comment  }}'
+    with_items:
+      - { address: '77.40.158.123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix (IPv4)" }
+      - { address: '2001:8c0:9302:4::123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix (IPv6)" }
 
   - name: Enable ufw
-    ufw:
+    community.general.ufw:
       state: enabled
       logging: on
 
