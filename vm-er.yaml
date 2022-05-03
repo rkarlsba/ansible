@@ -16,17 +16,20 @@
     ansible.builtin.apt:
       name:
         - apt-transport-https
+        - bc
         - etckeeper
         - git
         - htop
         - locales-all
         - lshw
         - mlocate
+        - pasteinit
         - sudo
         - sysstat
         - tmux
         - tshark
         - ufw
+        - uptimed
         - vim
         - zabbix-agent
       state: latest
@@ -270,13 +273,16 @@
 
   handlers:
     - name: restart sysstat
+      ansible.builtin.systemd:
       service:
         name: sysstat
+        enabled: yes
         state: restarted
 
     - name: restart zabbix-agent
       service:
         name: zabbix-agent
+        enabled: yes
         state: restarted
 
     - name: updatedb
