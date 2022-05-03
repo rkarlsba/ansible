@@ -1,4 +1,4 @@
-# vim:ts=2:sw=2:sts=2:et:ai
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
 - hosts: kykelipi
   strategy: free
@@ -52,18 +52,28 @@
       name: sysstat
       state: started
 
-  - name: Make sure group roy exists
-    group:
-      name: roy
-      state: present
-      gid: 1999
-
-  - name: Make sure user roy exists
-    user:
-      name: roy
-      comment: Roy Sigurd Karlsbakk
-      uid: 1999
-      group: roy
+# Han derre roy {{{
+# - name: Make sure group roy exists
+#   group:
+#     name: roy
+#     state: present
+#     gid: 1999
+#
+# - name: Make sure user roy exists
+#   user:
+#     name: roy
+#     comment: Roy Sigurd Karlsbakk
+#     uid: 1999
+#     group: roy
+##
+# - name: Create ssh dir for roy
+#   file:
+#     path: /home/roy/.ssh
+#     mode: 0700
+#     owner: roy
+#     group: roy
+#     state: directory
+# }}}
 
 # ssh authorization
   - name: Create ssh dir for root
@@ -73,22 +83,6 @@
       owner: root
       group: root
       state: directory
-
-  - name: Create ssh dir for roy
-    file:
-      path: /home/roy/.ssh
-      mode: 0700
-      owner: roy
-      group: roy
-      state: directory
-
-# - name: Create ssh dir for pi
-#   file:
-#     path: /home/pi/.ssh
-#     mode: 0700
-#     owner: pi
-#     group: pi
-#     state: directory
 
   - name: Add relevant keys to .ssh/authorized_keys
     blockinfile:
@@ -102,7 +96,6 @@
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
     with_items:
     - {path: '/home/roy/.ssh/authorized_keys'}
-#   - {path: '/home/pi/.ssh/authorized_keys'}
     - {path: '/root/.ssh/authorized_keys'}
 
   - name: update /root/.bashrc
@@ -155,21 +148,6 @@
       block: |
         set modeline
 
-# - name: update /home/pi/.bashrc
-#   blockinfile:
-#     dest: /home/pi/.bashrc
-#     owner: pi
-#     group: pi
-#     create: yes
-#     block: |
-#       # Ansible was here!!!!
-#       export LS_OPTIONS='--color=auto'
-#       eval "`dircolors`"
-#       alias ls='ls $LS_OPTIONS'
-#       alias l='ls $LS_OPTIONS -l'
-#
-#       set -o vi
-
   - name: update /home/{{ item }}/.inputrc
     blockinfile:
       dest: /home/{{ item }}/.inputrc
@@ -180,16 +158,6 @@
         set editing-mode vi
     with_items:
       - roy
-
-# - name: update /home/pi/.vimrc
-#   blockinfile:
-#     dest: /home/pi/.vimrc
-#     owner: pi
-#     group: pi
-#     create: yes
-#     marker: "\" {mark} ANSIBLE MANAGED BLOCK"
-#     block: |
-#       set modeline
 
   - name: update /etc/vim/vimrc.local
     blockinfile:
