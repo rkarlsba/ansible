@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: vmer
+- hosts: trengeroppdatering
   strategy: free
   vars:
     http_port: 80
@@ -16,12 +16,14 @@
     ansible.builtin.apt:
       name:
         - apt-transport-https
+        - bc
         - etckeeper
         - git
         - htop
         - locales-all
         - lshw
         - mlocate
+        - pasteinit
         - sudo
         - sysstat
         - tmux
@@ -237,7 +239,7 @@
       job: /sbin:/usr/sbin:$PATH
       state: present
 
-  - name: Crontab for fstrim
+  - name: Crontab for fstrim - daily
     cron:
       name: "fstrim for everything supported @ 01:00"
       minute: "0"
@@ -245,7 +247,7 @@
       job: "fstrim -a"
       state: present
 
-  - name: Crontab for fstrim
+  - name: Crontab for fstrim at bootup
     cron:
       name: "fstrim for everything supported @reboot"
       special_time: reboot
@@ -271,13 +273,16 @@
 
   handlers:
     - name: restart sysstat
+      ansible.builtin.systemd:
       service:
         name: sysstat
+        enabled: yes
         state: restarted
 
     - name: restart zabbix-agent
       service:
         name: zabbix-agent
+        enabled: yes
         state: restarted
 
     - name: updatedb

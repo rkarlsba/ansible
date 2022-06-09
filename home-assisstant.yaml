@@ -1,0 +1,80 @@
+# vim:ts=2:sw=2:sts=2:et:ai
+
+- hosts: homeassistant
+  strategy: free
+  remote_user: root
+  tasks:
+  - name: Install needed stuff for homeassistant
+    ansible.builtin.apt:
+      name:
+        - python3-venv
+        - python3-pip
+        - gpiod
+      update_cache: yes
+      state: latest
+  - name: UFW - Allow port 8123
+    ansible.builtin.ufw:
+      rule: allow
+      port: '{{ item.port  }}'
+      comment: '{{ item.comment  }}'
+    with_items:
+      - { port: "8123", comment: "Allow Homeassistant" }
+  - name: Make sure group homeassistant exists
+    ansible.builtin.group:
+      name: homeassistant
+      state: present
+  - name: Make sure user homeassistant exists
+    ansible.builtin.user:
+      name: homeassistant
+      state: present
+      comment: "Home Assistant system user"
+      group: homeassistant
+      groups: dialout,gpio,i2c
+  - name: Create homeassistant system dir
+    ansible.builtin.file:
+      path: /home/homeassistant/.homeassistant
+      mode: 0750
+      owner: homeassistant
+      group: homeassistant
+      state: directory
+  - name: Create homeassistant tmp dir
+    ansible.builtin.file:
+      path: /home/homeassistant/tmp
+      mode: 0750
+      owner: homeassistant
+      group: homeassistant
+      state: directory
+  - name: Create homeassistant install script
+    ansible.builtin.copy:
+      src: files/home/homeassistant/tmp/ha-install.sh
+      dest: /home/homeassistant/tmp/ha-install.sh
+      owner: homeassistant
+      group: homeassistant
+      mode: 0750
+  - name: Install homeassistant
+    ansible.builtin.command: sudo -u homeassistant -H -s /home/homeassistant/tmp/ha-install.sh
+  - name: Install systemd service
+    ansible.builtin.copy:
+      src: files/etc/systemd/system/homeassistant.service
+      dest: /etc/systemd/system/homeassistant.service
+      owner: root
+      group: root
+      mode: 0644
+  - name: Refresh systemd config
+    ansible.builtin.systemd:
+      name: homeassistant
+      daemon_reload: yes
+      enabled: yes
+      masked: no
+      state: started
+
+# - name: UFW - Allow SSH and HTTP(S)
+#   ufw:
+#     rule: allow
+#     port: '{{ item.port  }}'
+#     comment: '{{ item.comment  }}'
+#   with_items:
+#     - { port: "22", comment: "Allow SSH" }
+#     - { port: "80", comment: "Allow HTTP" }
+#     - { port: "443", comment: "Allow HTTPS" }
+

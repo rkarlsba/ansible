@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai
 
-- hosts: servere
+- hosts: trengeroppdatering
   strategy: free
 
   remote_user: root
@@ -69,11 +69,11 @@
       regex: 'Unattended-Upgrade::Mail '
       line: 'Unattended-Upgrade::Mail "roy@karlsbakk.net";'
 
-  - name: "Set when to send unattended upgrades report"
+  - name: "Set when to report upgrades"
     lineinfile:
       path: /etc/apt/apt.conf.d/50unattended-upgrades
       regex: 'Unattended-Upgrade::MailReport '
-      line: 'Unattended-Upgrade::MailReport "only-on-error"'
+      line: 'Unattended-Upgrade::MailReport "only-on-error";'
 
   - name: "Turn on unattended upgrades"
     ansible.builtin.blockinfile:
