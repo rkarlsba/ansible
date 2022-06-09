@@ -27,6 +27,7 @@
         - tmux
         - tshark
         - ufw
+        - uptimed
         - vim
         - zabbix-agent
       state: latest
