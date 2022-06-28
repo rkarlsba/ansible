@@ -40,10 +40,10 @@ dhcp-server.karlsbakk.net
 # dhcp-client01.karlsbakk.net
 
 [trengeroppdatering]
-bcachefs-test1.karlsbakk.net
+sdr.karlsbakk.net
 
 [vmer]
-apache.karlsbakk.net
+# apache.karlsbakk.net
 # beef.karlsbakk.net
 # ceph01.karlsbakk.net
 # ceph02.karlsbakk.net
@@ -69,14 +69,16 @@ apache.karlsbakk.net
 # mqtt.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
-postgresql.karlsbakk.net
-pox.karlsbakk.net
+# postgresql.karlsbakk.net
+# pox.karlsbakk.net
 # rclone.karlsbakk.net
-restic.karlsbakk.net
-rtorrent.karlsbakk.net
-smtp.karlsbakk.net
+# restic.karlsbakk.net
+# rtorrent.karlsbakk.net
+sdr.karlsbakk.net
+# smtp.karlsbakk.net
 # squid.karlsbakk.net
 # vpn.karlsbakk.net
+# whoogle.karlsbakk.net
 # wg.karlsbakk.net
 # znuny.karlsbakk.net
 
