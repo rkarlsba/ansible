@@ -1,0 +1,52 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: dhcp_server
+  strategy: free
+  remote_user: root
+  tasks:
+  - name: Installere ISC DHCP-server the normal stuff
+    ansible.builtin.apt:
+      update_cache: yes
+      name: isc-dhcp-server
+      state: latest
+  - name: Kopiere inn /etc/default/isc-dhcp-server
+    ansible.builtin.copy:
+      src: files/dhcp/isc-dhcp-server
+      dest: /etc/default/isc-dhcp-server
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart isc-dhcp-server
+  - name: Kopiere inn /etc/rsyslog.d/30-dhcpd.conf
+    ansible.builtin.copy:
+      src: files/dhcp/30-dhcpd.conf
+      dest: /etc/rsyslog.d/30-dhcpd.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
+  - name: Kopiere inn /etc/dhcp/dhcpd.conf
+    ansible.builtin.copy:
+      src: files/dhcp/dhcpd.conf
+      dest: /etc/dhcp/dhcpd.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart isc-dhcp-server
+
+  handlers:
+    - name: restart isc-dhcp-server
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        name: isc-dhcp-server
+        state: restarted
+
+    - name: restart rsyslog
+      ansible.builtin.systemd:
+        daemon_reload: yes
+        name: rsyslog
+        state: restarted
+

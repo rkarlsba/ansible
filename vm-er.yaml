@@ -7,6 +7,14 @@
     max_clients: 200
   remote_user: root
   tasks:
+  - name: Replace sources.list with a sane one
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list
+      dest: /etc/apt/sources.list
+      backup: yes
+      owner: root
+      group: root
+      mode: 0644
   - name: apt-get full-upgrade
     ansible.builtin.apt:
       update_cache: yes
@@ -23,7 +31,7 @@
         - locales-all
         - lshw
         - mlocate
-        - pasteinit
+        - pastebinit
         - sudo
         - sysstat
         - tmux
@@ -34,17 +42,13 @@
         - zabbix-agent
       state: latest
   - name: Enable sysstat
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/default/sysstat
       regexp: '^ENABLED='
       line: 'ENABLED="true"'
     notify:
     - restart sysstat
     - updatedb
-  - name: ensure sysstat is running
-    service:
-      name: sysstat
-      state: started
 # roy {{{
 # - name: Make sure group roy exists
 #   group:
@@ -54,11 +58,11 @@
 #
 # }}}
   - name: Make sure roy is member of sudo
-    user:
+    ansible.builtin.user:
       name: roy
       group: sudo
   - name: update /root/.tmux.conf
-    blockinfile:
+    ansible.builtin.blockinfile:
       dest: /root/.tmux.conf
       block: |
         set -g prefix C-a
@@ -67,7 +71,7 @@
         setw -g mode-keys vi
       create: yes
   - name: update /root/.bashrc
-    blockinfile:
+    ansible.builtin.blockinfile:
       dest: /root/.bashrc
       block: |
         # Ansible was here!!!!
@@ -83,7 +87,7 @@
         [ -f $HOME/.aliases ] && source $HOME/.aliases
 
   - name: Add relevant keys to .ssh/authorized_keys
-    blockinfile:
+    ansible.builtin.blockinfile:
       path: "{{ item.path }}"
       create: yes
       block: |
@@ -95,7 +99,7 @@
     - {path: '/root/.ssh/authorized_keys'}
 # FIXME De under slås sammen
   - name: update/create ~/.vimrc
-    blockinfile:
+    ansible.builtin.blockinfile:
       dest: /root/.vimrc
       create: yes
       marker: '" {mark} ANSIBLE MANAGED BLOCK'
@@ -119,7 +123,7 @@
         let g:AutoPairs = {}
 
   - name: update/create ~/.vimrc
-    blockinfile:
+    ansible.builtin.blockinfile:
       dest: /home/roy/.vimrc
       create: yes
       owner: roy
@@ -145,7 +149,7 @@
         let g:AutoPairs = {}
 
   - name: update /home/roy/.bashrc
-    blockinfile:
+    ansible.builtin.blockinfile:
       dest: /home/roy/.bashrc
       block: |
         # Ansible was here!!!!
@@ -255,32 +259,31 @@
       state: present
 
   - name: Remove ServerActive if present in zabbix agent config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_agentd.conf
       regexp: '^ServerActive=.*'
       state: absent
     notify:
-    - restart zabbix-agent
+    - restart zabbix_agent
 
   - name: Add smilla to zabbix_agent.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/zabbix/zabbix_agentd.conf
       regexp: '^Server=.*'
       line: 'Server=77.40.158.123,2001:840:4b0b:1000::123'
       state: present
     notify:
-    - restart zabbix-agent
+    - restart zabbix_agent
 
   handlers:
     - name: restart sysstat
       ansible.builtin.systemd:
-      service:
         name: sysstat
         enabled: yes
         state: restarted
 
-    - name: restart zabbix-agent
-      service:
+    - name: restart zabbix_agent
+      ansible.builtin.systemd:
         name: zabbix-agent
         enabled: yes
         state: restarted
