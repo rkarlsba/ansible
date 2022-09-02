@@ -88,15 +88,26 @@
 
   - name: Add relevant keys to .ssh/authorized_keys
     ansible.builtin.blockinfile:
-      path: "{{ item.path }}"
+      path: '/home/roy/.ssh/authorized_keys'
+      create: yes
+      owner: roy
+      group: roy
+      block: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@oslomet.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqbzUA7TXuzcYjHnWEA5uWOJfLAUqzTQnDi9HATYeg5xTNoUZ53gkUS2vUK1mpHDWUM7twXiVN9PFKuQHDVC7t2A3xCzi3RVRoLJhOpV3pSGtYRLClWP5SoAzgE0G6kOtRyWjzUKoEm6kL4sOSCHfIloXnrU1+9PbB0bBCdMTA0XBSMYwxvt5HbWJp3T3cqsjdz9OVihZ21thvEHLRSDkcEUcSBpyuxiCpi3xX4hNd5Ek4KgnbktyqqPsTYHIxaBA0wCaRODyqInFmgqGjCtvDOB/IXl1KXHhxngWHuUd1O+Q+OXizVcICsaNLjEDc46XEwTAFT5KfjRWG+Vty1iiX root@smilla.karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
+    
+  - name: Add relevant keys to .ssh/authorized_keys
+    ansible.builtin.blockinfile:
+      path: '/root/.ssh/authorized_keys'
       create: yes
       block: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@oslomet.no
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqbzUA7TXuzcYjHnWEA5uWOJfLAUqzTQnDi9HATYeg5xTNoUZ53gkUS2vUK1mpHDWUM7twXiVN9PFKuQHDVC7t2A3xCzi3RVRoLJhOpV3pSGtYRLClWP5SoAzgE0G6kOtRyWjzUKoEm6kL4sOSCHfIloXnrU1+9PbB0bBCdMTA0XBSMYwxvt5HbWJp3T3cqsjdz9OVihZ21thvEHLRSDkcEUcSBpyuxiCpi3xX4hNd5Ek4KgnbktyqqPsTYHIxaBA0wCaRODyqInFmgqGjCtvDOB/IXl1KXHhxngWHuUd1O+Q+OXizVcICsaNLjEDc46XEwTAFT5KfjRWG+Vty1iiX root@smilla.karlsbakk.net
         ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
-    with_items:
-    - {path: '/root/.ssh/authorized_keys'}
+    
 # FIXME De under slås sammen
   - name: update/create ~/.vimrc
     ansible.builtin.blockinfile:

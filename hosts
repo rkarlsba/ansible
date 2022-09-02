@@ -44,8 +44,10 @@ nuclei.karlsbakk.net
 # sdr.karlsbakk.net
 # pi
 # 192.168.10.129/24
-nypi.karlsbakk.net
-
+# nypi.karlsbakk.net
+# zabbix-dev1.karlsbakk.net
+# zabbix-dev2.karlsbakk.net
+openmeetings.karlsbakk.net
 
 [vmer]
 # apache.karlsbakk.net
@@ -86,6 +88,8 @@ nypi.karlsbakk.net
 # whoogle.karlsbakk.net
 # wg.karlsbakk.net
 # znuny.karlsbakk.net
+# zabbix-dev1.karlsbakk.net
+zabbix-dev2.karlsbakk.net
 
 [kopano]
 kopano.karlsbakk.net
