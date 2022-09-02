@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai
 
-- hosts: restic
+- hosts: zabbix_server
   strategy: free
 
   remote_user: root
@@ -11,60 +11,10 @@
       name: restic
       state: latest
 
-  - name: Copy restic backup script
-    ansible.builtin.copy:
-      src: files/usr/local/bin/backup-to-restic.sh
-      dest: /usr/local/bin/backup-to-restic.sh
-      force: yes
-      owner: root
-      group: root
-      mode: '0755'
+  - name: Install zabbix, postgres and apache
+    apt:
+      name:
+        - postgresql-13
+        - apache2
+        - zabbix-server-pgsql
 
-  - name: Copy skeleton for pre-exec script
-    ansible.builtin.copy:
-      src: files/usr/local/bin/restic-backup-pre-exec.sh
-      dest: /usr/local/bin/restic-backup-pre-exec.sh
-      force: no
-      owner: root
-      group: root
-      mode: '0755'
-
-  - name: Copy skeleton for post-exec script
-    ansible.builtin.copy:
-      src: files/usr/local/bin/restic-backup-post-exec.sh
-      dest: /usr/local/bin/restic-backup-post-exec.sh
-      force: no
-      owner: root
-      group: root
-      mode: '0755'
-
-  - name: Fix restic excludes
-    ansible.builtin.blockinfile:
-      path: /usr/local/etc/restic-excludes.txt
-      create: yes
-      block: |
-        /proc
-        /sys
-        /dev
-        /run
-        /var/cache/apt
-        /var/lib/lxcfs
-      owner: root
-      group: root
-
-  - name: Configure ssh with backup host
-    ansible.builtin.blockinfile:
-      path: /root/.ssh/config
-      create: yes
-      block: |
-        host restic
-            Hostname restic.karlsbakk.net
-            User {{ ansible_hostname }}-bk
-
-  - name: Crontab for backup
-    cron:
-      name: "Backup to Restic at 0100 each night"
-      minute: "0"
-      hour: "1"
-      job: "/usr/local/bin/backup-to-restic.sh"
-      state: present
