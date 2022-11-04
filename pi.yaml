@@ -7,14 +7,14 @@
     max_clients: 200
   remote_user: root
   tasks:
-  - name: Set hostname
-    hostname:
-      name: "{{ piname }}"
-  - name: Replace old hostname from /etc/hosts with the real hostname
-    lineinfile:
-      dest: /etc/hosts
-      regexp: "127.0.1.1.*"
-      line: "127.0.1.1  {{ piname }}"
+# - name: Set hostname
+#   hostname:
+#     name: "{{ piname }}"
+# - name: Replace old hostname from /etc/hosts with the real hostname
+#   lineinfile:
+#     dest: /etc/hosts
+#     regexp: "127.0.1.1.*"
+#     line: "127.0.1.1  {{ piname }}"
   - name: Log everything to smilla
     lineinfile:
       dest: /etc/rsyslog.d/01-smilla.conf
@@ -45,12 +45,12 @@
       path: /etc/default/sysstat
       regexp: '^ENABLED='
       line: 'ENABLED="true"'
-    notify:
-    - restart sysstat
-  - name: ensure sysstat is running
+  - name: Ensure sysstat enabled and is running
     service:
       name: sysstat
-      state: started
+      enabled: yes
+    notify:
+    - restart sysstat
 
 # Han derre roy {{{
 # - name: Make sure group roy exists
@@ -266,3 +266,4 @@
       service:
         name: sysstat
         state: restarted
+        masked: no
