@@ -35,11 +35,6 @@ gluster03.karlsbakk.net
 [dhcp_server]
 dhcp-server.karlsbakk.net
 
-[vmer]
-#dhcp-server.karlsbakk.net
-nuclei.karlsbakk.net
-# dhcp-client01.karlsbakk.net
-
 [trengeroppdatering]
 # sdr.karlsbakk.net
 # pi
@@ -51,6 +46,7 @@ openmeetings.karlsbakk.net
 
 [vmer]
 # apache.karlsbakk.net
+awx.karlsbakk.net
 # beef.karlsbakk.net
 # ceph01.karlsbakk.net
 # ceph02.karlsbakk.net
@@ -60,6 +56,8 @@ openmeetings.karlsbakk.net
 # collabora.karlsbakk.net
 # debian-bullseye-mal
 # debian-buster-mal
+# dhcp-client01.karlsbakk.net
+# dhcp-server.karlsbakk.net
 # els1.karlsbakk.net
 # gluster01.karlsbakk.net
 # gluster02.karlsbakk.net
@@ -74,6 +72,7 @@ openmeetings.karlsbakk.net
 # matrix.karlsbakk.net
 # motion.karlsbakk.net
 # mqtt.karlsbakk.net
+# nuclei.karlsbakk.net
 # openvas.karlsbakk.net
 # plex.karlsbakk.net
 # postgresql.karlsbakk.net
@@ -85,11 +84,11 @@ openmeetings.karlsbakk.net
 # smtp.karlsbakk.net
 # squid.karlsbakk.net
 # vpn.karlsbakk.net
-# whoogle.karlsbakk.net
 # wg.karlsbakk.net
-# znuny.karlsbakk.net
+# whoogle.karlsbakk.net
 # zabbix-dev1.karlsbakk.net
-zabbix-dev2.karlsbakk.net
+# zabbix-dev2.karlsbakk.net
+# znuny.karlsbakk.net
 
 [kopano]
 kopano.karlsbakk.net
