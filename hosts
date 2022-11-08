@@ -36,7 +36,6 @@ gluster03.karlsbakk.net
 [dhcp_server]
 dhcp-server.karlsbakk.net
 
-
 [trengeroppdatering]
 # 192.168.10.129/24
 # debian-desktop.karlsbakk.net
@@ -50,6 +49,7 @@ insecure.karlsbakk.net
 
 [vmer]
 # apache.karlsbakk.net
+awx.karlsbakk.net
 # beef.karlsbakk.net
 # ceph01.karlsbakk.net
 # ceph02.karlsbakk.net
@@ -59,10 +59,12 @@ insecure.karlsbakk.net
 # collabora.karlsbakk.net
 # debian-bullseye-mal
 # debian-buster-mal
+# dhcp-client01.karlsbakk.net
+# dhcp-server.karlsbakk.net
 # debian-desktop.karlsbakk.net
 # dhcp-client01.karlsbakk.net
 # dhcp-server.karlsbakk.net
-docker.karlsbakk.net
+# docker.karlsbakk.net
 # els1.karlsbakk.net
 # gluster01.karlsbakk.net
 # gluster02.karlsbakk.net
