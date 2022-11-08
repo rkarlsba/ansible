@@ -15,6 +15,13 @@
       owner: root
       group: root
       mode: 0644
+  - name: Add backports
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list.d/backports.list
+      dest: /etc/apt/sources.list.d/backports.list
+      owner: root
+      group: root
+      mode: 0644
   - name: apt-get full-upgrade
     ansible.builtin.apt:
       update_cache: yes
@@ -40,8 +47,12 @@
         - ufw
         - uptimed
         - vim
-        - zabbix-agent
+        - zabbix-agent2
       state: latest
+# - name: Remove old zabbix agent
+#   ansible.builtin.apt:
+#     name: zabbix-agent
+#     state: disabled
   - name: Enable sysstat
     ansible.builtin.lineinfile:
       path: /etc/default/sysstat
