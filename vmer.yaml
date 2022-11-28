@@ -49,10 +49,11 @@
         - vim
         - zabbix-agent2
       state: latest
-# - name: Remove old zabbix agent
-#   ansible.builtin.apt:
-#     name: zabbix-agent
-#     state: disabled
+  - name: Remove old shite
+    ansible.builtin.apt:
+      name: 
+        - zabbix-agent
+      state: absent
   - name: Enable sysstat
     ansible.builtin.lineinfile:
       path: /etc/default/sysstat
@@ -281,22 +282,35 @@
       job: "fstrim -a"
       state: present
 
-  - name: Remove ServerActive if present in zabbix agent config
-    ansible.builtin.lineinfile:
-      path: /etc/zabbix/zabbix_agentd.conf
-      regexp: '^ServerActive=.*'
-      state: absent
+  - name: Create custom Zabbix agent config
+    ansible.builtin.blockinfile:
+      path: /etc/zabbix/zabbix_agent2.d/karlsbakk.conf
+      block: |
+        Server=77.40.158.123,2001:8c0:9302:4::123
+        ServerActive=77.40.158.123,2001:8c0:9302:4::123
+        Hostname=
+      create: yes
     notify:
-    - restart zabbix_agent
+    - restart zabbix_agent2
 
-  - name: Add smilla to zabbix_agent.conf
-    ansible.builtin.lineinfile:
-      path: /etc/zabbix/zabbix_agentd.conf
-      regexp: '^Server=.*'
-      line: 'Server=77.40.158.123,2001:840:4b0b:1000::123'
-      state: present
-    notify:
-    - restart zabbix_agent
+# {{{ Fjerna
+# - name: Remove ServerActive if present in zabbix agent config
+#   ansible.builtin.lineinfile:
+#     path: /etc/zabbix/zabbix_agentd.conf
+#     regexp: '^ServerActive=.*'
+#     state: absent
+#   notify:
+#   - restart zabbix_agent
+
+# - name: Add smilla to zabbix_agent.conf
+#   ansible.builtin.lineinfile:
+#     path: /etc/zabbix/zabbix_agentd.conf
+#     regexp: '^Server=.*'
+#     line: 'Server=77.40.158.123,2001:840:4b0b:1000::123'
+#     state: present
+#   notify:
+#   - restart zabbix_agent
+#   }}}
 
   handlers:
     - name: restart sysstat
@@ -308,6 +322,12 @@
     - name: restart zabbix_agent
       ansible.builtin.systemd:
         name: zabbix-agent
+        enabled: yes
+        state: restarted
+
+    - name: restart zabbix_agent2
+      ansible.builtin.systemd:
+        name: zabbix-agent2
         enabled: yes
         state: restarted
 
