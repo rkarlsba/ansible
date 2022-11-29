@@ -127,12 +127,19 @@ zabbix-dev2.karlsbakk.net
 
 [zabagt2]
 apache.karlsbakk.net
-mariadb.karlsbakk.net
-restic.karlsbakk.net
-postgresql.karlsbakk.net
-rtorrent.karlsbakk.net
+crpi.karlsbakk.net
+francesco.karlsbakk.net
 grafana.karlsbakk.net
+#irc.karlsbakk.net # ubuntu
+mail.karlsbakk.net
+mariadb.karlsbakk.net
 mqtt.karlsbakk.net
-smtp.karlsbakk.net
+ns2.karlsbakk.net
+postgresql.karlsbakk.net
 pox.karlsbakk.net
+restic.karlsbakk.net
+rtorrent.karlsbakk.net
+smilla.karlsbakk.net
+smtp.karlsbakk.net
 squid.karlsbakk.net
+zabbix.karlsbakk.net
