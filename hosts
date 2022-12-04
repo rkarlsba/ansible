@@ -126,20 +126,21 @@ hjemmehjelp.karlsbakk.net
 zabbix-dev2.karlsbakk.net
 
 [zabagt2]
-apache.karlsbakk.net
-crpi.karlsbakk.net
-francesco.karlsbakk.net
-grafana.karlsbakk.net
-#irc.karlsbakk.net # ubuntu
-mail.karlsbakk.net
-mariadb.karlsbakk.net
-mqtt.karlsbakk.net
-ns2.karlsbakk.net
-postgresql.karlsbakk.net
-pox.karlsbakk.net
-restic.karlsbakk.net
-rtorrent.karlsbakk.net
-smilla.karlsbakk.net
-smtp.karlsbakk.net
-squid.karlsbakk.net
-zabbix.karlsbakk.net
+# apache.karlsbakk.net
+# crpi.karlsbakk.net
+# francesco.karlsbakk.net
+# grafana.karlsbakk.net
+# irc.karlsbakk.net # ubuntu
+# mail.karlsbakk.net
+# mariadb.karlsbakk.net
+# mqtt.karlsbakk.net
+# ns2.karlsbakk.net
+plex.karlsbakk.net
+# postgresql.karlsbakk.net
+# pox.karlsbakk.net
+# restic.karlsbakk.net
+# rtorrent.karlsbakk.net
+# smilla.karlsbakk.net
+# smtp.karlsbakk.net
+# squid.karlsbakk.net
+# zabbix.karlsbakk.net
