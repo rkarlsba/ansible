@@ -1,0 +1,84 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: zabagt2
+  strategy: free
+  remote_user: root
+  tasks:
+# - name: Add backports
+#   ansible.builtin.copy:
+#     src: files/etc/apt/sources.list.d/backports.list
+#     dest: /etc/apt/sources.list.d/backports.list
+#     owner: root
+#     group: root
+#     mode: 0644
+
+  - name: apt-get full-upgrade
+    ansible.builtin.apt:
+      update_cache: yes
+      upgrade: dist
+      autoremove: yes
+
+  - name: Install zabbix-agent2
+    ansible.builtin.apt:
+      name:
+        - zabbix-agent2
+      state: latest
+
+  - name: Remove old zabbix-agent
+    ansible.builtin.apt:
+      name: 
+        - zabbix-agent
+      state: absent
+
+  - name: Copy plugins
+    ansible.builtin.copy:
+      src: 'files/usr/local/bin/{{ item.filename }}'
+      dest: '/usr/local/bin/{{ item.filename }}'
+      owner: root
+      group: root
+      mode: 0755
+    with_items:
+      - { filename: 'zabbix_check_linux_updates.sh' }
+      - { filename: 'zabbix_check_needs_reboot.sh' }
+      - { filename: 'zabbix_checkro.pl' }
+      - { filename: 'zabbix_linux_distro_check.pl' }
+      - { filename: 'zabbix_kernelversioncheck.sh' }
+
+  - name: Create custom Zabbix agent config
+    ansible.builtin.blockinfile:
+      path: /etc/zabbix/zabbix_agent2.d/karlsbakk.conf
+      block: |
+        # General settings
+        Server=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2a01:79c:cebf:61e4:9d31:fed2:82ec:89e
+        ServerActive=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2a01:79c:cebf:61e4:9d31:fed2:82ec:89e
+        Hostname={{inventory_hostname}}
+
+        # Distro plugin
+        UserParameter=custom.distro.name,/usr/local/bin/zabbix_linux_distro_check.pl --name
+        UserParameter=custom.distro.version,/usr/local/bin/zabbix_linux_distro_check.pl --vers
+        UserParameter=custom.distro.arch,/usr/local/bin/zabbix_linux_distro_check.pl --arch
+        UserParameter=custom.distro.friendlyname,/usr/local/bin/zabbix_linux_distro_check.pl --friendly
+
+        # Reboot check
+        UserParameter=custom.rebootcheck,/usr/local/bin/zabbix_check_needs_reboot.sh --local
+
+        # Update check
+        UserParameter=custom.yumupdatescheck,/usr/local/bin/zabbix_check_linux_updates.sh
+
+        # Read only check
+        # UserParameter=custom.fsrocheck,/usr/local/bin/zabbix_check_fs_ro.pl
+        UserParameter=custom.fsrocheck,/usr/local/bin/zabbix_checkro.pl
+        UserParameter=vfs.fs.discovery_custom,/usr/local/bin/zabbix_check_fs_ro_lld.pl
+
+        # Kernel updates
+        UserParameter=custom.kernelversioncheck,/usr/local/bin/zabbix_kernelversioncheck.sh --local
+      create: yes
+    notify:
+    - restart zabbix_agent2
+
+  handlers:
+    - name: restart zabbix_agent2
+      ansible.builtin.systemd:
+        name: zabbix-agent2
+        enabled: yes
+        state: restarted
