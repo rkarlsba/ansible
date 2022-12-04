@@ -25,6 +25,14 @@ beef.karlsbakk.net
 # ubuntu-focal-mal.karlsbakk.net
 ubuntu-jammy-mal.karlsbakk.net
 
+[andyvm]
+# servere her ;)
+#rmv.andyoslo.no
+#skrothaug.andyoslo.no
+#transmission.andyoslo.no
+web.andyoslo.no
+plex.andyoslo.no
+
 [servere:vars]
 ansible_python_interpreter=/usr/bin/python3
 
