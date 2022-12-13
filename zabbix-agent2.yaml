@@ -1,4 +1,4 @@
-# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker:isfname-==:isfname-=,
 
 - hosts: zabagt2
   strategy: free
@@ -48,10 +48,13 @@
     ansible.builtin.blockinfile:
       path: /etc/zabbix/zabbix_agent2.d/karlsbakk.conf
       block: |
+        # vim:isfname-==:isfname-=,
+
         # General settings
-        Server=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2a01:79c:cebf:61e4:9d31:fed2:82ec:89e
-        ServerActive=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2a01:79c:cebf:61e4:9d31:fed2:82ec:89e
+        Server=77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1
+        ServerActive=77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1
         Hostname={{inventory_hostname}}
+        Timeout=30
 
         # Distro plugin
         UserParameter=custom.distro.name,/usr/local/bin/zabbix_linux_distro_check.pl --name
