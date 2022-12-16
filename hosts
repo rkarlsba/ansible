@@ -57,59 +57,60 @@ insecure.karlsbakk.net
 # zabbix-dev2.karlsbakk.net
 
 [vmer]
-apache.karlsbakk.net
-# awx.karlsbakk.net
-# beef.karlsbakk.net
-# ceph01.karlsbakk.net
-# ceph02.karlsbakk.net
-# ceph03.karlsbakk.net
-# ceph04.karlsbakk.net
-# clam.karlsbakk.net
-# collabora.karlsbakk.net
-# debian-bullseye-mal
-# debian-buster-mal
-# dhcp-client01.karlsbakk.net
-# dhcp-server.karlsbakk.net
-# debian-desktop.karlsbakk.net
-# dhcp-client01.karlsbakk.net
-# dhcp-server.karlsbakk.net
-# docker.karlsbakk.net
-# els1.karlsbakk.net
-# gluster01.karlsbakk.net
-# gluster02.karlsbakk.net
-# gluster03.karlsbakk.net
-grafana.karlsbakk.net
-# haproxy.karlsbakk.net
-# imapsync.karlsbakk.net
-# insecure.karlsbakk.net
-# ipa.karlsbakk.net
-# jellyfin.karlsbakk.net
-# macidtest.karlsbakk.net
-mariadb.karlsbakk.net
-# matrix.karlsbakk.net
-# mitmproxy.karlsbakk.net
-# motion.karlsbakk.net
-mqtt.karlsbakk.net
-# nuclei.karlsbakk.net
-# openmeetings.karlsbakk.net
-# openvas.karlsbakk.net
-plex.karlsbakk.net
-postgresql.karlsbakk.net
-pox.karlsbakk.net
-# prat.karlsbakk.net
-# rclone.karlsbakk.net
-restic.karlsbakk.net
-rtorrent.karlsbakk.net
-# sdr.karlsbakk.net
-smtp.karlsbakk.net
-squid.karlsbakk.net
-# vpn.karlsbakk.net
-# wg.karlsbakk.net
-# whoogle.karlsbakk.net
-# zabbix-dev1.karlsbakk.net
-# zabbix-dev2.karlsbakk.net
-# zabbix-dev3.karlsbakk.net
-# znuny.karlsbakk.net
+### apache.karlsbakk.net
+### # awx.karlsbakk.net
+### # beef.karlsbakk.net
+### # ceph01.karlsbakk.net
+### # ceph02.karlsbakk.net
+### # ceph03.karlsbakk.net
+### # ceph04.karlsbakk.net
+### # clam.karlsbakk.net
+### # collabora.karlsbakk.net
+### # debian-bullseye-mal
+### # debian-buster-mal
+### # dhcp-client01.karlsbakk.net
+### # dhcp-server.karlsbakk.net
+### # debian-desktop.karlsbakk.net
+### # dhcp-client01.karlsbakk.net
+### # dhcp-server.karlsbakk.net
+### # docker.karlsbakk.net
+### # els1.karlsbakk.net
+### # gluster01.karlsbakk.net
+### # gluster02.karlsbakk.net
+### # gluster03.karlsbakk.net
+### grafana.karlsbakk.net
+### # haproxy.karlsbakk.net
+### # imapsync.karlsbakk.net
+### # insecure.karlsbakk.net
+### # ipa.karlsbakk.net
+### # jellyfin.karlsbakk.net
+### # macidtest.karlsbakk.net
+### mariadb.karlsbakk.net
+### # matrix.karlsbakk.net
+### # mitmproxy.karlsbakk.net
+### # motion.karlsbakk.net
+### mqtt.karlsbakk.net
+### # nuclei.karlsbakk.net
+### # openmeetings.karlsbakk.net
+### # openvas.karlsbakk.net
+openvpn.karlsbakk.net
+### plex.karlsbakk.net
+### postgresql.karlsbakk.net
+### pox.karlsbakk.net
+### # prat.karlsbakk.net
+### # rclone.karlsbakk.net
+### restic.karlsbakk.net
+### rtorrent.karlsbakk.net
+### # sdr.karlsbakk.net
+### smtp.karlsbakk.net
+### squid.karlsbakk.net
+### # vpn.karlsbakk.net
+### wireguard.karlsbakk.net
+### # whoogle.karlsbakk.net
+### # zabbix-dev1.karlsbakk.net
+### # zabbix-dev2.karlsbakk.net
+### # zabbix-dev3.karlsbakk.net
+### # znuny.karlsbakk.net
 
 [kopano]
 kopano.karlsbakk.net
