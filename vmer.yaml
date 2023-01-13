@@ -51,7 +51,9 @@
         - locales-all
         - lshw
         - mlocate
+        - nfs-common
         - pastebinit
+        - pwgen
         - sudo
         - sysstat
         - tmux
