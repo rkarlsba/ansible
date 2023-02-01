@@ -46,6 +46,7 @@
         - bc
         - curl
         - etckeeper
+        - fail2ban
         - git
         - htop
         - locales-all
@@ -227,6 +228,9 @@
       special_time: reboot
       job: "fstrim -a"
       state: present
+
+# - name: Zabbix Agent2
+#   ansible.builtin.import_playbook: zabbix-agent2.yaml
 
   handlers:
     - name: restart sysstat

@@ -51,6 +51,51 @@
       enabled: yes
     notify:
     - restart sysstat
+  - name: update /root/.tmux.conf
+    ansible.builtin.blockinfile:
+      dest: '{{ item.filename }}'
+      block: |
+        set -g prefix C-a
+        unbind-key C-b
+        bind-key C-a send-prefix
+        setw -g mode-keys vi
+      create: yes
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      mode: 0644
+    with_items:
+      - { filename: '/root/.tmux.conf', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.tmux.conf', owner: 'roy', group: 'roy' }
+  - name: Update/create ~/.vimrc
+    ansible.builtin.blockinfile:
+      dest: '{{ item.filename }}'
+      create: yes
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        set modeline
+        set modelines=5
+        set incsearch
+        set nohlsearch
+        syntax on
+        set background=dark
+        set ruler
+        set mouse=
+        set ttymouse=
+
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        \" ABEL
+        au BufNewFile,BufRead *.gcode setf gcode
+        let g:autoclose_on = 0
+        let g:AutoPairs = {}
+    with_items:
+      - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }
 
 # Han derre roy {{{
 # - name: Make sure group roy exists
