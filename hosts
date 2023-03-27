@@ -7,14 +7,9 @@ irc.karlsbakk.net
 [homeassistant]
 192.168.10.249 piname=homearse
 
-[kykelipi]
-#bluepi
-#greenpi
-#redpi
-#yellowpi
-#192.168.10.249	piname=homearse
-#kvmpi		piname=kvmpi
-172.17.12.0	piname=kykelipi
+[mangopi]
+10.47.100.10	piname=mangopi1.karlsbakk.net
+#10.47.100.11	piname=mangopi2.karlsbakk.net
 
 [servere]
 # zimbra.karlsbakk.net
@@ -60,8 +55,11 @@ insecure.karlsbakk.net
 [bitwarden]
 bitwarden.karlsbakk.net
 
+[docker]
+docker.karlsbakk.net
+
 [vmer]
-apache.karlsbakk.net
+# apache.karlsbakk.net
 # awx.karlsbakk.net
 # beef.karlsbakk.net
 bitwarden.karlsbakk.net
@@ -78,7 +76,7 @@ bitwarden.karlsbakk.net
 # debian-desktop.karlsbakk.net
 # dhcp-client01.karlsbakk.net
 # dhcp-server.karlsbakk.net
-# docker.karlsbakk.net
+docker.karlsbakk.net
 # els1.karlsbakk.net
 # gluster01.karlsbakk.net
 # gluster02.karlsbakk.net
@@ -89,12 +87,16 @@ grafana.karlsbakk.net
 # insecure.karlsbakk.net
 # ipa.karlsbakk.net
 # jellyfin.karlsbakk.net
+# koding.karlsbakk.net
 # macidtest.karlsbakk.net
+mail.karlsbakk.net
 mariadb.karlsbakk.net
 # matrix.karlsbakk.net
 # mitmproxy.karlsbakk.net
 # motion.karlsbakk.net
 mqtt.karlsbakk.net
+mta.karlsbakk.net
+ns2.karlsbakk.net
 # nuclei.karlsbakk.net
 # openmeetings.karlsbakk.net
 # openvas.karlsbakk.net
@@ -108,35 +110,32 @@ restic.karlsbakk.net
 rtorrent.karlsbakk.net
 # sdr.karlsbakk.net
 smtp.karlsbakk.net
-squid.karlsbakk.net
+# squid.karlsbakk.net
 # vpn.karlsbakk.net
 # wireguard.karlsbakk.net
 # whoogle.karlsbakk.net
-# zabbix-dev1.karlsbakk.net
-# zabbix-dev2.karlsbakk.net
-# zabbix-dev3.karlsbakk.net
+zabbix6.karlsbakk.net
 # znuny.karlsbakk.net
 
-[kopano]
-kopano.karlsbakk.net
+[langchange]
+ipa.karlsbakk.net
 
 [restic]
-# apache.karlsbakk.net
-# plex.karlsbakk.net
-# mqtt.karlsbakk.net
-smtp.karlsbakk.net
-postgresql.karlsbakk.net
-mariadb.karlsbakk.net
-plex.karlsbakk.net
-postgresql.karlsbakk.net
-smtp.karlsbakk.net
-irc.karlsbakk.net
-mqtt.karlsbakk.net
-ns2.karlsbakk.net
-bitwarden.karlsbakk.net
 #zimbra.karlsbakk.net
-hjemmehjelp.karlsbakk.net
-
+#apache.karlsbakk.net
+#bitwarden.karlsbakk.net
+#hjemmehjelp.karlsbakk.net
+homearse.karlsbakk.net
+#irc.karlsbakk.net
+#mail.karlsbakk.net
+#mangopi1.karlsbakk.net
+#mangopi2.karlsbakk.net
+#mariadb.karlsbakk.net
+#mqtt.karlsbakk.net
+#ns2.karlsbakk.net
+#plex.karlsbakk.net
+#postgresql.karlsbakk.net
+#smtp.karlsbakk.net
 
 [zabbix_server]
 zabbix-dev2.karlsbakk.net
@@ -145,16 +144,18 @@ zabbix-dev2.karlsbakk.net
 # apache.karlsbakk.net
 # bitwarden.karlsbakk.net
 # crpi.karlsbakk.net
+docker.karlsbakk.net
 # francesco.karlsbakk.net
 # grafana.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
 # mail.karlsbakk.net
 # mariadb.karlsbakk.net
 # mqtt.karlsbakk.net
+# mta.karlsbakk.net
 # ns2.karlsbakk.net
 # plex.karlsbakk.net
 # postgresql.karlsbakk.net
-pox.karlsbakk.net
+# pox.karlsbakk.net
 # restic.karlsbakk.net
 # rtorrent.karlsbakk.net
 # smilla.karlsbakk.net

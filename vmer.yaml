@@ -20,7 +20,7 @@
     ansible.builtin.copy:
       src: files/etc/apt/sources.list
       dest: /etc/apt/sources.list
-      backup: yes
+      backup: true
       owner: root
       group: root
       mode: 0644
@@ -35,9 +35,9 @@
 
   - name: apt-get full-upgrade
     ansible.builtin.apt:
-      update_cache: yes
+      update_cache: true
       upgrade: dist
-      autoremove: yes
+      autoremove: true
 
   - name: Install the normal stuff
     ansible.builtin.apt:
@@ -47,6 +47,7 @@
         - curl
         - etckeeper
         - fail2ban
+        - finger
         - git
         - htop
         - locales-all
@@ -60,9 +61,49 @@
         - tmux
         - tshark
         - ufw
+        - unattended-upgrades
         - uptimed
         - vim
       state: latest
+
+# Unattended upgrades
+  - name: "Enable unattended upgrades for everything except 'proposed'"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'origin=Debian,codename=\${distro_codename}-updates'
+      line: "        \"origin=Debian,codename=${distro_codename}-updates\";"
+
+  - name: "Set email address for unattended upgrades report"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'Unattended-Upgrade::Mail '
+      line: 'Unattended-Upgrade::Mail "roy@karlsbakk.net";'
+
+  - name: "Set when to report upgrades"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'Unattended-Upgrade::MailReport '
+      line: 'Unattended-Upgrade::MailReport "only-on-error";'
+
+  - name: "Turn on unattended upgrades"
+    ansible.builtin.blockinfile:
+      path: "/etc/apt/apt.conf.d/20auto-upgrades"
+      create: yes
+      marker: "// {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        // Actually enable unattended upgrades
+        APT::Periodic::Update-Package-Lists "1";
+        APT::Periodic::Unattended-Upgrade "1";
+
+  - name: Install fail2ban config
+    ansible.builtin.copy:
+      src: files/etc/fail2ban/jail.d/karlsbakk.conf
+      dest: /etc/fail2ban/jail.d/karlsbakk.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+      - restart fail2ban
 
   - name: Enable sysstat
     ansible.builtin.lineinfile:
@@ -72,10 +113,20 @@
     notify:
       - restart sysstat
       - updatedb
+  - name: Create group roy if it doesn't exist
+    ansible.builtin.group:
+      name: roy
+  - name: Make sure user roy exists and has primary group roy
+    ansible.builtin.user:
+      name: roy
+      comment: Roy Sigurd Karlsbakk
+      shell: /bin/bash
+      group: roy
   - name: Make sure roy is member of sudo
     ansible.builtin.user:
       name: roy
-      group: sudo
+      groups: sudo,users
+      append: true
   - name: update /root/.tmux.conf
     ansible.builtin.blockinfile:
       dest: /root/.tmux.conf
@@ -84,11 +135,11 @@
         unbind-key C-b
         bind-key C-a send-prefix
         setw -g mode-keys vi
-      create: yes
+      create: true
   - name: Add relevant keys to \$HOME/.ssh/authorized_keys
     ansible.builtin.blockinfile:
       path: '{{ item.filename }}'
-      create: yes
+      create: true
       owner: '{{ item.owner }}'
       group: '{{ item.group }}'
       block: |
@@ -103,7 +154,7 @@
   - name: update/create ~/.vimrc
     ansible.builtin.blockinfile:
       dest: '{{ item.filename }}'
-      create: yes
+      create: true
       owner: '{{ item.owner }}'
       group: '{{ item.group }}'
       marker: '" {mark} ANSIBLE MANAGED BLOCK'
@@ -134,7 +185,7 @@
   - name: update /home/roy/.bashrc
     ansible.builtin.blockinfile:
       dest: /home/roy/.bashrc
-      create: yes
+      create: true
       block: |
         # Ansible was here!!!!
         export LS_OPTIONS='--color=auto -F'
@@ -150,7 +201,7 @@
   - name: update /root/.bashrc
     ansible.builtin.blockinfile:
       dest: /root/.bashrc
-      create: yes
+      create: true
       block: |
         # Ansible was here!!!!
         export LS_OPTIONS='--color=auto -F'
@@ -210,7 +261,7 @@
   - name: Creates an entry like "PATH=/opt/bin" on top of crontab
     cron:
         name: PATH
-        env: yes
+        env: true
         job: /sbin:/usr/sbin:$PATH
         state: present
 
@@ -233,10 +284,16 @@
 #   ansible.builtin.import_playbook: zabbix-agent2.yaml
 
   handlers:
+    - name: restart fail2ban
+      ansible.builtin.systemd:
+        name: fail2ban
+        enabled: true
+        state: restarted
+
     - name: restart sysstat
       ansible.builtin.systemd:
         name: sysstat
-        enabled: yes
+        enabled: true
         state: restarted
 
     - name: updatedb

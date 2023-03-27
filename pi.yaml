@@ -20,17 +20,32 @@
       dest: /etc/rsyslog.d/01-smilla.conf
       line: "*.*       @[2a01:79c:cebf:61e4:1::1]"
       create: yes
-  - name: Install the normal stuff
-    apt:
+
+### apt ###
+  - name: Remove packages we don't want
+    ansible.builtin.apt:
+      name:
+        - stress
+      update_cache: yes
+      state: absent
+      purge: true
+  - name: Install packages we quite often need
+    ansible.builtin.apt:
       name:
         - autoconf
         - automake
         - build-essential
         - etckeeper
+        - fail2ban
         - finger
         - git
         - locales-all
+        - lsof
+        - man-db
+        - manpages
+        - manpages-dev
         - mlocate
+        - sysbench
         - sysstat
         - tmux
         - tree
@@ -121,18 +136,24 @@
 # }}}
 
 # ssh authorization
-  - name: Create ssh dir for root
+  - name: Create ssh dir for root and users
     file:
-      path: /root/.ssh
+      path: '{{ item.path }}'
       mode: 0700
-      owner: root
-      group: root
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
       state: directory
+    with_items:
+      - { path: '/root/.ssh', owner: 'root', group: 'root' }
+      - { path: '/home/roy/.ssh', owner: 'roy', group: 'roy' }
 
   - name: Add relevant keys to .ssh/authorized_keys
     blockinfile:
 
       path: "{{ item.path }}"
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      mode: 0600
       create: yes
       block: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@hioa.no
@@ -140,8 +161,8 @@
         ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
     with_items:
-    - {path: '/home/roy/.ssh/authorized_keys'}
-    - {path: '/root/.ssh/authorized_keys'}
+    - { path: '/home/roy/.ssh/authorized_keys', owner: 'root', group: 'root'  }
+    - { path: '/root/.ssh/authorized_keys', owner: 'root', group: 'root'  }
 
   - name: update /root/.bashrc
     blockinfile:
@@ -185,30 +206,11 @@
 
   - name: update /home/roy/.vimrc
     blockinfile:
-      dest: /home/roy/.vimrc
-      owner: roy
-      group: roy
+      dest: "{{ item.filename }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
       create: yes
       marker: "\" {mark} ANSIBLE MANAGED BLOCK"
-      block: |
-        set modeline
-
-  - name: update /home/{{ item }}/.inputrc
-    blockinfile:
-      dest: /home/{{ item }}/.inputrc
-      owner: "{{ item }}"
-      group: "{{ item }}"
-      create: yes
-      block: |
-        set editing-mode vi
-    with_items:
-      - roy
-
-  - name: update /etc/vim/vimrc.local
-    blockinfile:
-      dest: /etc/vim/vimrc.local
-      create: yes
-      marker: '" {mark} ANSIBLE MANAGED BLOCK'
       block: |
         syntax on
         if has("autocmd")
@@ -222,10 +224,25 @@
         set background=dark
         set incsearch
         set modeline
+        set modelines=4
         set foldmethod=marker
 
         set mouse=
         set ttymouse=
+    with_items:
+      - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }
+
+  - name: update /home/{{ item }}/.inputrc
+    blockinfile:
+      dest: /home/{{ item }}/.inputrc
+      owner: "{{ item }}"
+      group: "{{ item }}"
+      create: yes
+      block: |
+        set editing-mode vi
+    with_items:
+      - roy
 
   - name: set timezone to Europe/Oslo
     timezone:
@@ -306,7 +323,23 @@
       job: "fstrim -a"
       state: present
 
+  - name: Install fail2ban config
+    ansible.builtin.copy:
+      src: files/etc/fail2ban/jail.d/karlsbakk.conf
+      dest: /etc/apt/sources.list.d/backports.list
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+      - restart fail2ban
+
   handlers:
+    - name: restart fail2ban
+      ansible.builtin.systemd:
+        name: fail2ban
+        enabled: yes
+        state: restarted
+
     - name: restart sysstat
       service:
         name: sysstat

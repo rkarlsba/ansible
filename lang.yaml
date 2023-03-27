@@ -1,4 +1,5 @@
-- hosts: vmer
+#- hosts: vmer
+- hosts: langchange
   strategy: free
   vars:
     http_port: 80
@@ -8,16 +9,19 @@
       - en_US.UTF-8
       - nb_NO.UTF-8
       - nn_NO.UTF-8
-      - no_NO.UTF-8
-    language:
+    languages:
       - en_GB:en
       - en_US:en
       - nb_NO:no
       - nn_NO:no
-      - no_NO:no
 
   remote_user: root
   tasks:
+  - name: Install locales-all
+    ansible.builtin.apt:
+      name:
+        - locales-all
+      state: latest
   - name: Set timezone to Europe/Oslo
     ansible.builtin.file:
       src: /usr/share/zoneinfo/Europe/Oslo
@@ -35,7 +39,8 @@
     ansible.builtin.lineinfile:
       dest: /etc/default/locale
       regexp: "^LANG="
-      line: "LANG={{ locale }}"
+      line: "LANG={{ item }}"
+    loop: "{{ languages }}"
     notify: "rebuild locales database"
 
   # # this will always report as "changed"
@@ -44,14 +49,16 @@
   #   ansible.builtin.command: localectl set-locale LC_TIME="{{ LC_time }}"
   #   notify: "rebuild locales database"
 
-  - name: "Set LC_TIME to {{ LC_time }}"
-    ansible.builtin.lineinfile:
-      dest: /etc/default/locale
-      regexp: "^LC_TIME="
-      line: "LC_TIME={{ LC_time }}"
-    notify: "rebuild locales database"
+# - name: "Set LC_TIME to {{ LC_time }}"
+#   ansible.builtin.lineinfile:
+#     dest: /etc/default/locale
+#     regexp: "^LC_TIME="
+#     line: "LC_TIME={{ LC_time }}"
+#   notify: "rebuild locales database"
 
-# NOTE: changes won't take effect until logout/login (no effect in the current session)
-# it does however take effect in new sessions (via ssh, for example) and
-# new sessions for other users than the currently logged in user
-# I have not found a way to make changes take effect immediately on Ubuntu
+  handlers:
+  - name: rebuild locales database
+    command: "{{ item }}"
+    with_items:
+      - dpkg-reconfigure locales -f noninteractive
+      - /usr/sbin/locale-gen
