@@ -1,0 +1,351 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: mangopi
+  strategy: free
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: Set hostname
+    hostname:
+      name: "{{ piname }}"
+  - name: Replace old hostname from /etc/hosts with the real hostname
+    lineinfile:
+      dest: /etc/hosts
+      regexp: "127.0.1.1.*"
+      line: "127.0.1.1\t{{ piname }}"
+  - name: Log everything to smilla
+    lineinfile:
+      dest: /etc/rsyslog.d/01-smilla.conf
+      line: "*.*\t@[2a01:79c:cebf:61e4:1::1]"
+      create: yes
+  - name: Remove packages we don't want
+    ansible.builtin.apt:
+      name:
+        - stress
+      update_cache: yes
+      state: absent
+      purge: true
+  - name: Install packages we quite often need
+    ansible.builtin.apt:
+      name:
+        - autoconf
+        - automake
+        - avahi-daemon
+        - avahi-discover
+        - avahi-utils
+        - bash-completion
+        - build-essential
+        - debhelper
+        - etckeeper
+        - finger
+        - git
+        - locales-all
+        - lsof
+        - man-db
+        - manpages
+        - manpages-dev
+        - mlocate
+        - python3-dev
+        - sysbench
+        - sysstat
+        - tmux
+        - tree
+        - ufw
+        - unattended-upgrades
+        - uptimed
+        - vim
+        - xauth
+      update_cache: yes
+      state: latest
+  - name: Enable sysstat
+    lineinfile:
+      path: /etc/default/sysstat
+      regexp: '^ENABLED='
+      line: 'ENABLED="true"'
+  - name: Ensure sysstat enabled and is running
+    service:
+      name: sysstat
+      enabled: yes
+    notify:
+    - restart sysstat
+  - name: update /root/.tmux.conf
+    ansible.builtin.blockinfile:
+      dest: '{{ item.filename }}'
+      block: |
+        set -g prefix C-a
+        unbind-key C-b
+        bind-key C-a send-prefix
+        setw -g mode-keys vi
+      create: yes
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      mode: 0644
+    with_items:
+      - { filename: '/root/.tmux.conf', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.tmux.conf', owner: 'roy', group: 'roy' }
+  - name: Update/create ~/.vimrc
+    ansible.builtin.blockinfile:
+      dest: '{{ item.filename }}'
+      create: yes
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        set modeline
+        set modelines=5
+        set incsearch
+        set nohlsearch
+        syntax on
+        set background=dark
+        set ruler
+        set mouse=
+        set ttymouse=
+
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        \" ABEL
+        au BufNewFile,BufRead *.gcode setf gcode
+        let g:autoclose_on = 0
+        let g:AutoPairs = {}
+    with_items:
+      - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }
+
+# Han derre roy {{{
+# - name: Make sure group roy exists
+#   group:
+#     name: roy
+#     state: present
+#     gid: 1999
+#
+# - name: Make sure user roy exists
+#   user:
+#     name: roy
+#     comment: Roy Sigurd Karlsbakk
+#     uid: 1999
+#     group: roy
+##
+# - name: Create ssh dir for roy
+#   file:
+#     path: /home/roy/.ssh
+#     mode: 0700
+#     owner: roy
+#     group: roy
+#     state: directory
+# }}}
+
+# ssh authorization
+  - name: Create ssh dir for root and users
+    file:
+      path: '{{ item.path }}'
+      mode: 0700
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      state: directory
+    with_items:
+      - { path: '/root/.ssh', owner: 'root', group: 'root' }
+      - { path: '/home/roy/.ssh', owner: 'roy', group: 'roy' }
+
+  - name: Add relevant keys to .ssh/authorized_keys
+    blockinfile:
+
+      path: "{{ item.path }}"
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      mode: 0600
+      create: yes
+      block: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@hioa.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqbzUA7TXuzcYjHnWEA5uWOJfLAUqzTQnDi9HATYeg5xTNoUZ53gkUS2vUK1mpHDWUM7twXiVN9PFKuQHDVC7t2A3xCzi3RVRoLJhOpV3pSGtYRLClWP5SoAzgE0G6kOtRyWjzUKoEm6kL4sOSCHfIloXnrU1+9PbB0bBCdMTA0XBSMYwxvt5HbWJp3T3cqsjdz9OVihZ21thvEHLRSDkcEUcSBpyuxiCpi3xX4hNd5Ek4KgnbktyqqPsTYHIxaBA0wCaRODyqInFmgqGjCtvDOB/IXl1KXHhxngWHuUd1O+Q+OXizVcICsaNLjEDc46XEwTAFT5KfjRWG+Vty1iiX root@smilla.karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
+    with_items:
+    - { path: '/home/roy/.ssh/authorized_keys', owner: 'root', group: 'root'  }
+    - { path: '/root/.ssh/authorized_keys', owner: 'root', group: 'root'  }
+
+  - name: update /root/.bashrc
+    blockinfile:
+      path: /root/.bashrc
+      owner: root
+      group: root
+      create: yes
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+
+        set -o vi
+
+  - name: update /root/.vimrc
+    blockinfile:
+      dest: /root/.vimrc
+      owner: root
+      group: root
+      create: yes
+      marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        set modeline
+
+  - name: update /home/roy/.bashrc
+    blockinfile:
+      dest: /home/roy/.bashrc
+      owner: roy
+      group: roy
+      create: yes
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+
+        set -o vi
+
+  - name: update /home/roy/.vimrc
+    blockinfile:
+      dest: "{{ item.filename }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      create: yes
+      marker: "\" {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        syntax on
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+        endif
+
+        if has("autocmd")
+          filetype plugin indent on
+        endif
+
+        set background=dark
+        set incsearch
+        set modeline
+        set modelines=4
+        set foldmethod=marker
+
+        set mouse=
+        set ttymouse=
+    with_items:
+      - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }
+
+  - name: update /home/{{ item }}/.inputrc
+    blockinfile:
+      dest: /home/{{ item }}/.inputrc
+      owner: "{{ item }}"
+      group: "{{ item }}"
+      create: yes
+      block: |
+        set editing-mode vi
+    with_items:
+      - roy
+
+  - name: set timezone to Europe/Oslo
+    timezone:
+      name: Europe/Oslo
+
+  - name: UFW - Allow some ports
+    community.general.ufw:
+      rule: allow
+      port: '{{ item.port }}'
+      comment: '{{ item.comment }}'
+      proto: '{{item.proto }}'
+    with_items:
+      - { port: "22", proto: "tcp", comment: "Allow SSH" }
+      - { port: "80", proto: "tcp", comment: "Allow HTTP" }
+      - { port: "443", proto: "tcp", comment: "Allow HTTPS" }
+      - { port: "60000:60049", proto: "udp", comment: "Allow Mosh ports" }
+
+  - name: UFW - Allow multicast
+    community.general.ufw:
+      rule: allow
+      to_ip: '{{ item.address  }}'
+      comment: '{{ item.comment  }}'
+    with_items:
+      - { address: "224.0.0.0/4", comment: "Allow IPv4 multicast" }
+      - { address: "ff00::/8", comment: "Allow IPv6 multicast" }
+
+  - name: UFW - Allow localnet
+    community.general.ufw:
+      rule: allow
+      from_ip: '{{ item.address  }}'
+      comment: '{{ item.comment  }}'
+    with_items:
+      - { address: "192.168.10.0/24", comment: "Allow all from local IPv4" }
+      - { address: "2a01:79c:cebf:61e4::/62", comment: "Allow all from local IPv6" }
+
+  - name: UFW - Allow some specifics
+    community.general.ufw:
+      rule: allow
+      from_ip: '{{ item.address  }}'
+      to_port: '{{ item.port }}'
+      proto: '{{ item.proto }}'
+      comment: '{{ item.comment  }}'
+    with_items:
+      - { address: '77.40.158.123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix (IPv4)" }
+      - { address: '2001:8c0:9302:4::123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix (IPv6)" }
+
+  - name: Enable ufw
+    community.general.ufw:
+      state: enabled
+      logging: on
+
+  - name:
+    git_config:
+      name: user.email
+      repo: /etc
+      scope: local
+      value: roy@karlsbakk.net
+
+  - name:
+    git_config:
+      name: user.name
+      repo: /etc
+      scope: local
+      value: 'Roy Sigurd Karlsbakk'
+
+  - name: Crontab for daily fstrim
+    cron:
+      name: "fstrim for everything supported @ 01:00"
+      minute: "0"
+      hour: "1"
+      job: "fstrim -a"
+      state: present
+
+  - name: Crontab for fstrim at bootup
+    cron:
+      name: "fstrim for everything supported @ reboot"
+      special_time: reboot
+      job: "fstrim -a"
+      state: present
+
+  - name: Install fail2ban config
+    ansible.builtin.copy:
+      src: files/etc/fail2ban/jail.d/karlsbakk.conf
+      dest: /etc/apt/sources.list.d/backports.list
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+      - restart fail2ban
+
+  handlers:
+    - name: restart fail2ban
+      ansible.builtin.systemd:
+        name: fail2ban
+        enabled: yes
+        state: restarted
+
+    - name: restart sysstat
+      service:
+        name: sysstat
+        state: restarted
+        masked: no
