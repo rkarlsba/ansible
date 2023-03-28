@@ -85,7 +85,7 @@ grafana.karlsbakk.net
 # haproxy.karlsbakk.net
 # imapsync.karlsbakk.net
 # insecure.karlsbakk.net
-# ipa.karlsbakk.net
+ipa.karlsbakk.net
 # jellyfin.karlsbakk.net
 # koding.karlsbakk.net
 # macidtest.karlsbakk.net
@@ -144,10 +144,11 @@ zabbix-dev2.karlsbakk.net
 # apache.karlsbakk.net
 # bitwarden.karlsbakk.net
 # crpi.karlsbakk.net
-docker.karlsbakk.net
+# docker.karlsbakk.net
 # francesco.karlsbakk.net
 # grafana.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
+ipa.karlsbakk.net
 # mail.karlsbakk.net
 # mariadb.karlsbakk.net
 # mqtt.karlsbakk.net
