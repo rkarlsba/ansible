@@ -53,6 +53,7 @@
       group: root
       mode: 0755
     with_items:
+      - { filename: 'check-dns.sh' }
       - { filename: 'zabbix_check_linux_updates.sh' }
       - { filename: 'zabbix_check_needs_reboot.sh' }
       - { filename: 'zabbix_checkro.pl' }
@@ -66,8 +67,8 @@
         # vim:isfname-==:isfname-=,
 
         # General settings
-        Server=77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1,193.29.58.196
-        ServerActive=77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1,2a0a:51c0:0:1f:4ca5::2
+        Server=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1,193.29.58.196,2a0a:51c0:0:1f:4ca5::2
+        ServerActive=2001:8c0:9302:4::123,2001:4641:4dfa::2ab1,2a0a:51c0:0:1f:4ca5::2
         Hostname={{inventory_hostname}}
         Timeout=30
 
@@ -90,6 +91,9 @@
 
         # Kernel updates
         UserParameter=custom.kernelversioncheck,/usr/local/bin/zabbix_kernelversioncheck.sh --local
+
+        # Check if server can do DNS lookups
+        UserParameter=custom.dnslookup,/usr/local/bin/check-dns.sh google.com
       create: yes
     notify:
     - restart zabbix_agent2

@@ -56,8 +56,10 @@
         - nfs-common
         - pastebinit
         - pwgen
+        - resolvconf
         - sudo
         - sysstat
+        - time
         - tmux
         - tshark
         - ufw

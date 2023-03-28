@@ -59,63 +59,44 @@ bitwarden.karlsbakk.net
 docker.karlsbakk.net
 
 [vmer]
-# apache.karlsbakk.net
-# awx.karlsbakk.net
-# beef.karlsbakk.net
+apache.karlsbakk.net
 bitwarden.karlsbakk.net
-# ceph01.karlsbakk.net
-# ceph02.karlsbakk.net
-# ceph03.karlsbakk.net
-# ceph04.karlsbakk.net
-# clam.karlsbakk.net
-# collabora.karlsbakk.net
-# debian-bullseye-mal
-# debian-buster-mal
-# dhcp-client01.karlsbakk.net
-# dhcp-server.karlsbakk.net
-# debian-desktop.karlsbakk.net
-# dhcp-client01.karlsbakk.net
-# dhcp-server.karlsbakk.net
 docker.karlsbakk.net
-# els1.karlsbakk.net
-# gluster01.karlsbakk.net
-# gluster02.karlsbakk.net
-# gluster03.karlsbakk.net
 grafana.karlsbakk.net
-# haproxy.karlsbakk.net
-# imapsync.karlsbakk.net
-# insecure.karlsbakk.net
 ipa.karlsbakk.net
-# jellyfin.karlsbakk.net
-# koding.karlsbakk.net
-# macidtest.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
-# matrix.karlsbakk.net
-# mitmproxy.karlsbakk.net
 # motion.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
-# nuclei.karlsbakk.net
-# openmeetings.karlsbakk.net
-# openvas.karlsbakk.net
-# openvpn.karlsbakk.net
-# plex.karlsbakk.net
+plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
-# prat.karlsbakk.net
-# rclone.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
-# sdr.karlsbakk.net
 smtp.karlsbakk.net
-# squid.karlsbakk.net
-# vpn.karlsbakk.net
-# wireguard.karlsbakk.net
-# whoogle.karlsbakk.net
 zabbix6.karlsbakk.net
-# znuny.karlsbakk.net
+
+[vmer-fixed]
+apache.karlsbakk.net
+bitwarden.karlsbakk.net
+crpi.karlsbakk.net
+docker.karlsbakk.net
+ipa.karlsbakk.net
+grafana.karlsbakk.net
+# irc.karlsbakk.net # ubuntu
+ipa.karlsbakk.net
+mail.karlsbakk.net
+mariadb.karlsbakk.net
+mqtt.karlsbakk.net
+# mta.karlsbakk.net boot
+# ns2.karlsbakk.net boot
+# # plex.karlsbakk.net
+# postgresql.karlsbakk.net
+# pox.karlsbakk.net
+# restic.karlsbakk.net
+# rtorrent.karlsbakk.net
 
 [langchange]
 ipa.karlsbakk.net
@@ -141,25 +122,26 @@ homearse.karlsbakk.net
 zabbix-dev2.karlsbakk.net
 
 [zabagt2]
-# apache.karlsbakk.net
-# bitwarden.karlsbakk.net
-# crpi.karlsbakk.net
-# docker.karlsbakk.net
-# francesco.karlsbakk.net
-# grafana.karlsbakk.net
+apache.karlsbakk.net
+bitwarden.karlsbakk.net
+crpi.karlsbakk.net
+docker.karlsbakk.net
+francesco.karlsbakk.net
+grafana.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
 ipa.karlsbakk.net
-# mail.karlsbakk.net
-# mariadb.karlsbakk.net
-# mqtt.karlsbakk.net
-# mta.karlsbakk.net
-# ns2.karlsbakk.net
-# plex.karlsbakk.net
-# postgresql.karlsbakk.net
-# pox.karlsbakk.net
-# restic.karlsbakk.net
-# rtorrent.karlsbakk.net
+mail.karlsbakk.net
+mariadb.karlsbakk.net
+mqtt.karlsbakk.net
+mta.karlsbakk.net
+ns2.karlsbakk.net
+plex.karlsbakk.net
+postgresql.karlsbakk.net
+pox.karlsbakk.net
+restic.karlsbakk.net
+rtorrent.karlsbakk.net
 # smilla.karlsbakk.net
-# smtp.karlsbakk.net
-# squid.karlsbakk.net
+smtp.karlsbakk.net
 # zabbix.karlsbakk.net
+zabbix6.karlsbakk.net
+
