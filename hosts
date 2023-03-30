@@ -145,3 +145,20 @@ smtp.karlsbakk.net
 # zabbix.karlsbakk.net
 zabbix6.karlsbakk.net
 
+[zabagt2_malin]
+# list opp maskinene som skal oppgraderes her
+ark-survival-evolved-vm.malinux.no
+apache2-vm.malinux.no
+bareos-vm.malinux.no
+dns-vm.malinux.no
+duplicati-vm.malinux.no
+irc-vm.malinux.no
+minecraft-kos-vm.malinux.no
+minecraft-vm.malinux.no
+mysql-vm.malinux.no
+plex-vm.malinux.no
+rclone-vm.malinux.no
+rtorrent-vm.malinux.no
+# vrising-vm.malinux.no
+zabbix-vm.malinux.no
+black-mamba.malinux.no
