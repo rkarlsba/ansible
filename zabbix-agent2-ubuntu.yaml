@@ -5,6 +5,13 @@
   strategy: free
   remote_user: root
   tasks:
+  - name: Add backports
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list.d/backports.list
+      dest: /etc/apt/sources.list.d/backports.list
+      owner: root
+      group: root
+      mode: 0644
 
   - name: apt-get full-upgrade
     ansible.builtin.apt:
@@ -24,6 +31,21 @@
         - zabbix-agent
       state: absent
 
+  - name: UFW - Allow zabbix traffic from zabbix
+    ufw:
+      rule: allow
+      from_ip: "{{ item.ip_addr }}"
+      proto: "{{ item.proto }}"
+      port: "{{ item.port }}"
+      comment: "{{ item.comment }}"
+    with_items:
+      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)' }
+      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv6)' }
+      - { ip_addr: '80.213.160.61', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv4)' }
+      - { ip_addr: '2001:4641:4dfa::2ab1', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv6)' }
+
   - name: Copy plugins
     ansible.builtin.copy:
       src: 'files/usr/local/bin/{{ item.filename }}'
@@ -32,6 +54,7 @@
       group: root
       mode: 0755
     with_items:
+      - { filename: 'check-dns.sh' }
       - { filename: 'zabbix_check_linux_updates.sh' }
       - { filename: 'zabbix_check_needs_reboot.sh' }
       - { filename: 'zabbix_checkro.pl' }
@@ -45,8 +68,8 @@
         # vim:isfname-==:isfname-=,
 
         # General settings
-        Server=77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1
-        ServerActive=77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1
+        Server=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1,193.29.58.196,2a0a:51c0:0:1f:4ca5::2
+        ServerActive=2001:8c0:9302:4::123,2001:4641:4dfa::2ab1,2a0a:51c0:0:1f:4ca5::2
         Hostname={{inventory_hostname}}
         Timeout=30
 
@@ -69,6 +92,9 @@
 
         # Kernel updates
         UserParameter=custom.kernelversioncheck,/usr/local/bin/zabbix_kernelversioncheck.sh --local
+
+        # Check if server can do DNS lookups
+        UserParameter=custom.dnslookup,/usr/local/bin/check-dns.sh google.com
       create: yes
     notify:
     - restart zabbix_agent2
