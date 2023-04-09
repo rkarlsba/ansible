@@ -103,20 +103,20 @@ ipa.karlsbakk.net
 
 [restic]
 #zimbra.karlsbakk.net
-#apache.karlsbakk.net
-#bitwarden.karlsbakk.net
-#hjemmehjelp.karlsbakk.net
+apache.karlsbakk.net
+bitwarden.karlsbakk.net
+hjemmehjelp.karlsbakk.net
 homearse.karlsbakk.net
-#irc.karlsbakk.net
-#mail.karlsbakk.net
+irc.karlsbakk.net
+mail.karlsbakk.net
 #mangopi1.karlsbakk.net
 #mangopi2.karlsbakk.net
-#mariadb.karlsbakk.net
-#mqtt.karlsbakk.net
-#ns2.karlsbakk.net
-#plex.karlsbakk.net
-#postgresql.karlsbakk.net
-#smtp.karlsbakk.net
+mariadb.karlsbakk.net
+mqtt.karlsbakk.net
+ns2.karlsbakk.net
+plex.karlsbakk.net
+postgresql.karlsbakk.net
+smtp.karlsbakk.net
 
 [zabbix_server]
 zabbix-dev2.karlsbakk.net
