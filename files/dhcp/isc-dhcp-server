@@ -1,0 +1,4 @@
+# Vi lytter bare på enp7s0 for IPv4. IPv6 håndeteres av Neighbour Discovery (ND)
+# og Router Advertisement (RA).
+INTERFACESv4="enp7s0"
+INTERFACESv6=""
