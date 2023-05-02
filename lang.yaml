@@ -1,0 +1,64 @@
+#- hosts: vmer
+- hosts: langchange
+  strategy: free
+  vars:
+    http_port: 80
+    max_clients: 200
+    locales:
+      - en_GB.UTF-8
+      - en_US.UTF-8
+      - nb_NO.UTF-8
+      - nn_NO.UTF-8
+    languages:
+      - en_GB:en
+      - en_US:en
+      - nb_NO:no
+      - nn_NO:no
+
+  remote_user: root
+  tasks:
+  - name: Install locales-all
+    ansible.builtin.apt:
+      name:
+        - locales-all
+      state: latest
+  - name: Set timezone to Europe/Oslo
+    ansible.builtin.file:
+      src: /usr/share/zoneinfo/Europe/Oslo
+      dest: /etc/localtime
+      state: link
+
+  - name: Generate the selected locales
+    community.general.locale_gen:
+      name: "{{ item }}"
+      state: present
+    loop: "{{ locales }}"
+    notify: "rebuild locales database"
+  
+  - name: Set the default locale
+    ansible.builtin.lineinfile:
+      dest: /etc/default/locale
+      regexp: "^LANG="
+      line: "LANG={{ item }}"
+    loop: "{{ languages }}"
+    notify: "rebuild locales database"
+
+  # # this will always report as "changed"
+  # # why don't we set LC_TIME the same way as LANG above?
+  # - name: Set LC_TIME to international standard date/time notation
+  #   ansible.builtin.command: localectl set-locale LC_TIME="{{ LC_time }}"
+  #   notify: "rebuild locales database"
+
+# - name: "Set LC_TIME to {{ LC_time }}"
+#   ansible.builtin.lineinfile:
+#     dest: /etc/default/locale
+#     regexp: "^LC_TIME="
+#     line: "LC_TIME={{ LC_time }}"
+#   notify: "rebuild locales database"
+
+  handlers:
+  - name: rebuild locales database
+    command: "{{ item }}"
+    with_items:
+      - dpkg-reconfigure locales -f noninteractive
+      - /usr/sbin/locale-gen

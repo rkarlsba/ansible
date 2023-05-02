@@ -1,0 +1,5 @@
+---
+no_containers: 3
+container_name: test
+container_image: debian
+command_to_run: sleep 1h

@@ -1,1 +1,1 @@
-/Users/roy/src/git/rkarlsba/ymse/zabbix/plugins/check-fail2ban/check_fail2ban.pl
+../../../../../ymse/zabbix/plugins/check-fail2ban/check_fail2ban.pl

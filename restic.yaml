@@ -1,15 +1,27 @@
 # vim:ts=2:sw=2:sts=2:et:ai
 
-- hosts: kykelipi
+- hosts: restic
   strategy: free
 
   remote_user: root
   tasks:
-  - name: "Do an apt full-upgrade"
+  - name: Install restic from apt
     ansible.builtin.apt:
       update_cache: yes
       name: restic
       state: latest
+
+  - name: Do a restic self-update
+    ansible.builtin.command: restic self-update
+
+  - name: Copy restic backup config
+    ansible.builtin.copy:
+      src: files/etc/default/restic
+      dest: /etc/default/restic
+      force: yes
+      owner: root
+      group: root
+      mode: '0644'
 
   - name: Copy restic backup script
     ansible.builtin.copy:
@@ -69,12 +81,3 @@
       job: "/usr/local/bin/backup-to-restic.sh"
       state: present
 
-  - name: Add cleanup/rotation to restic-backup-post-exec.sh
-    ansible.builtin.blockinfile:
-      path: /usr/local/bin/restic-backup-post-exec.sh
-      create: yes
-      block: |
-        export RESTIC_REPOSITORY="sftp:restic:restic-repo"
-        export RESTIC_PASSWORD_FILE="/usr/local/etc/restic-password.txt"
-
-        restic forget --keep-daily 14 --keep-weekly 5 --keep-monthly 12 --keep-yearly 1 --prune

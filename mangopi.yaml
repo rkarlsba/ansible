@@ -1,27 +1,25 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: kykelipi
+- hosts: mangopi
   strategy: free
   vars:
     http_port: 80
     max_clients: 200
   remote_user: root
   tasks:
-# - name: Set hostname
-#   hostname:
-#     name: "{{ piname }}"
-# - name: Replace old hostname from /etc/hosts with the real hostname
-#   lineinfile:
-#     dest: /etc/hosts
-#     regexp: "127.0.1.1.*"
-#     line: "127.0.1.1  {{ piname }}"
+  - name: Set hostname
+    hostname:
+      name: "{{ piname }}"
+  - name: Replace old hostname from /etc/hosts with the real hostname
+    lineinfile:
+      dest: /etc/hosts
+      regexp: "127.0.1.1.*"
+      line: "127.0.1.1\t{{ piname }}"
   - name: Log everything to smilla
     lineinfile:
       dest: /etc/rsyslog.d/01-smilla.conf
-      line: "*.*       @[2a01:79c:cebf:61e4:1::1]"
+      line: "*.*\t@[2a01:79c:cebf:61e4:1::1]"
       create: yes
-
-### apt ###
   - name: Remove packages we don't want
     ansible.builtin.apt:
       name:
@@ -34,9 +32,13 @@
       name:
         - autoconf
         - automake
+        - avahi-daemon
+        - avahi-discover
+        - avahi-utils
+        - bash-completion
         - build-essential
+        - debhelper
         - etckeeper
-        - fail2ban
         - finger
         - git
         - locales-all
@@ -45,6 +47,7 @@
         - manpages
         - manpages-dev
         - mlocate
+        - python3-dev
         - sysbench
         - sysstat
         - tmux
@@ -53,6 +56,7 @@
         - unattended-upgrades
         - uptimed
         - vim
+        - xauth
       update_cache: yes
       state: latest
   - name: Enable sysstat
