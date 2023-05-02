@@ -128,8 +128,9 @@ crpi.karlsbakk.net
 docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
+homearse.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
-ipa.karlsbakk.net
+# ipa.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 mqtt.karlsbakk.net
@@ -143,7 +144,7 @@ rtorrent.karlsbakk.net
 # smilla.karlsbakk.net
 smtp.karlsbakk.net
 ssh.karlsbakk.net
-# zabbix.karlsbakk.net
+zabbix5.karlsbakk.net
 zabbix6.karlsbakk.net
 
 [zabagt2_malin]
