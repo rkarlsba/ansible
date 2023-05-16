@@ -1,1 +1,1 @@
-../../../../../privat/roy/restic/restic-backup-post-exec.sh
+../../../../../ymse/backup/restic/restic-backup-post-exec.sh

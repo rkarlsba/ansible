@@ -1,1 +1,1 @@
-../../../../../privat/roy/restic/backup-to-restic.sh
+../../../../../ymse/backup/restic/backup-to-restic.sh
