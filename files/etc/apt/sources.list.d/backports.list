@@ -1,2 +1,2 @@
 # backports
-deb [arch=amd64] https://deb.debian.org/debian bullseye-backports main
+deb https://deb.debian.org/debian bullseye-backports main

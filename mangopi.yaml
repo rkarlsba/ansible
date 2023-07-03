@@ -7,19 +7,51 @@
     max_clients: 200
   remote_user: root
   tasks:
+  - name: Make sure group roy exists
+    group:
+      name: roy
+      state: present
+      gid: 1999
+
+  - name: Add backports
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list.d/backports.list
+      dest: /etc/apt/sources.list.d/backports.list
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Make sure user roy exists
+    user:
+      name: roy
+      comment: Roy Sigurd Karlsbakk
+      uid: 1999
+      group: roy
+
+  - name: Create ssh dir for roy
+    file:
+      path: /home/roy/.ssh
+      mode: 0700
+      owner: roy
+      group: roy
+      state: directory
+
   - name: Set hostname
     hostname:
       name: "{{ piname }}"
+
   - name: Replace old hostname from /etc/hosts with the real hostname
     lineinfile:
       dest: /etc/hosts
       regexp: "127.0.1.1.*"
       line: "127.0.1.1\t{{ piname }}"
+
   - name: Log everything to smilla
     lineinfile:
       dest: /etc/rsyslog.d/01-smilla.conf
       line: "*.*\t@[2a01:79c:cebf:61e4:1::1]"
       create: yes
+
   - name: Remove packages we don't want
     ansible.builtin.apt:
       name:
@@ -27,6 +59,7 @@
       update_cache: yes
       state: absent
       purge: true
+
   - name: Install packages we quite often need
     ansible.builtin.apt:
       name:
@@ -39,6 +72,7 @@
         - build-essential
         - debhelper
         - etckeeper
+        - fail2ban
         - finger
         - git
         - locales-all
@@ -59,17 +93,20 @@
         - xauth
       update_cache: yes
       state: latest
+
   - name: Enable sysstat
     lineinfile:
       path: /etc/default/sysstat
       regexp: '^ENABLED='
       line: 'ENABLED="true"'
+
   - name: Ensure sysstat enabled and is running
     service:
       name: sysstat
       enabled: yes
     notify:
     - restart sysstat
+
   - name: update /root/.tmux.conf
     ansible.builtin.blockinfile:
       dest: '{{ item.filename }}'
@@ -85,6 +122,7 @@
     with_items:
       - { filename: '/root/.tmux.conf', owner: 'root', group: 'root' }
       - { filename: '/home/roy/.tmux.conf', owner: 'roy', group: 'roy' }
+
   - name: Update/create ~/.vimrc
     ansible.builtin.blockinfile:
       dest: '{{ item.filename }}'
@@ -115,29 +153,6 @@
     with_items:
       - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
       - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }
-
-# Han derre roy {{{
-# - name: Make sure group roy exists
-#   group:
-#     name: roy
-#     state: present
-#     gid: 1999
-#
-# - name: Make sure user roy exists
-#   user:
-#     name: roy
-#     comment: Roy Sigurd Karlsbakk
-#     uid: 1999
-#     group: roy
-##
-# - name: Create ssh dir for roy
-#   file:
-#     path: /home/roy/.ssh
-#     mode: 0700
-#     owner: roy
-#     group: roy
-#     state: directory
-# }}}
 
 # ssh authorization
   - name: Create ssh dir for root and users
@@ -290,8 +305,10 @@
       proto: '{{ item.proto }}'
       comment: '{{ item.comment  }}'
     with_items:
-      - { address: '77.40.158.123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix (IPv4)" }
-      - { address: '2001:8c0:9302:4::123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix (IPv6)" }
+      - { address: '77.40.158.123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix5 (IPv4)" }
+      - { address: '2001:8c0:9302:4::123', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix5 (IPv6)" }
+      - { address: '193.29.58.196', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix6 (IPv4)" }
+      - { address: '2a0a:51c0:0:1f:4ca5::2', port: "10050", proto: "tcp", comment: "Allow zabbix traffic from zabbix6 (IPv6)" }
 
   - name: Enable ufw
     community.general.ufw:
@@ -330,7 +347,7 @@
   - name: Install fail2ban config
     ansible.builtin.copy:
       src: files/etc/fail2ban/jail.d/karlsbakk.conf
-      dest: /etc/apt/sources.list.d/backports.list
+      dest: /etc/fail2ban/jail.d/karlsbakk.conf
       owner: root
       group: root
       mode: 0644

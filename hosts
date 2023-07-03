@@ -8,8 +8,8 @@ irc.karlsbakk.net
 192.168.10.249 piname=homearse
 
 [mangopi]
-10.47.100.10	piname=mangopi1.karlsbakk.net
-#10.47.100.11	piname=mangopi2.karlsbakk.net
+#10.47.100.10	piname=mangopi1.karlsbakk.net
+mangopi1.karlsbakk.net
 
 [servere]
 # zimbra.karlsbakk.net
@@ -63,7 +63,7 @@ apache.karlsbakk.net
 bitwarden.karlsbakk.net
 docker.karlsbakk.net
 grafana.karlsbakk.net
-ipa.karlsbakk.net
+# ipa.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 # motion.karlsbakk.net
@@ -76,6 +76,7 @@ pox.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 smtp.karlsbakk.net
+ssh.karlsbakk.net
 zabbix6.karlsbakk.net
 
 [vmer-fixed]
@@ -128,10 +129,10 @@ crpi.karlsbakk.net
 docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
-homearse.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
 # ipa.karlsbakk.net
 mail.karlsbakk.net
+mangopi1.karlsbakk.net
 mariadb.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
@@ -143,9 +144,8 @@ restic.karlsbakk.net
 rtorrent.karlsbakk.net
 # smilla.karlsbakk.net
 smtp.karlsbakk.net
-squid.karlsbakk.net
 ssh.karlsbakk.net
-zabbix5.karlsbakk.net
+# zabbix.karlsbakk.net
 zabbix6.karlsbakk.net
 
 [zabagt2_malin]
@@ -165,3 +165,6 @@ rtorrent-vm.malinux.no
 # vrising-vm.malinux.no
 zabbix-vm.malinux.no
 black-mamba.malinux.no
+
+[ipv6change]
+

@@ -69,9 +69,9 @@
       path: /root/.ssh/config
       create: yes
       block: |
-        host restic
-            Hostname restic.karlsbakk.net
-            User {{ ansible_hostname }}-bk
+        # host restic
+        #     Hostname restic.karlsbakk.net
+        #     User {{ ansible_hostname }}-bk
 
   - name: Crontab for backup
     cron:

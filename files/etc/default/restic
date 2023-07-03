@@ -4,3 +4,22 @@
 export RESTIC_REPOSITORY="sftp:restic:restic-repo"
 export RESTIC_PASSWORD_FILE="/usr/local/etc/restic-password.txt"
 
+RESTIC_EXCLUDE_FILE="/usr/local/etc/restic-excludes.txt"
+RESTIC_EXCLUDE=""
+RESTIC_VERBOSE=""
+RESTIC_ONE_FILESYSTEM=""
+RESTIC_PRE_EXEC_JOB="/usr/local/bin/restic-backup-pre-exec.sh"
+RESTIC_POST_EXEC_JOB="/usr/local/bin/restic-backup-post-exec.sh"
+
+RESTIC_BACKUP_DIRS="/"
+RESTIC_CMD="restic --verbose backup --exclude-file $RESTIC_EXCLUDE_FILE $RESTIC_BACKUP_DIRS"
+ONE_FILESYSTEM=0
+RETCODE=0
+VERBOSE=0
+
+# Backup rotation - see https://restic.readthedocs.io/en/stable/060_forget.html
+KEEP_WIITHIN='14d'
+KEEP_WEEKLY='5'
+KEEP_MONTHLY='3'
+KEEP_YEARLY='0'
+PRUNE='PRUNE'

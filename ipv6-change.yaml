@@ -1,0 +1,12 @@
+# vim:ts=2:sw=2:sts=2:et:ai
+
+- hosts: ipv6change
+  strategy: free
+
+  remote_user: root
+  tasks:
+    ansible.builtin.lineinfile:
+      path: /tmp/interfaces
+      regexp: '^(\s+address\s+)2a01:79c:cebf:61e4:(.*)$'
+      line: '\12a01:79c:cebe:d8d0:\2'
+      backrefs: yes
