@@ -75,7 +75,6 @@ postgresql.karlsbakk.net
 pox.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
-smtp.karlsbakk.net
 ssh.karlsbakk.net
 zabbix6.karlsbakk.net
 
@@ -117,7 +116,6 @@ mqtt.karlsbakk.net
 ns2.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
-smtp.karlsbakk.net
 
 [zabbix_server]
 zabbix-dev2.karlsbakk.net
@@ -143,7 +141,6 @@ pox.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 # smilla.karlsbakk.net
-smtp.karlsbakk.net
 ssh.karlsbakk.net
 # zabbix.karlsbakk.net
 zabbix6.karlsbakk.net

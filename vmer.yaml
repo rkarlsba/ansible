@@ -246,7 +246,7 @@
       comment: '{{ item.comment }}'
     with_items:
       - { ip: '192.168.10.0/23', comment: 'Allow from local network (IPv4)' }
-      - { ip: '2a01:79c:cebf:61e4::/62', comment: 'Allow from local network (IPv6)' }
+      - { ip: '2a01:79c:cebe:d8d0::/62', comment: 'Allow from local network (IPv6)' }
 
   - name: UFW - Allow UDP traffic for mosh
     ufw:
