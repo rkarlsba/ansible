@@ -77,8 +77,9 @@ restic.karlsbakk.net
 rtorrent.karlsbakk.net
 ssh.karlsbakk.net
 zabbix6.karlsbakk.net
+octofarm.karlsbakk.net
 
-[vmer-fixed]
+[vmer_fixed]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
 crpi.karlsbakk.net
@@ -120,6 +121,31 @@ postgresql.karlsbakk.net
 [zabbix_server]
 zabbix-dev2.karlsbakk.net
 
+[pi_reboot]
+crpi.karlsbakk.net
+mangopi1.karlsbakk.net
+
+[vm_reboot]
+apache.karlsbakk.net
+bitwarden.karlsbakk.net
+docker.karlsbakk.net
+francesco.karlsbakk.net
+grafana.karlsbakk.net
+mail.karlsbakk.net
+mariadb.karlsbakk.net
+mqtt.karlsbakk.net
+mta.karlsbakk.net
+ns2.karlsbakk.net
+octofarm.karlsbakk.net
+plex.karlsbakk.net
+postgresql.karlsbakk.net
+pox.karlsbakk.net
+raidtest.karlsbakk.net
+restic.karlsbakk.net
+rtorrent.karlsbakk.net
+ssh.karlsbakk.net
+zabbix6.karlsbakk.net
+
 [zabagt2]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
@@ -138,12 +164,14 @@ ns2.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
+raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 # smilla.karlsbakk.net
 ssh.karlsbakk.net
 # zabbix.karlsbakk.net
 zabbix6.karlsbakk.net
+octofarm.karlsbakk.net
 
 [zabagt2_malin]
 # list opp maskinene som skal oppgraderes her
