@@ -9,8 +9,8 @@
   tasks:
   - name: Replace sources.list with a sane one
     ansible.builtin.copy:
-      src: files/etc/apt/sources.list
-      dest: /etc/apt/sources.list
+      src: files/etc/apt/sources.list-bookworm
+      dest: /etc/apt/sources.list-bookworm
       backup: true
       owner: root
       group: root
@@ -18,8 +18,8 @@
 
   - name: Add backports
     ansible.builtin.copy:
-      src: files/etc/apt/sources.list.d/backports.list
-      dest: /etc/apt/sources.list.d/backports.list
+      src: files/etc/apt/sources.list.d/backports.list-bookworm
+      dest: /etc/apt/sources.list.d/backports.list-bookworm
       owner: root
       group: root
       mode: 0644
@@ -58,6 +58,9 @@
         - uptimed
         - vim
       state: latest
+
+
+        #apt-transport-https bc curl etckeeper fail2ban finger git htop locales-all lshw mlocate nfs-common pastebinit pwgen resolvconf sudo sysstat time tmux tshark ufw unattended-upgrades uptimedevim
 
 # Unattended upgrades
   - name: "Enable unattended upgrades for everything except 'proposed'"
