@@ -58,26 +58,31 @@ bitwarden.karlsbakk.net
 [docker]
 docker.karlsbakk.net
 
+[ny-irc]
+ny-irc.karlsbakk.net
+
 [vmer]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
+collabora.karlsbakk.net
 docker.karlsbakk.net
+francesco.karlsbakk.net
 grafana.karlsbakk.net
-# ipa.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
-# motion.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
+octofarm.karlsbakk.net
+openmediavault.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
+raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 ssh.karlsbakk.net
 zabbix6.karlsbakk.net
-octofarm.karlsbakk.net
 
 [vmer_fixed]
 apache.karlsbakk.net
@@ -125,9 +130,10 @@ zabbix-dev2.karlsbakk.net
 crpi.karlsbakk.net
 mangopi1.karlsbakk.net
 
-[vm_reboot]
+[update_and_reboot_if_needed]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
+collabora.karlsbakk.net
 docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
@@ -137,6 +143,7 @@ mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
 octofarm.karlsbakk.net
+openmediavault.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
@@ -150,7 +157,7 @@ zabbix6.karlsbakk.net
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
 crpi.karlsbakk.net
-docker.karlsbakk.net
+#docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
