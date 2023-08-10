@@ -46,6 +46,7 @@
         - mlocate
         - nfs-common
         - pastebinit
+        - postfix
         - pwgen
         - resolvconf
         - sudo
@@ -106,20 +107,24 @@
     notify:
       - restart sysstat
       - updatedb
+
   - name: Create group roy if it doesn't exist
     ansible.builtin.group:
       name: roy
+
   - name: Make sure user roy exists and has primary group roy
     ansible.builtin.user:
       name: roy
       comment: Roy Sigurd Karlsbakk
       shell: /bin/bash
       group: roy
+
   - name: Make sure roy is member of sudo
     ansible.builtin.user:
       name: roy
       groups: sudo,users
       append: true
+
   - name: update /root/.tmux.conf
     ansible.builtin.blockinfile:
       dest: /root/.tmux.conf
@@ -129,6 +134,7 @@
         bind-key C-a send-prefix
         setw -g mode-keys vi
       create: true
+
   - name: Add relevant keys to \$HOME/.ssh/authorized_keys
     ansible.builtin.blockinfile:
       path: '{{ item.filename }}'
@@ -365,6 +371,22 @@
 
 # </zabbix>
 
+# <smtp>
+  - name: Remove SMTP Relay
+    ansible.builtin.lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: '^relayhost'
+      state: absent
+
+  - name: Set SMTP Relay
+    ansible.builtin.lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: '^relayhost'
+      line: relayhost = mta.karlsbakk.net:26
+    notify:
+      - reload postfix
+# </smtp>
+
   handlers:
     - name: restart zabbix_agent2
       ansible.builtin.systemd:
@@ -383,6 +405,12 @@
         name: sysstat
         enabled: true
         state: restarted
+
+    - name: reload postfix
+      ansible.builtin.systemd:
+        name: postfix
+        enabled: true
+        state: reloaded
 
     - name: updatedb
       command:

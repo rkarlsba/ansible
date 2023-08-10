@@ -10,7 +10,7 @@
   - name: Replace sources.list with a sane one
     ansible.builtin.copy:
       src: files/etc/apt/sources.list-bookworm
-      dest: /etc/apt/sources.list-bookworm
+      dest: /etc/apt/sources.list
       backup: true
       owner: root
       group: root
@@ -19,7 +19,7 @@
   - name: Add backports
     ansible.builtin.copy:
       src: files/etc/apt/sources.list.d/backports.list-bookworm
-      dest: /etc/apt/sources.list.d/backports.list-bookworm
+      dest: /etc/apt/sources.list.d/backports.list
       owner: root
       group: root
       mode: 0644
@@ -91,15 +91,15 @@
         APT::Periodic::Update-Package-Lists "1";
         APT::Periodic::Unattended-Upgrade "1";
 
-  - name: Install fail2ban config
-    ansible.builtin.copy:
-      src: files/etc/fail2ban/jail.d/karlsbakk.conf
-      dest: /etc/fail2ban/jail.d/karlsbakk.conf
-      owner: root
-      group: root
-      mode: 0644
-    notify:
-      - restart fail2ban
+# - name: Install fail2ban config
+#   ansible.builtin.copy:
+#     src: files/etc/fail2ban/jail.d/karlsbakk.conf
+#     dest: /etc/fail2ban/jail.d/karlsbakk.conf
+#     owner: root
+#     group: root
+#     mode: 0644
+#   notify:
+#     - restart fail2ban
 
   - name: Enable sysstat
     ansible.builtin.lineinfile:
