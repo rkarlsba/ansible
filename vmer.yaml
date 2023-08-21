@@ -24,6 +24,16 @@
       group: root
       mode: 0644
 
+  - name: Log everything to smilla
+    ansible.builtin.copy:
+      src: files/etc/rsyslog.d/01-smilla.conf
+      dest: /etc/rsyslog.d/01-smilla.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
+
   - name: apt-get full-upgrade
     ansible.builtin.apt:
       update_cache: true
@@ -47,8 +57,10 @@
         - nfs-common
         - pastebinit
         - postfix
+        - psmisc
         - pwgen
         - resolvconf
+        - rsync
         - sudo
         - sysstat
         - time
@@ -56,8 +68,10 @@
         - tshark
         - ufw
         - unattended-upgrades
+        - unzip
         - uptimed
         - vim
+        - virt-what
       state: latest
 
 # Unattended upgrades
@@ -399,6 +413,12 @@
         name: fail2ban
         enabled: true
         state: restarted
+
+    - name: restart rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+        masked: no
 
     - name: restart sysstat
       ansible.builtin.systemd:
