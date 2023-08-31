@@ -103,15 +103,15 @@
         APT::Periodic::Update-Package-Lists "1";
         APT::Periodic::Unattended-Upgrade "1";
 
- - name: Install fail2ban config
-   ansible.builtin.copy:
-     src: files/etc/fail2ban/jail.d/karlsbakk-bookworm.conf
-     dest: /etc/fail2ban/jail.d/karlsbakk-bookworm.conf
-     owner: root
-     group: root
-     mode: 0644
-   notify:
-     - restart fail2ban
+  - name: Install fail2ban config
+    ansible.builtin.copy:
+      src: files/etc/fail2ban/jail.d/karlsbakk-bookworm.conf
+      dest: /etc/fail2ban/jail.d/karlsbakk-bookworm.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+      - restart fail2ban
 
   - name: Enable sysstat
     ansible.builtin.lineinfile:
