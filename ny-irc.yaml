@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: ny-irc
+- hosts: ny_irc
   strategy: free
   vars:
     http_port: 80
@@ -24,6 +24,16 @@
       group: root
       mode: 0644
 
+  - name: Log everything to smilla
+    ansible.builtin.copy:
+      src: files/etc/rsyslog.d/01-smilla.conf
+      dest: /etc/rsyslog.d/01-smilla.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
+
   - name: apt-get full-upgrade
     ansible.builtin.apt:
       update_cache: true
@@ -46,21 +56,23 @@
         - mlocate
         - nfs-common
         - pastebinit
+        - postfix
+        - psmisc
         - pwgen
         - resolvconf
+        - rsync
         - sudo
         - sysstat
         - time
         - tmux
         - tshark
         - ufw
+        - unzip
         - unattended-upgrades
         - uptimed
         - vim
+        - virt-what
       state: latest
-
-
-        #apt-transport-https bc curl etckeeper fail2ban finger git htop locales-all lshw mlocate nfs-common pastebinit pwgen resolvconf sudo sysstat time tmux tshark ufw unattended-upgrades uptimedevim
 
 # Unattended upgrades
   - name: "Enable unattended upgrades for everything except 'proposed'"
@@ -91,15 +103,15 @@
         APT::Periodic::Update-Package-Lists "1";
         APT::Periodic::Unattended-Upgrade "1";
 
-# - name: Install fail2ban config
-#   ansible.builtin.copy:
-#     src: files/etc/fail2ban/jail.d/karlsbakk.conf
-#     dest: /etc/fail2ban/jail.d/karlsbakk.conf
-#     owner: root
-#     group: root
-#     mode: 0644
-#   notify:
-#     - restart fail2ban
+ - name: Install fail2ban config
+   ansible.builtin.copy:
+     src: files/etc/fail2ban/jail.d/karlsbakk-bookworm.conf
+     dest: /etc/fail2ban/jail.d/karlsbakk-bookworm.conf
+     owner: root
+     group: root
+     mode: 0644
+   notify:
+     - restart fail2ban
 
   - name: Enable sysstat
     ansible.builtin.lineinfile:
@@ -367,6 +379,23 @@
     - restart zabbix_agent2
 
 # </zabbix>
+#
+# <smtp>
+  - name: Remove SMTP Relay
+    ansible.builtin.lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: '^relayhost'
+      state: absent
+
+  - name: Set SMTP Relay
+    ansible.builtin.lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: '^relayhost'
+      line: relayhost = mta.karlsbakk.net:26
+    notify:
+      - reload postfix
+# </smtp>
+
 
   handlers:
     - name: restart zabbix_agent2
@@ -381,6 +410,18 @@
         enabled: true
         state: restarted
 
+    - name: reload postfix
+      ansible.builtin.systemd:
+        name: postfix
+        enabled: true
+        state: reloaded
+
+    - name: restart rsyslog
+      service:
+        name: rsyslog
+        state: restarted
+        masked: no
+
     - name: restart sysstat
       ansible.builtin.systemd:
         name: sysstat
@@ -391,6 +432,4 @@
       command:
         cmd: /usr/bin/updatedb
 
-          # name: Import zabbix-agent2 playbook
-          # ansible.builtin.import_playbook: zabbix-agent2.inc.yaml
 
