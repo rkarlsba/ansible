@@ -54,6 +54,7 @@
         - locales-all
         - lshw
         - mlocate
+        - mosh
         - nfs-common
         - pastebinit
         - postfix

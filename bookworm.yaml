@@ -53,13 +53,16 @@
         - htop
         - locales-all
         - lshw
+        - mailutils
         - mlocate
+        - mosh
         - nfs-common
         - pastebinit
         - postfix
         - psmisc
         - pwgen
         - resolvconf
+        - restic
         - rsync
         - sudo
         - sysstat
@@ -392,14 +395,8 @@
     notify:
     - restart zabbix_agent2
 
-# </zabbix>
-#
-# <smtp>
-# - name: Remove SMTP Relay
-#   ansible.builtin.lineinfile:
-#     path: /etc/postfix/main.cf
-#     regexp: '^relayhost'
-#     state: absent
+      #
+      #
 
   - name: Set SMTP Relay
     ansible.builtin.lineinfile:
@@ -409,6 +406,44 @@
     notify:
       - reload postfix
 # </smtp>
+
+# <restic>
+  - name: Do a restic self-update
+    ansible.builtin.command: restic self-update
+
+  - name: Copy restic files
+    ansible.builtin.copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dst }}'
+      mode: '{{ item.mode }}'
+      force: yes
+      owner: root
+      group: root
+    with_items:
+      - { src: 'files/etc/default/restic', dest: '/etc/default/restic', mode: '0644' }
+      - { src: 'files/usr/local/bin/backup-to-restic.sh', dest: '/usr/local/bin/backup-to-restic.sh', mode: '0755' }
+      - { src: 'files/usr/local/bin/restic-backup-pre-exec.sh', dest: '/usr/local/bin/restic-backup-pre-exec.sh', mode: '0755' }
+      - { src: 'files/usr/local/bin/restic-backup-post-exec.sh', dest: '/usr/local/bin/restic-backup-post-exec.sh', mode: '0755' }
+      - { src: 'files/usr/local/etc/restic-excludes.txt', dest: '/usr/local/etc/restic-excludes.txt', mode: '0644' }
+      - { src: '', dest: '', mode: '0755' }
+
+  - name: Configure ssh with backup host
+    ansible.builtin.blockinfile:
+      path: /root/.ssh/config
+      create: yes
+      block: |
+        # host restic
+        #     Hostname restic.karlsbakk.net
+        #     User {{ ansible_hostname }}-bk
+
+  - name: Crontab for backup
+    cron:
+      name: "Backup to Restic at 0100 each night"
+      minute: "0"
+      hour: "1"
+      job: "/usr/local/bin/backup-to-restic.sh"
+      state: present
+# </restic>
 
   - name: updatedb
     ansible.builtin.command:

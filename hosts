@@ -74,7 +74,7 @@ mariadb.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
-octofarm.karlsbakk.net
+#octofarm.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
@@ -98,12 +98,12 @@ mariadb.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
-octofarm.karlsbakk.net
+#octofarm.karlsbakk.net
 #openmediavault.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
-raidtest.karlsbakk.net
+#raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 ssh.karlsbakk.net

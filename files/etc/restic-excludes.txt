@@ -1,0 +1,6 @@
+/proc
+/sys
+/dev
+/run
+/var/cache/apt
+/var/lib/lxcfs
