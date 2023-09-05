@@ -68,7 +68,7 @@ bitwarden.karlsbakk.net
 #docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
-greylog.karlsbakk.net
+graylog.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 mqtt.karlsbakk.net
@@ -92,7 +92,7 @@ bitwarden.karlsbakk.net
 #docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
-greylog.karlsbakk.net
+graylog.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 mqtt.karlsbakk.net
@@ -114,7 +114,7 @@ apache.karlsbakk.net
 bitwarden.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
-greylog.karlsbakk.net
+graylog.karlsbakk.net
 mariadb.karlsbakk.net
 mqtt.karlsbakk.net
 octofarm.karlsbakk.net

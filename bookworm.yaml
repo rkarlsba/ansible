@@ -414,18 +414,17 @@
   - name: Copy restic files
     ansible.builtin.copy:
       src: '{{ item.src }}'
-      dest: '{{ item.dst }}'
+      dest: '{{ item.dest }}'
       mode: '{{ item.mode }}'
-      force: yes
+      force: '{{ item.force }}'
       owner: root
       group: root
     with_items:
-      - { src: 'files/etc/default/restic', dest: '/etc/default/restic', mode: '0644' }
-      - { src: 'files/usr/local/bin/backup-to-restic.sh', dest: '/usr/local/bin/backup-to-restic.sh', mode: '0755' }
-      - { src: 'files/usr/local/bin/restic-backup-pre-exec.sh', dest: '/usr/local/bin/restic-backup-pre-exec.sh', mode: '0755' }
-      - { src: 'files/usr/local/bin/restic-backup-post-exec.sh', dest: '/usr/local/bin/restic-backup-post-exec.sh', mode: '0755' }
-      - { src: 'files/usr/local/etc/restic-excludes.txt', dest: '/usr/local/etc/restic-excludes.txt', mode: '0644' }
-      - { src: '', dest: '', mode: '0755' }
+      - { src: 'files/etc/default/restic', dest: '/etc/default/restic', mode: '0644', force: 'yes' }
+      - { src: 'files/usr/local/bin/backup-to-restic.sh', dest: '/usr/local/bin/backup-to-restic.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/bin/restic-backup-pre-exec.sh', dest: '/usr/local/bin/restic-backup-pre-exec.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/bin/restic-backup-post-exec.sh', dest: '/usr/local/bin/restic-backup-post-exec.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/etc/restic-excludes.txt', dest: '/usr/local/etc/restic-excludes.txt', mode: '0644', force: 'no' }
 
   - name: Configure ssh with backup host
     ansible.builtin.blockinfile:

@@ -62,6 +62,7 @@
         - pwgen
         - resolvconf
         - rsync
+        - rsyslog
         - sudo
         - sysstat
         - time
@@ -280,7 +281,7 @@
     cron:
         name: PATH
         env: true
-        job: /sbin:/usr/sbin:$PATH
+        job: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         state: present
 
   - name: Crontab for fstrim - daily
