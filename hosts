@@ -60,6 +60,8 @@ docker.karlsbakk.net
 
 [bookworm]
 ny-irc.karlsbakk.net
+pox.karlsbakk.net
+ssh.karlsbakk.net
 
 [bullseye]
 apache.karlsbakk.net
@@ -77,11 +79,11 @@ ns2.karlsbakk.net
 #octofarm.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
-pox.karlsbakk.net
+#pox.karlsbakk.net
 #raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
-ssh.karlsbakk.net
+#ssh.karlsbakk.net
 zabbix5.karlsbakk.net
 zabbix6.karlsbakk.net
 
@@ -102,11 +104,11 @@ ns2.karlsbakk.net
 #openmediavault.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
-pox.karlsbakk.net
+#pox.karlsbakk.net
 #raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
-ssh.karlsbakk.net
+#ssh.karlsbakk.net
 zabbix6.karlsbakk.net
 
 [smtp]
