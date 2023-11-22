@@ -58,34 +58,45 @@ bitwarden.karlsbakk.net
 [docker]
 docker.karlsbakk.net
 
-[bookworm]
-ny-irc.karlsbakk.net
-pox.karlsbakk.net
-ssh.karlsbakk.net
+# Debian 10
+[buster]
+crpi.karlsbakk.net
 
+# Debian 11
 [bullseye]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
 #collabora.karlsbakk.net
 #docker.karlsbakk.net
-francesco.karlsbakk.net
 grafana.karlsbakk.net
 graylog.karlsbakk.net
+homearse.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
-mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
 #octofarm.karlsbakk.net
-plex.karlsbakk.net
+#plex.karlsbakk.net
 postgresql.karlsbakk.net
 #pox.karlsbakk.net
 #raidtest.karlsbakk.net
-restic.karlsbakk.net
 rtorrent.karlsbakk.net
 #ssh.karlsbakk.net
 zabbix5.karlsbakk.net
 zabbix6.karlsbakk.net
+
+# Debian 12
+[bookworm]
+francesco.karlsbakk.net
+#mailcow.karlsbakk.net
+mqtt.karlsbakk.net
+ny-irc.karlsbakk.net
+pox.karlsbakk.net
+restic.karlsbakk.net
+snaptest.karlsbakk.net
+ssh.karlsbakk.net
+tuya
+lydgreie.local
 
 [vmer]
 apache.karlsbakk.net

@@ -24,16 +24,6 @@
       group: root
       mode: 0644
 
-  - name: Log everything to smilla
-    ansible.builtin.copy:
-      src: files/etc/rsyslog.d/01-smilla.conf
-      dest: /etc/rsyslog.d/01-smilla.conf
-      owner: root
-      group: root
-      mode: 0644
-    notify:
-    - restart rsyslog
-
   - name: apt-get full-upgrade
     ansible.builtin.apt:
       update_cache: true
@@ -66,6 +56,7 @@
         - resolvconf
         - restic
         - rsync
+        - rsyslog
         - sudo
         - sysstat
         - time
@@ -78,6 +69,16 @@
         - vim
         - virt-what
       state: latest
+
+  - name: Log everything to smilla
+    ansible.builtin.copy:
+      src: files/etc/rsyslog.d/01-smilla.conf
+      dest: /etc/rsyslog.d/01-smilla.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
 
 # Unattended upgrades
   - name: "Enable unattended upgrades for everything except 'proposed'"

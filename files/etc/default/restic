@@ -1,6 +1,9 @@
 # vim:ft=sh
 
-# Variabler - se https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables
+# We need a good path - it's lost sometimes
+export PATH=/bin:/usr/bin:/usr/local/bin:/sbin:/usr/sbin:/usr/local/sbin:/snap/bin
+
+# Variables - see https://restic.readthedocs.io/en/latest/040_backup.html#environment-variables
 export RESTIC_REPOSITORY="sftp:restic:restic-repo"
 export RESTIC_PASSWORD_FILE="/usr/local/etc/restic-password.txt"
 
