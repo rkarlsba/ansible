@@ -1,9 +1,14 @@
 # vim:ft=dosini
+
+[fail2ban]
+#francesco.karlsbakk.net
+irc.karlsbakk.net
+
 [homeassistant]
 192.168.10.249 piname=homearse
 
 [mangopi]
-#10.47.100.10   piname=mangopi1.karlsbakk.net
+#10.47.100.10	piname=mangopi1.karlsbakk.net
 mangopi1.karlsbakk.net
 
 [servere]
@@ -48,7 +53,11 @@ insecure.karlsbakk.net
 # zabbix-dev2.karlsbakk.net
 
 [bitwarden]
-bitwarden.karlsbakk.n
+bitwarden.karlsbakk.net
+
+[docker]
+docker.karlsbakk.net
+
 # Debian 10
 [buster]
 crpi.karlsbakk.net
@@ -247,3 +256,4 @@ zabbix-vm.malinux.no
 black-mamba.malinux.no
 
 [ipv6change]
+
