@@ -94,6 +94,9 @@
 
         # Check if server can do DNS lookups
         UserParameter=custom.dnslookup,/usr/local/bin/check-dns.sh google.com
+
+        # Check if mountpoint is actually mounted
+        UserParameter=vfs.mount.is_mounted[*],mountpoint -q $1 && echo YES || echo NO
       create: yes
     notify:
     - restart zabbix_agent2

@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: vmer
+- hosts: bullseye
   strategy: free
   vars:
     http_port: 80
@@ -45,7 +45,9 @@
       name:
         - apt-transport-https
         - bc
+        - binutils
         - curl
+        - debian-security-support
         - etckeeper
         - fail2ban
         - finger
@@ -54,6 +56,7 @@
         - locales-all
         - lshw
         - mlocate
+        - mosh
         - nfs-common
         - pastebinit
         - postfix
@@ -61,6 +64,7 @@
         - pwgen
         - resolvconf
         - rsync
+        - rsyslog
         - sudo
         - sysstat
         - time
@@ -113,14 +117,18 @@
     notify:
       - restart fail2ban
 
-  - name: Enable sysstat
+  - name: Enable sysstat in config file
     ansible.builtin.lineinfile:
       path: /etc/default/sysstat
       regexp: '^ENABLED='
       line: 'ENABLED="true"'
+
+  - name: Enable sysstat in systemd
+    ansible.builtin.systemd:
+      name: sysstat
+      enabled: true
     notify:
       - restart sysstat
-      - updatedb
 
   - name: Create group roy if it doesn't exist
     ansible.builtin.group:
@@ -275,7 +283,7 @@
     cron:
         name: PATH
         env: true
-        job: /sbin:/usr/sbin:$PATH
+        job: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
         state: present
 
   - name: Crontab for fstrim - daily
@@ -293,15 +301,6 @@
       job: "fstrim -a"
       state: present
 
-  - name: Check if reboot required
-    stat:
-      path: /var/run/reboot-required
-    register: reboot_required_file
-
-  - name: Reboot if required
-    reboot:
-    when: reboot_required_file.stat.exists == true
-
 # <zabbix>
   - name: Install zabbix-agent2
     ansible.builtin.apt:
@@ -315,6 +314,22 @@
         - zabbix-agent
       state: absent
 
+  - name: UFW - clean up old rules related to zabbix
+    ufw:
+      rule: allow
+      delete: true
+      from_ip: "{{ item.ip_addr }}"
+      proto: "{{ item.proto }}"
+      port: "{{ item.port }}"
+      comment: "{{ item.comment }}"
+    with_items:
+      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk5.net (IPv6)' }
+      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv6)' }
+      - { ip_addr: '80.213.160.61', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv4)' }
+      - { ip_addr: '2001:4641:4dfa::2ab1', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv6)' }
+
   - name: UFW - Allow zabbix traffic from zabbix
     ufw:
       rule: allow
@@ -323,12 +338,10 @@
       port: "{{ item.port }}"
       comment: "{{ item.comment }}"
     with_items:
-      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)' }
-      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv6)' }
-      - { ip_addr: '80.213.160.61', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv4)' }
-      - { ip_addr: '2001:4641:4dfa::2ab1', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv6)' }
+      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk5.net (IPv6)' }
+      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv6)' }
 
   - name: Copy plugins
     ansible.builtin.copy:
@@ -401,6 +414,19 @@
       - reload postfix
 # </smtp>
 
+  - name: updatedb
+    ansible.builtin.command:
+      cmd: /usr/bin/updatedb
+
+  - name: Check if reboot required
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required_file
+
+  - name: Reboot if required
+    reboot:
+    when: reboot_required_file.stat.exists == true
+
   handlers:
     - name: restart zabbix_agent2
       ansible.builtin.systemd:
@@ -423,7 +449,6 @@
     - name: restart sysstat
       ansible.builtin.systemd:
         name: sysstat
-        enabled: true
         state: restarted
 
     - name: reload postfix

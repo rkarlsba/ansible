@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: vmer
+- hosts: bookworm
   strategy: free
   vars:
     http_port: 80
@@ -9,7 +9,7 @@
   tasks:
   - name: Replace sources.list with a sane one
     ansible.builtin.copy:
-      src: files/etc/apt/sources.list
+      src: files/etc/apt/sources.list-bookworm
       dest: /etc/apt/sources.list
       backup: true
       owner: root
@@ -18,21 +18,11 @@
 
   - name: Add backports
     ansible.builtin.copy:
-      src: files/etc/apt/sources.list.d/backports.list
+      src: files/etc/apt/sources.list.d/backports.list-bookworm
       dest: /etc/apt/sources.list.d/backports.list
       owner: root
       group: root
       mode: 0644
-
-  - name: Log everything to smilla
-    ansible.builtin.copy:
-      src: files/etc/rsyslog.d/01-smilla.conf
-      dest: /etc/rsyslog.d/01-smilla.conf
-      owner: root
-      group: root
-      mode: 0644
-    notify:
-    - restart rsyslog
 
   - name: apt-get full-upgrade
     ansible.builtin.apt:
@@ -45,7 +35,9 @@
       name:
         - apt-transport-https
         - bc
+        - binutils
         - curl
+        - debian-security-support
         - etckeeper
         - fail2ban
         - finger
@@ -53,26 +45,40 @@
         - htop
         - locales-all
         - lshw
+        - mailutils
         - mlocate
+        - mosh
         - nfs-common
         - pastebinit
         - postfix
         - psmisc
         - pwgen
         - resolvconf
+        - restic
         - rsync
+        - rsyslog
         - sudo
         - sysstat
         - time
         - tmux
         - tshark
         - ufw
-        - unattended-upgrades
         - unzip
+        - unattended-upgrades
         - uptimed
         - vim
         - virt-what
       state: latest
+
+  - name: Log everything to smilla
+    ansible.builtin.copy:
+      src: files/etc/rsyslog.d/01-smilla.conf
+      dest: /etc/rsyslog.d/01-smilla.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
 
 # Unattended upgrades
   - name: "Enable unattended upgrades for everything except 'proposed'"
@@ -105,22 +111,26 @@
 
   - name: Install fail2ban config
     ansible.builtin.copy:
-      src: files/etc/fail2ban/jail.d/karlsbakk.conf
-      dest: /etc/fail2ban/jail.d/karlsbakk.conf
+      src: files/etc/fail2ban/jail.d/karlsbakk-bookworm.conf
+      dest: /etc/fail2ban/jail.d/karlsbakk-bookworm.conf
       owner: root
       group: root
       mode: 0644
     notify:
       - restart fail2ban
 
-  - name: Enable sysstat
+  - name: Enable sysstat in config file
     ansible.builtin.lineinfile:
       path: /etc/default/sysstat
       regexp: '^ENABLED='
       line: 'ENABLED="true"'
+
+  - name: Enable sysstat in systemd
+    ansible.builtin.systemd:
+      name: sysstat
+      enabled: true
     notify:
       - restart sysstat
-      - updatedb
 
   - name: Create group roy if it doesn't exist
     ansible.builtin.group:
@@ -293,15 +303,6 @@
       job: "fstrim -a"
       state: present
 
-  - name: Check if reboot required
-    stat:
-      path: /var/run/reboot-required
-    register: reboot_required_file
-
-  - name: Reboot if required
-    reboot:
-    when: reboot_required_file.stat.exists == true
-
 # <zabbix>
   - name: Install zabbix-agent2
     ansible.builtin.apt:
@@ -315,6 +316,22 @@
         - zabbix-agent
       state: absent
 
+  - name: UFW - clean up old rules related to zabbix
+    ufw:
+      rule: allow
+      delete: true
+      from_ip: "{{ item.ip_addr }}"
+      proto: "{{ item.proto }}"
+      port: "{{ item.port }}"
+      comment: "{{ item.comment }}"
+    with_items:
+      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk5.net (IPv6)' }
+      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv6)' }
+      - { ip_addr: '80.213.160.61', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv4)' }
+      - { ip_addr: '2001:4641:4dfa::2ab1', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv6)' }
+
   - name: UFW - Allow zabbix traffic from zabbix
     ufw:
       rule: allow
@@ -323,12 +340,10 @@
       port: "{{ item.port }}"
       comment: "{{ item.comment }}"
     with_items:
-      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)' }
-      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv6)' }
-      - { ip_addr: '80.213.160.61', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv4)' }
-      - { ip_addr: '2001:4641:4dfa::2ab1', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv6)' }
+      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk5.net (IPv6)' }
+      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv6)' }
 
   - name: Copy plugins
     ansible.builtin.copy:
@@ -383,15 +398,7 @@
     notify:
     - restart zabbix_agent2
 
-# </zabbix>
-
 # <smtp>
-  - name: Remove SMTP Relay
-    ansible.builtin.lineinfile:
-      path: /etc/postfix/main.cf
-      regexp: '^relayhost'
-      state: absent
-
   - name: Set SMTP Relay
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
@@ -401,28 +408,66 @@
       - reload postfix
 # </smtp>
 
+# <restic>
+  - name: Do a restic self-update
+    ansible.builtin.command: restic self-update
+
+  - name: Copy restic files
+    ansible.builtin.copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+      mode: '{{ item.mode }}'
+      force: '{{ item.force }}'
+      owner: root
+      group: root
+    with_items:
+      - { src: 'files/etc/default/restic', dest: '/etc/default/restic', mode: '0644', force: 'yes' }
+      - { src: 'files/usr/local/bin/backup-to-restic.sh', dest: '/usr/local/bin/backup-to-restic.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/bin/restic-backup-pre-exec.sh', dest: '/usr/local/bin/restic-backup-pre-exec.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/bin/restic-backup-post-exec.sh', dest: '/usr/local/bin/restic-backup-post-exec.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/etc/restic-excludes.txt', dest: '/usr/local/etc/restic-excludes.txt', mode: '0644', force: 'no' }
+
+  - name: Configure ssh with backup host
+    ansible.builtin.blockinfile:
+      path: /root/.ssh/config
+      create: yes
+      block: |
+        # host restic
+        #     Hostname restic.karlsbakk.net
+        #     User {{ ansible_hostname }}-bk
+
+  - name: Crontab for backup
+    cron:
+      name: "Backup to Restic at 0100 each night"
+      minute: "0"
+      hour: "1"
+      job: "/usr/local/bin/backup-to-restic.sh"
+      state: present
+# </restic>
+
+  - name: updatedb
+    ansible.builtin.command:
+      cmd: /usr/bin/updatedb
+
+  - name: Check if reboot required
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required_file
+
+  - name: Reboot if required
+    reboot:
+    when: reboot_required_file.stat.exists == true
+
   handlers:
     - name: restart zabbix_agent2
       ansible.builtin.systemd:
         name: zabbix-agent2
-        enabled: yes
+        enabled: true
         state: restarted
 
     - name: restart fail2ban
       ansible.builtin.systemd:
         name: fail2ban
-        enabled: true
-        state: restarted
-
-    - name: restart rsyslog
-      service:
-        name: rsyslog
-        state: restarted
-        masked: no
-
-    - name: restart sysstat
-      ansible.builtin.systemd:
-        name: sysstat
         enabled: true
         state: restarted
 
@@ -432,10 +477,18 @@
         enabled: true
         state: reloaded
 
+    - name: restart rsyslog
+      ansible.builtin.systemd:
+        name: rsyslog
+        state: restarted
+
+    - name: restart sysstat
+      ansible.builtin.systemd:
+        name: sysstat
+        state: restarted
+
     - name: updatedb
       command:
         cmd: /usr/bin/updatedb
 
-          # name: Import zabbix-agent2 playbook
-          # ansible.builtin.import_playbook: zabbix-agent2.inc.yaml
 

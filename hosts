@@ -1,14 +1,9 @@
 # vim:ft=dosini
-
-[fail2ban]
-#francesco.karlsbakk.net
-irc.karlsbakk.net
-
 [homeassistant]
 192.168.10.249 piname=homearse
 
 [mangopi]
-#10.47.100.10	piname=mangopi1.karlsbakk.net
+#10.47.100.10   piname=mangopi1.karlsbakk.net
 mangopi1.karlsbakk.net
 
 [servere]
@@ -53,24 +48,81 @@ insecure.karlsbakk.net
 # zabbix-dev2.karlsbakk.net
 
 [bitwarden]
-bitwarden.karlsbakk.net
+bitwarden.karlsbakk.n
+# Debian 10
+[buster]
+crpi.karlsbakk.net
 
-[docker]
-docker.karlsbakk.net
+# Debian 11
+[bullseye]
+apache.karlsbakk.net
+bitwarden.karlsbakk.net
+#collabora.karlsbakk.net
+#docker.karlsbakk.net
+grafana.karlsbakk.net
+graylog.karlsbakk.net
+homearse.karlsbakk.net
+mail.karlsbakk.net
+mariadb.karlsbakk.net
+mta.karlsbakk.net
+ns2.karlsbakk.net
+#octofarm.karlsbakk.net
+#plex.karlsbakk.net
+postgresql.karlsbakk.net
+#pox.karlsbakk.net
+#raidtest.karlsbakk.net
+rtorrent.karlsbakk.net
+#ssh.karlsbakk.net
+zabbix5.karlsbakk.net
+zabbix6.karlsbakk.net
+
+# Debian 12
+[bookworm]
+francesco.karlsbakk.net
+#mailcow.karlsbakk.net
+mqtt.karlsbakk.net
+ny-irc.karlsbakk.net
+pox.karlsbakk.net
+restic.karlsbakk.net
+snaptest.karlsbakk.net
+ssh.karlsbakk.net
+tuya
+lydgreie.local
 
 [vmer]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
-docker.karlsbakk.net
+#collabora.karlsbakk.net
+#docker.karlsbakk.net
+francesco.karlsbakk.net
 grafana.karlsbakk.net
-# ipa.karlsbakk.net
+graylog.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
-# motion.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
+#octofarm.karlsbakk.net
+#openmediavault.karlsbakk.net
+plex.karlsbakk.net
+postgresql.karlsbakk.net
+#pox.karlsbakk.net
+#raidtest.karlsbakk.net
+restic.karlsbakk.net
+rtorrent.karlsbakk.net
+#ssh.karlsbakk.net
+zabbix6.karlsbakk.net
+
+[smtp]
+apache.karlsbakk.net
+bitwarden.karlsbakk.net
+francesco.karlsbakk.net
+grafana.karlsbakk.net
+graylog.karlsbakk.net
+mariadb.karlsbakk.net
+mqtt.karlsbakk.net
 octofarm.karlsbakk.net
+#openmediavault.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
@@ -78,9 +130,8 @@ raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 ssh.karlsbakk.net
-zabbix6.karlsbakk.net
 
-[vmer-fixed]
+[vmer_fixed]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
 crpi.karlsbakk.net
@@ -104,29 +155,57 @@ mqtt.karlsbakk.net
 ipa.karlsbakk.net
 
 [restic]
-#zimbra.karlsbakk.net
-apache.karlsbakk.net
-bitwarden.karlsbakk.net
-hjemmehjelp.karlsbakk.net
-homearse.karlsbakk.net
-irc.karlsbakk.net
-mail.karlsbakk.net
+#apache.karlsbakk.net
+#bitwarden.karlsbakk.net
+#hjemmehjelp.karlsbakk.net
+#homearse.karlsbakk.net
+#irc.karlsbakk.net
+#mail.karlsbakk.net
 #mangopi1.karlsbakk.net
 #mangopi2.karlsbakk.net
-mariadb.karlsbakk.net
-mqtt.karlsbakk.net
-ns2.karlsbakk.net
-plex.karlsbakk.net
-postgresql.karlsbakk.net
+#mariadb.karlsbakk.net
+#mqtt.karlsbakk.net
+#ns2.karlsbakk.net
+#plex.karlsbakk.net
+#postgresql.karlsbakk.net
+#zabbix6.karlsbakk.net
+retropie.local
 
 [zabbix_server]
 zabbix-dev2.karlsbakk.net
+
+[pi_reboot]
+crpi.karlsbakk.net
+mangopi1.karlsbakk.net
+
+[update_and_reboot_if_needed]
+apache.karlsbakk.net
+bitwarden.karlsbakk.net
+collabora.karlsbakk.net
+docker.karlsbakk.net
+francesco.karlsbakk.net
+grafana.karlsbakk.net
+mail.karlsbakk.net
+mariadb.karlsbakk.net
+mqtt.karlsbakk.net
+mta.karlsbakk.net
+ns2.karlsbakk.net
+octofarm.karlsbakk.net
+#openmediavault.karlsbakk.net
+plex.karlsbakk.net
+postgresql.karlsbakk.net
+pox.karlsbakk.net
+raidtest.karlsbakk.net
+restic.karlsbakk.net
+rtorrent.karlsbakk.net
+ssh.karlsbakk.net
+zabbix6.karlsbakk.net
 
 [zabagt2]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
 crpi.karlsbakk.net
-docker.karlsbakk.net
+#docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
@@ -137,7 +216,6 @@ mariadb.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
-octofarm.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 pox.karlsbakk.net
@@ -148,6 +226,7 @@ rtorrent.karlsbakk.net
 ssh.karlsbakk.net
 # zabbix.karlsbakk.net
 zabbix6.karlsbakk.net
+octofarm.karlsbakk.net
 
 [zabagt2_malin]
 # list opp maskinene som skal oppgraderes her
@@ -168,4 +247,3 @@ zabbix-vm.malinux.no
 black-mamba.malinux.no
 
 [ipv6change]
-apache.karlsbakk.net

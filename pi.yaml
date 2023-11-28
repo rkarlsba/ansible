@@ -16,10 +16,14 @@
 #     regexp: "127.0.1.1.*"
 #     line: "127.0.1.1  {{ piname }}"
   - name: Log everything to smilla
-    lineinfile:
+    ansible.builtin.copy:
+      src: files/etc/rsyslog.d/01-smilla.conf
       dest: /etc/rsyslog.d/01-smilla.conf
-      line: "*.*       @[2a01:79c:cebf:61e4:1::1]"
-      create: yes
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
 
 ### apt ###
   - name: Remove packages we don't want
@@ -343,5 +347,11 @@
     - name: restart sysstat
       service:
         name: sysstat
+        state: restarted
+        masked: no
+
+    - name: restart rsyslog
+      service:
+        name: rsyslog
         state: restarted
         masked: no
