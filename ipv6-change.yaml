@@ -8,17 +8,24 @@
 
   remote_user: root
   tasks:
-  - name: "Change IPv6 prefix - address"
+# - name: "Change IPv6 prefix - address"
+#   ansible.builtin.lineinfile:
+#     path: /tmp/interfaces
+#     regexp: '^(\s+address\s+){{ old_prefix }}(.*)$'
+#     line: '\1{{ new_prefix }}\2'
+#     backrefs: yes
+
+# - name: "Change IPv6 prefix - gateway"
+#   ansible.builtin.lineinfile:
+#     path: /tmp/interfaces
+#     regexp: '^(\s+gateway\s+){{ old_prefix }}(.*)$'
+#     line: '\1{{ new_prefix }}\2'
+#     backrefs: yes
+
+  - name: "Change IPv6 prefix"
     ansible.builtin.lineinfile:
       path: /tmp/interfaces
       regexp: '^(\s+address\s+){{ old_prefix }}(.*)$'
-      line: '\1{{ new_prefix }}\2'
-      backrefs: yes
-
-  - name: "Change IPv6 prefix - gateway"
-    ansible.builtin.lineinfile:
-      path: /tmp/interfaces
-      regexp: '^(\s+gateway\s+){{ old_prefix }}(.*)$'
       line: '\1{{ new_prefix }}\2'
       backrefs: yes
 
