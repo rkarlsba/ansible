@@ -2,11 +2,23 @@
 
 - hosts: ipv6change
   strategy: free
+  vars:
+    old_prefix: '2a01:79c:cebf:61e4:'
+    new_prefix: '2a01:79c:cebe:d8d0:'
 
   remote_user: root
   tasks:
+  - name: "Change IPv6 prefix - address"
     ansible.builtin.lineinfile:
       path: /tmp/interfaces
-      regexp: '^(\s+address\s+)2a01:79c:cebf:61e4:(.*)$'
-      line: '\12a01:79c:cebe:d8d0:\2'
+      regexp: '^(\s+address\s+){{ old_prefix }}(.*)$'
+      line: '\1{{ new_prefix }}\2'
       backrefs: yes
+
+  - name: "Change IPv6 prefix - gateway"
+    ansible.builtin.lineinfile:
+      path: /tmp/interfaces
+      regexp: '^(\s+gateway\s+){{ old_prefix }}(.*)$'
+      line: '\1{{ new_prefix }}\2'
+      backrefs: yes
+
