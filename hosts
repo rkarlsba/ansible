@@ -95,8 +95,8 @@ pox.karlsbakk.net
 restic.karlsbakk.net
 snaptest.karlsbakk.net
 ssh.karlsbakk.net
-tuya
-lydgreie.local
+#tuya
+#lydgreie.local
 
 [vmer]
 apache.karlsbakk.net
