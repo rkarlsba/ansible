@@ -1,4 +1,4 @@
-# vim:ft=dosini
+# vim:ft=dosini:fdm=marker
 
 [fail2ban]
 #francesco.karlsbakk.net
@@ -65,9 +65,7 @@ crpi.karlsbakk.net
 # Debian 11
 [bullseye]
 apache.karlsbakk.net
-bitwarden.karlsbakk.net
 #collabora.karlsbakk.net
-#docker.karlsbakk.net
 grafana.karlsbakk.net
 graylog.karlsbakk.net
 homearse.karlsbakk.net
@@ -87,6 +85,8 @@ zabbix6.karlsbakk.net
 
 # Debian 12
 [bookworm]
+bitwarden.karlsbakk.net
+docker.karlsbakk.net
 francesco.karlsbakk.net
 #mailcow.karlsbakk.net
 mqtt.karlsbakk.net
@@ -98,29 +98,30 @@ ssh.karlsbakk.net
 #tuya
 #lydgreie.local
 
-[vmer]
-apache.karlsbakk.net
-bitwarden.karlsbakk.net
-#collabora.karlsbakk.net
-#docker.karlsbakk.net
-francesco.karlsbakk.net
-grafana.karlsbakk.net
-graylog.karlsbakk.net
-mail.karlsbakk.net
-mariadb.karlsbakk.net
-mqtt.karlsbakk.net
-mta.karlsbakk.net
-ns2.karlsbakk.net
-#octofarm.karlsbakk.net
-#openmediavault.karlsbakk.net
-plex.karlsbakk.net
-postgresql.karlsbakk.net
-#pox.karlsbakk.net
-#raidtest.karlsbakk.net
-restic.karlsbakk.net
-rtorrent.karlsbakk.net
-#ssh.karlsbakk.net
-zabbix6.karlsbakk.net
+#[vmer] {{{
+#apache.karlsbakk.net
+#bitwarden.karlsbakk.net
+##collabora.karlsbakk.net
+##docker.karlsbakk.net
+#francesco.karlsbakk.net
+#grafana.karlsbakk.net
+#graylog.karlsbakk.net
+#mail.karlsbakk.net
+#mariadb.karlsbakk.net
+#mqtt.karlsbakk.net
+#mta.karlsbakk.net
+#ns2.karlsbakk.net
+##octofarm.karlsbakk.net
+##openmediavault.karlsbakk.net
+#plex.karlsbakk.net
+#postgresql.karlsbakk.net
+##pox.karlsbakk.net
+##raidtest.karlsbakk.net
+#restic.karlsbakk.net
+#rtorrent.karlsbakk.net
+##ssh.karlsbakk.net
+#zabbix6.karlsbakk.net
+# }}}
 
 [smtp]
 apache.karlsbakk.net
@@ -175,10 +176,10 @@ ipa.karlsbakk.net
 #mariadb.karlsbakk.net
 #mqtt.karlsbakk.net
 #ns2.karlsbakk.net
-#plex.karlsbakk.net
+plex.karlsbakk.net
 #postgresql.karlsbakk.net
 #zabbix6.karlsbakk.net
-retropie.local
+#retropie.local
 
 [zabbix_server]
 zabbix-dev2.karlsbakk.net

@@ -55,6 +55,7 @@
         - htop
         - locales-all
         - lshw
+        - mailutils
         - mlocate
         - mosh
         - nfs-common

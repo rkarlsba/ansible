@@ -67,6 +67,7 @@
   - name: Configure ssh with backup host
     ansible.builtin.blockinfile:
       path: /root/.ssh/config
+      force: no
       create: yes
       block: |
         # host restic
