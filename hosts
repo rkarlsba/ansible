@@ -86,7 +86,7 @@ zabbix6.karlsbakk.net
 # Debian 12
 [bookworm]
 bitwarden.karlsbakk.net
-docker.karlsbakk.net
+#docker.karlsbakk.net
 francesco.karlsbakk.net
 #mailcow.karlsbakk.net
 mqtt.karlsbakk.net
@@ -145,7 +145,7 @@ ssh.karlsbakk.net
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
 crpi.karlsbakk.net
-docker.karlsbakk.net
+#docker.karlsbakk.net
 ipa.karlsbakk.net
 grafana.karlsbakk.net
 # irc.karlsbakk.net # ubuntu
@@ -192,7 +192,7 @@ mangopi1.karlsbakk.net
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
 collabora.karlsbakk.net
-docker.karlsbakk.net
+#docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
 mail.karlsbakk.net
