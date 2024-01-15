@@ -96,33 +96,10 @@ moodle.karlsbakk.net
 restic.karlsbakk.net
 snaptest.karlsbakk.net
 ssh.karlsbakk.net
-#tuya
-#lydgreie.local
 
-#[vmer] {{{
-#apache.karlsbakk.net
-#bitwarden.karlsbakk.net
-##collabora.karlsbakk.net
-##docker.karlsbakk.net
-#francesco.karlsbakk.net
-#grafana.karlsbakk.net
-#graylog.karlsbakk.net
-#mail.karlsbakk.net
-#mariadb.karlsbakk.net
-#mqtt.karlsbakk.net
-#mta.karlsbakk.net
-#ns2.karlsbakk.net
-##octofarm.karlsbakk.net
-##openmediavault.karlsbakk.net
-#plex.karlsbakk.net
-#postgresql.karlsbakk.net
-##pox.karlsbakk.net
-##raidtest.karlsbakk.net
-#restic.karlsbakk.net
-#rtorrent.karlsbakk.net
-##ssh.karlsbakk.net
-#zabbix6.karlsbakk.net
-# }}}
+[mail]
+mail.karlsbakk.net
+mta.karlsbakk.net
 
 [smtp]
 apache.karlsbakk.net

@@ -1,0 +1,22 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: mail
+  strategy: free
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+# - name: Show facts available on the system
+#   ansible.builtin.debug:
+#     var: ansible_facts
+
+  - name: Create dummy file on target host
+    ansible.builtin.copy:
+      src: files/tmp/ansible-dummy-2024-01-15.dat
+      dest: /tmp/ansible-dummy-2024-01-15.dat
+      backup: true
+      owner: root
+      group: root
+      mode: 0644
+      when: ansible_facts['fqdn'] != "mail.karlsbakk.net"
