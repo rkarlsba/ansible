@@ -400,17 +400,19 @@
 # </zabbix>
 
 # <smtp>
-  - name: Remove SMTP Relay
-    ansible.builtin.lineinfile:
+  - name: Comment out old SMTP Relay
+    ansible.builtin.replace:
       path: /etc/postfix/main.cf
-      regexp: '^relayhost'
-      state: absent
+      regexp: '^(relayhost .*)$'
+      replace: '# \1'
+    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
 
   - name: Set SMTP Relay
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
       regexp: '^relayhost'
       line: relayhost = mta.karlsbakk.net:26
+    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
     notify:
       - reload postfix
 # </smtp>

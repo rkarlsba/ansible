@@ -19,4 +19,4 @@
       owner: root
       group: root
       mode: 0644
-      when: ansible_facts['fqdn'] != "mail.karlsbakk.net"
+    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
