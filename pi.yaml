@@ -330,7 +330,7 @@
   - name: Install fail2ban config
     ansible.builtin.copy:
       src: files/etc/fail2ban/jail.d/karlsbakk.conf
-      dest: /etc/apt/sources.list.d/backports.list
+      dest: /etc/fail2ban/jail.d/karlsbakk.conf
       owner: root
       group: root
       mode: 0644
