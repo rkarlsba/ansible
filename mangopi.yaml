@@ -49,7 +49,7 @@
   - name: Log everything to smilla
     lineinfile:
       dest: /etc/rsyslog.d/01-smilla.conf
-      line: "*.*\t@[2a01:79c:cebf:61e4:1::1]"
+      line: "*.*\t@[2a01:79c:cebe:d8d0:1::1]"
       create: yes
 
   - name: Remove packages we don't want
@@ -295,7 +295,7 @@
       comment: '{{ item.comment  }}'
     with_items:
       - { address: "192.168.10.0/24", comment: "Allow all from local IPv4" }
-      - { address: "2a01:79c:cebf:61e4::/62", comment: "Allow all from local IPv6" }
+      - { address: "2a01:79c:cebe:d8d0::/62", comment: "Allow all from local IPv6" }
 
   - name: UFW - Allow some specifics
     community.general.ufw:

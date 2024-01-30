@@ -38,6 +38,9 @@ gluster01.karlsbakk.net
 gluster02.karlsbakk.net
 gluster03.karlsbakk.net
 
+[kykelipi]
+crpi.karlsbakk.net
+
 [dhcp_server]
 dhcp-server.karlsbakk.net
 
@@ -60,7 +63,6 @@ docker.karlsbakk.net
 
 # Debian 10
 [buster]
-crpi.karlsbakk.net
 
 # Debian 11
 [bullseye]
@@ -69,6 +71,7 @@ apache.karlsbakk.net
 grafana.karlsbakk.net
 graylog.karlsbakk.net
 homearse.karlsbakk.net
+irc.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 mta.karlsbakk.net
@@ -86,11 +89,11 @@ zabbix6.karlsbakk.net
 # Debian 12
 [bookworm]
 bitwarden.karlsbakk.net
+crpi.karlsbakk.net
 #docker.karlsbakk.net
 francesco.karlsbakk.net
 #mailcow.karlsbakk.net
 mqtt.karlsbakk.net
-ny-irc.karlsbakk.net
 pox.karlsbakk.net
 moodle.karlsbakk.net
 restic.karlsbakk.net
@@ -123,7 +126,6 @@ ssh.karlsbakk.net
 [vmer_fixed]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
-crpi.karlsbakk.net
 #docker.karlsbakk.net
 ipa.karlsbakk.net
 grafana.karlsbakk.net

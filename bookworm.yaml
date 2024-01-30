@@ -53,12 +53,12 @@
         - postfix
         - psmisc
         - pwgen
-        - resolvconf
         - restic
         - rsync
         - rsyslog
         - sudo
         - sysstat
+        - telnet
         - time
         - tmux
         - tshark

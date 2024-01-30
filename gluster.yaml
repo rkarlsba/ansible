@@ -26,18 +26,18 @@
       rule: allow
       src: '{{ item }}'
     loop:
-      - 2a01:79c:cebf:61e4:300::22
-      - 2a01:79c:cebf:61e4:300::23
-      - 2a01:79c:cebf:61e4:300::24
-      - 2a01:79c:cebf:61e4:300::29
+      - 2a01:79c:cebe:d8d0:300::22
+      - 2a01:79c:cebe:d8d0:300::23
+      - 2a01:79c:cebe:d8d0:300::24
+      - 2a01:79c:cebe:d8d0:300::29
   - name: Add hostnames+IPs to /etc/hosts
     ansible.builtin.blockinfile:
       path: /etc/hosts
       block: |
-        2a01:79c:cebf:61e4:300::22	glusterfs01.karlsbakk.net glusterfs01
-        2a01:79c:cebf:61e4:300::23	glusterfs02.karlsbakk.net glusterfs02
-        2a01:79c:cebf:61e4:300::24	glusterfs03.karlsbakk.net glusterfs03
-        2a01:79c:cebf:61e4:300::29	rocky-gluster-client.karlsbakk.net rocky-gluster-client
+        2a01:79c:cebe:d8d0:300::22	glusterfs01.karlsbakk.net glusterfs01
+        2a01:79c:cebe:d8d0:300::23	glusterfs02.karlsbakk.net glusterfs02
+        2a01:79c:cebe:d8d0:300::24	glusterfs03.karlsbakk.net glusterfs03
+        2a01:79c:cebe:d8d0:300::29	rocky-gluster-client.karlsbakk.net rocky-gluster-client
   handlers:
     - name: restart glusterd
       service:

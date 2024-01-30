@@ -15,16 +15,6 @@
 #     dest: /etc/hosts
 #     regexp: "127.0.1.1.*"
 #     line: "127.0.1.1  {{ piname }}"
-  - name: Log everything to smilla
-    ansible.builtin.copy:
-      src: files/etc/rsyslog.d/01-smilla.conf
-      dest: /etc/rsyslog.d/01-smilla.conf
-      owner: root
-      group: root
-      mode: 0644
-    notify:
-    - restart rsyslog
-
 ### apt ###
   - name: Remove packages we don't want
     ansible.builtin.apt:
@@ -49,6 +39,7 @@
         - manpages
         - manpages-dev
         - mlocate
+        - rsyslog
         - sysbench
         - sysstat
         - tmux
@@ -59,6 +50,16 @@
         - vim
       update_cache: yes
       state: latest
+  - name: Log everything to smilla
+    ansible.builtin.copy:
+      src: files/etc/rsyslog.d/01-smilla.conf
+      dest: /etc/rsyslog.d/01-smilla.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
+
   - name: Enable sysstat
     lineinfile:
       path: /etc/default/sysstat
@@ -280,7 +281,7 @@
       comment: '{{ item.comment  }}'
     with_items:
       - { address: "192.168.10.0/24", comment: "Allow all from local IPv4" }
-      - { address: "2a01:79c:cebf:61e4::/62", comment: "Allow all from local IPv6" }
+      - { address: "2a01:79c:cebe:d8d0::/62", comment: "Allow all from local IPv6" }
 
   - name: UFW - Allow some specifics
     community.general.ufw:
@@ -336,6 +337,15 @@
       mode: 0644
     notify:
       - restart fail2ban
+
+  - name: Check if reboot required
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required_file
+
+  - name: Reboot if required
+    reboot:
+    when: reboot_required_file.stat.exists == true
 
   handlers:
     - name: restart fail2ban
