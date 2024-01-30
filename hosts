@@ -61,6 +61,11 @@ bitwarden.karlsbakk.net
 [docker]
 docker.karlsbakk.net
 
+# tvpi - currently on Debian 10
+[tvpi]
+# tvpi1
+192.168.10.123
+
 # Debian 10
 [buster]
 

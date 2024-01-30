@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: buster
+- hosts: tvpi
   strategy: free
   vars:
     http_port: 80
@@ -13,22 +13,6 @@
       name:
         - git
         - etckeeper
-# - name: Replace sources.list with a sane one
-#   ansible.builtin.copy:
-#     src: files/etc/apt/sources.list-buster
-#     dest: /etc/apt/sources.list
-#     backup: true
-#     owner: root
-#     group: root
-#     mode: 0644
-
-# - name: Add backports
-#   ansible.builtin.copy:
-#     src: files/etc/apt/sources.list.d/backports.list-buster
-#     dest: /etc/apt/sources.list.d/backports.list
-#     owner: root
-#     group: root
-#     mode: 0644
 
   - name: Log everything to smilla
     ansible.builtin.copy:
@@ -59,6 +43,8 @@
         - htop
         - locales-all
         - lshw
+        - lsof
+        - lvm2
         - mailutils
         - mlocate
         - mosh
@@ -303,101 +289,12 @@
       special_time: reboot
       job: "fstrim -a"
       state: present
-
-# <zabbix>
-  - name: Install zabbix-agent
-    ansible.builtin.apt:
-      name:
-        - zabbix-agent
-      state: latest
-
-  - name: Remove old zabbix-agent
-    ansible.builtin.apt:
-      name: 
-        - zabbix-agent
-      state: absent
-
-  - name: UFW - Allow zabbix traffic from zabbix
-    ufw:
-      rule: allow
-      from_ip: "{{ item.ip_addr }}"
-      proto: "{{ item.proto }}"
-      port: "{{ item.port }}"
-      comment: "{{ item.comment }}"
-    with_items:
-      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk5.net (IPv6)' }
-      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv6)' }
-
-  - name: Copy plugins
-    ansible.builtin.copy:
-      src: 'files/usr/local/bin/{{ item.filename }}'
-      dest: '/usr/local/bin/{{ item.filename }}'
-      owner: root
-      group: root
-      mode: 0755
-    with_items:
-      - { filename: 'check-dns.sh' }
-      - { filename: 'zabbix_check_linux_updates.sh' }
-      - { filename: 'zabbix_check_needs_reboot.sh' }
-      - { filename: 'zabbix_checkro.pl' }
-      - { filename: 'zabbix_linux_distro_check.pl' }
-      - { filename: 'zabbix_kernelversioncheck.sh' }
-
-  - name: Create custom Zabbix agent config
-    ansible.builtin.blockinfile:
-      path: /etc/zabbix/zabbix_agent.d/karlsbakk.conf
-      block: |
-        # vim:isfname-==:isfname-=,
-
-        # General settings
-        Server=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,193.29.58.196,2a0a:51c0:0:1f:4ca5::2
-        ServerActive=2001:8c0:9302:4::123,2001:4641:4dfa::2ab1,2a0a:51c0:0:1f:4ca5::2
-        Hostname={{inventory_hostname}}
-        Timeout=30
-
-        # Distro plugin
-        UserParameter=custom.distro.name,/usr/local/bin/zabbix_linux_distro_check.pl --name
-        UserParameter=custom.distro.version,/usr/local/bin/zabbix_linux_distro_check.pl --vers
-        UserParameter=custom.distro.arch,/usr/local/bin/zabbix_linux_distro_check.pl --arch
-        UserParameter=custom.distro.friendlyname,/usr/local/bin/zabbix_linux_distro_check.pl --friendly
-
-        # Reboot check
-        UserParameter=custom.rebootcheck,/usr/local/bin/zabbix_check_needs_reboot.sh --local
-
-        # Update check
-        UserParameter=custom.yumupdatescheck,/usr/local/bin/zabbix_check_linux_updates.sh
-
-        # Read only check
-        # UserParameter=custom.fsrocheck,/usr/local/bin/zabbix_check_fs_ro.pl
-        UserParameter=custom.fsrocheck,/usr/local/bin/zabbix_checkro.pl
-        UserParameter=vfs.fs.discovery_custom,/usr/local/bin/zabbix_check_fs_ro_lld.pl
-
-        # Kernel updates
-        UserParameter=custom.kernelversioncheck,/usr/local/bin/zabbix_kernelversioncheck.sh --local
-
-        # Check if server can do DNS lookups
-        UserParameter=custom.dnslookup,/usr/local/bin/check-dns.sh google.com
-      create: yes
-    notify:
-    - restart zabbix_agent
-
-# </zabbix>
-
 # <smtp>
-  - name: Comment out old SMTP Relay
-    ansible.builtin.replace:
-      path: /etc/postfix/main.cf
-      regexp: '^(relayhost .*)$'
-      replace: '# \1'
-    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
-
   - name: Set SMTP Relay
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
       regexp: '^relayhost'
-      line: relayhost = mta.karlsbakk.net:26
+      line: relayhost = 
     when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
     notify:
       - reload postfix
@@ -417,12 +314,6 @@
     when: reboot_required_file.stat.exists == true
 
   handlers:
-    - name: restart zabbix_agent
-      ansible.builtin.systemd:
-        name: zabbix-agent
-        enabled: yes
-        state: restarted
-
     - name: restart fail2ban
       ansible.builtin.systemd:
         name: fail2ban
