@@ -38,7 +38,10 @@ gluster01.karlsbakk.net
 gluster02.karlsbakk.net
 gluster03.karlsbakk.net
 
-[kykelipi]
+[pi_buster]
+tvpi1.local
+
+[pi_bullseye]
 crpi.karlsbakk.net
 
 [dhcp_server]

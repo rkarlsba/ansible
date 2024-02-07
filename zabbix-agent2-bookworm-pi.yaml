@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker:isfname-==:isfname-=,
 
-- hosts: kykelipi
+- hosts: pi_bullseye
   strategy: free
   remote_user: root
   tasks:
