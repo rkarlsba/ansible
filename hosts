@@ -38,6 +38,10 @@ gluster01.karlsbakk.net
 gluster02.karlsbakk.net
 gluster03.karlsbakk.net
 
+
+[arch]
+pikvm.karlsbakk.net
+
 [pi_buster]
 tvpi1.local
 
