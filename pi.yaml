@@ -117,29 +117,6 @@
       - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
       - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }
 
-# Han derre roy {{{
-# - name: Make sure group roy exists
-#   group:
-#     name: roy
-#     state: present
-#     gid: 1999
-#
-# - name: Make sure user roy exists
-#   user:
-#     name: roy
-#     comment: Roy Sigurd Karlsbakk
-#     uid: 1999
-#     group: roy
-##
-# - name: Create ssh dir for roy
-#   file:
-#     path: /home/roy/.ssh
-#     mode: 0700
-#     owner: roy
-#     group: roy
-#     state: directory
-# }}}
-
 # ssh authorization
   - name: Create ssh dir for root and users
     file:
