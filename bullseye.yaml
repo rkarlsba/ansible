@@ -9,8 +9,7 @@
   tasks:
   - name: Replace sources.list with a sane one
     ansible.builtin.copy:
-      src: files/etc/apt/sources.list-bookworm
-     #src: files/etc/apt/sources.list-buster
+      src: files/etc/apt/sources.list-bullseye
       dest: /etc/apt/sources.list
       backup: true
       owner: root
@@ -19,7 +18,7 @@
 
   - name: Add backports
     ansible.builtin.copy:
-      src: files/etc/apt/sources.list.d/backports.list
+      src: files/etc/apt/sources.list.d/backports.list-bullseye
       dest: /etc/apt/sources.list.d/backports.list
       owner: root
       group: root
