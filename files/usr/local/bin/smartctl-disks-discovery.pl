@@ -1,0 +1,1 @@
+../../../../../ymse/zabbix/zbx-smartctl/discovery-scripts/nix/smartctl-disks-discovery.pl

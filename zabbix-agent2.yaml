@@ -59,6 +59,7 @@
       - { filename: 'zabbix_checkro.pl' }
       - { filename: 'zabbix_linux_distro_check.pl' }
       - { filename: 'zabbix_kernelversioncheck.sh' }
+      - { filename: 'smartctl-disks-discovery.pl' }
 
   - name: Create custom Zabbix agent config
     ansible.builtin.blockinfile:
@@ -97,6 +98,14 @@
 
         # Check if mountpoint is actually mounted
         UserParameter=vfs.mount.is_mounted[*],mountpoint -q $1 && echo YES || echo NO
+
+        # SMART
+        UserParameter=uHDD.get[*],sudo smartctl -i -H -A -l error -l background $1 || true
+        UserParameter=uSSD.get[*],sudo smartctl -i -H -A -l error -l background $1 || true
+
+        UserParameter=uHDD.discovery[*],sudo /usr/local/bin/smartctl-disks-discovery.pl -i $1
+        UserParameter=uSSD.discovery[*],sudo /usr/local/bin/smartctl-disks-discovery.pl -i $1
+
       create: yes
     notify:
     - restart zabbix_agent2
