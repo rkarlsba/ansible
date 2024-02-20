@@ -125,12 +125,12 @@ grafana.karlsbakk.net
 graylog.karlsbakk.net
 mariadb.karlsbakk.net
 mqtt.karlsbakk.net
-octofarm.karlsbakk.net
+#octofarm.karlsbakk.net
 #openmediavault.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 #pox.karlsbakk.net
-raidtest.karlsbakk.net
+#raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 ssh.karlsbakk.net
@@ -184,7 +184,7 @@ mangopi1.karlsbakk.net
 [update_and_reboot_if_needed]
 apache.karlsbakk.net
 bitwarden.karlsbakk.net
-collabora.karlsbakk.net
+#collabora.karlsbakk.net
 #docker.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
@@ -193,12 +193,12 @@ mariadb.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
-octofarm.karlsbakk.net
+#octofarm.karlsbakk.net
 #openmediavault.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 #pox.karlsbakk.net
-raidtest.karlsbakk.net
+#raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 ssh.karlsbakk.net
@@ -222,14 +222,14 @@ ns2.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 #pox.karlsbakk.net
-raidtest.karlsbakk.net
+#raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 # smilla.karlsbakk.net
 ssh.karlsbakk.net
 # zabbix.karlsbakk.net
 zabbix6.karlsbakk.net
-octofarm.karlsbakk.net
+#octofarm.karlsbakk.net
 
 [zabagt2_malin]
 # list opp maskinene som skal oppgraderes her
