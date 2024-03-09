@@ -107,6 +107,14 @@
         APT::Periodic::Update-Package-Lists "1";
         APT::Periodic::Unattended-Upgrade "1";
 
+  - name: Install a sane resolv.conf
+    ansible.builtin.copy:
+      src: files/etc/resolv.conf
+      dest: /tec/resolv.conf
+      owner: root
+      group: root
+      mode: 0644
+
   - name: Install fail2ban config
     ansible.builtin.copy:
       src: files/etc/fail2ban/jail.d/karlsbakk.conf
