@@ -84,6 +84,7 @@ grafana.karlsbakk.net
 graylog.karlsbakk.net
 homearse.karlsbakk.net
 irc.karlsbakk.net
+koding.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 mta.karlsbakk.net
@@ -104,6 +105,7 @@ bitwarden.karlsbakk.net
 crpi.karlsbakk.net
 #docker.karlsbakk.net
 francesco.karlsbakk.net
+#koding.karlsbakk.net
 #mailcow.karlsbakk.net
 mqtt.karlsbakk.net
 #pox.karlsbakk.net
