@@ -113,7 +113,7 @@
   - name: Install a sane resolv.conf
     ansible.builtin.copy:
       src: files/etc/resolv.conf
-      dest: /tec/resolv.conf
+      dest: /etc/resolv.conf
       owner: root
       group: root
       mode: 0644
