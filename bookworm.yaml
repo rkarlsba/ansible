@@ -117,6 +117,17 @@
       group: root
       mode: 0644
 
+  - name: Install some sysctl files
+    ansible.builtin.copy:
+      src: 'files/etc/sysctl.d/{{ item }}'
+      dest: '/etc/sysctl.d/{{ item }}'
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - 01-kernel.conf
+      - 02-vm.conf
+
   - name: Install fail2ban config
     ansible.builtin.copy:
       src: files/etc/fail2ban/jail.d/karlsbakk-bookworm.conf
