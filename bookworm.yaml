@@ -455,14 +455,14 @@
       - { src: 'files/usr/local/bin/restic-backup-post-exec.sh', dest: '/usr/local/bin/restic-backup-post-exec.sh', mode: '0755', force: 'no' }
       - { src: 'files/usr/local/etc/restic-excludes.txt', dest: '/usr/local/etc/restic-excludes.txt', mode: '0644', force: 'no' }
 
-  - name: Configure ssh with backup host
-    ansible.builtin.blockinfile:
-      path: /root/.ssh/config
-      create: yes
-      block: |
-        # host restic
-        #     Hostname restic.karlsbakk.net
-        #     User {{ ansible_hostname }}-bk
+# - name: Configure ssh with backup host
+#   ansible.builtin.blockinfile:
+#     path: /root/.ssh/config
+#     create: yes
+#     block: |
+#       # host restic
+#       #     Hostname restic.karlsbakk.net
+#       #     User {{ ansible_hostname }}-bk
 
   - name: Crontab for backup
     cron:
