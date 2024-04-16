@@ -10,7 +10,7 @@ export RESTIC_PASSWORD_FILE="/usr/local/etc/restic-password.txt"
 RESTIC_EXCLUDE_FILE="/usr/local/etc/restic-excludes.txt"
 RESTIC_EXCLUDE=""
 RESTIC_VERBOSE=""
-RESTIC_ONE_FILESYSTEM=""
+RESTIC_ONE_FILESYSTEM="0"
 RESTIC_PRE_EXEC_JOB="/usr/local/bin/restic-backup-pre-exec.sh"
 RESTIC_POST_EXEC_JOB="/usr/local/bin/restic-backup-post-exec.sh"
 
