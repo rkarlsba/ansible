@@ -407,7 +407,7 @@
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
       regexp: '^relayhost'
-      line: relayhost = mta.karlsbakk.net:26
+      line: relayhost = [mta.karlsbakk.net]:26
     when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
     notify:
       - reload postfix

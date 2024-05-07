@@ -26,7 +26,7 @@
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
       regexp: '^relayhost'
-      line: relayhost = mta.karlsbakk.net:26
+      line: relayhost = [mta.karlsbakk.net]:26
     notify:
       - reload postfix
 
