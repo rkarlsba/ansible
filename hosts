@@ -47,6 +47,12 @@ tvpi1.local
 
 [pi_bullseye]
 crpi.karlsbakk.net
+homearse.karlsbakk.net
+
+[pi_bookworm]
+crpi.karlsbakk.net
+litenskjerm1.local
+upbox-pi.local
 
 [dhcp_server]
 dhcp-server.karlsbakk.net
