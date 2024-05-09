@@ -50,7 +50,6 @@ crpi.karlsbakk.net
 homearse.karlsbakk.net
 
 [pi_bookworm]
-crpi.karlsbakk.net
 litenskjerm1.local
 upbox-pi.local
 
@@ -85,7 +84,6 @@ docker.karlsbakk.net
 # Debian 11
 [bullseye]
 apache.karlsbakk.net
-#collabora.karlsbakk.net
 grafana.karlsbakk.net
 graylog.karlsbakk.net
 homearse.karlsbakk.net
@@ -94,13 +92,9 @@ mail.karlsbakk.net
 mariadb.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
-#octofarm.karlsbakk.net
-#plex.karlsbakk.net
+plex.karlsbakk.net
 postgresql.karlsbakk.net
-#pox.karlsbakk.net
-#raidtest.karlsbakk.net
 rtorrent.karlsbakk.net
-#ssh.karlsbakk.net
 zabbix5.karlsbakk.net
 zabbix6.karlsbakk.net
 
@@ -108,17 +102,15 @@ zabbix6.karlsbakk.net
 [bookworm]
 bitwarden.karlsbakk.net
 crpi.karlsbakk.net
-#docker.karlsbakk.net
 francesco.karlsbakk.net
 koding.karlsbakk.net
 lists.karlsbakk.net
-#mailcow.karlsbakk.net
+litenskjerm1.local
 mqtt.karlsbakk.net
-#pox.karlsbakk.net
-#moodle.karlsbakk.net
 restic.karlsbakk.net
 snaptest.karlsbakk.net
 ssh.karlsbakk.net
+upbox-pi.local
 
 [mail]
 mail.karlsbakk.net
