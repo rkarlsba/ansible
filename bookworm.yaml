@@ -365,6 +365,8 @@
       - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk5.net (IPv6)' }
       - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv4)' }
       - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv6)' }
+      - { ip_addr: '2.58.14.136', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from new zabbix7.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a07:efc0:1001:bcb0::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from new zabbix7.karlsbakk.net (IPv6)' }
 
   - name: Copy plugins
     ansible.builtin.copy:
@@ -387,9 +389,10 @@
       block: |
         # vim:isfname-==:isfname-=,
 
-        # General settings
-        Server=77.40.158.123,2001:8c0:9302:4::123,193.29.58.196,2a0a:51c0:0:1f:4ca5::2
-        ServerActive=2001:8c0:9302:4::123,2a0a:51c0:0:1f:4ca5::2
+        # General settings - oppdatere dette litt naar ipv6-adr kommer
+        # zabbix-new.karlsbakk.net has address 2.58.14.136
+        Server=77.40.158.123,2001:8c0:9302:4::123,193.29.58.196,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
+        ServerActive=2001:8c0:9302:4::123,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
 
         Hostname={{inventory_hostname}}
         Timeout=30
@@ -426,14 +429,20 @@
       path: /etc/postfix/main.cf
       regexp: '^(relayhost .*)$'
       replace: '# \1'
-    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
+    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and
+      ansible_facts['fqdn'] != "mta.karlsbakk.net" and
+      ansible_facts['fqdn'] != "litenskjerm1.local" and
+      ansible_facts['fqdn'] != "upbox-pi.local"
 
   - name: Set SMTP Relay
     ansible.builtin.lineinfile:
       path: /etc/postfix/main.cf
       regexp: '^relayhost'
       line: relayhost = [mta.karlsbakk.net]:26
-    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and ansible_facts['fqdn'] != "mta.karlsbakk.net"
+    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and
+      ansible_facts['fqdn'] != "mta.karlsbakk.net" and
+      ansible_facts['fqdn'] != "litenskjerm1.local" and
+      ansible_facts['fqdn'] != "upbox-pi.local"
     notify:
       - reload postfix
 # </smtp>

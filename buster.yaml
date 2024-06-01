@@ -339,6 +339,8 @@
       - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk5.net (IPv6)' }
       - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv4)' }
       - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv6)' }
+      - { ip_addr: '2.58.14.136', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from new zabbix7.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a07:efc0:1001:bcb0::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from new zabbix7.karlsbakk.net (IPv6)' }
 
   - name: Copy plugins
     ansible.builtin.copy:
@@ -362,8 +364,8 @@
         # vim:isfname-==:isfname-=,
 
         # General settings
-        Server=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,193.29.58.196,2a0a:51c0:0:1f:4ca5::2
-        ServerActive=2001:8c0:9302:4::123,2001:4641:4dfa::2ab1,2a0a:51c0:0:1f:4ca5::2
+        Server=77.40.158.123,2001:8c0:9302:4::123,193.29.58.196,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
+        ServerActive=2001:8c0:9302:4::123,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
         Hostname={{inventory_hostname}}
         Timeout=30
 

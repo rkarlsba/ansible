@@ -64,15 +64,15 @@
       owner: root
       group: root
 
-#  - name: Configure ssh with backup host
-#    ansible.builtin.blockinfile:
-#      path: /root/.ssh/config
-#      force: no
-#      create: yes
-#      block: |
-#        # host restic
-#        #     Hostname restic.karlsbakk.net
-#        #     User {{ ansible_hostname }}-bk
+  - name: Configure ssh with backup host
+    ansible.builtin.blockinfile:
+      path: /root/.ssh/config
+      force: no
+      create: yes
+      block: |
+        # host restic
+        #     Hostname restic.karlsbakk.net
+        #     User {{ ansible_hostname }}-bk
 
   - name: Crontab for backup
     cron:
