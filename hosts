@@ -86,6 +86,7 @@ docker.karlsbakk.net
 [bullseye]
 apache.karlsbakk.net
 homearse.karlsbakk.net
+# Snart bookworm mail.karlsbakk.net - neppe - fikk ikke til roundcube
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 ns2.karlsbakk.net
