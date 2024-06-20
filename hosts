@@ -88,7 +88,6 @@ apache.karlsbakk.net
 homearse.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
-mta.karlsbakk.net
 ns2.karlsbakk.net
 postgresql.karlsbakk.net
 
@@ -102,6 +101,7 @@ irc.karlsbakk.net
 litenskjerm1.local
 motion.karlsbakk.net
 mqtt.karlsbakk.net
+mta.karlsbakk.net
 plex.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
