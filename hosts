@@ -84,24 +84,21 @@ docker.karlsbakk.net
 # Debian 11
 [bullseye]
 apache.karlsbakk.net
-grafana.karlsbakk.net
 homearse.karlsbakk.net
 mail.karlsbakk.net
 mariadb.karlsbakk.net
 mta.karlsbakk.net
 ns2.karlsbakk.net
-plex.karlsbakk.net
+# snart bookworm plex.karlsbakk.net
 postgresql.karlsbakk.net
-zabbix5.karlsbakk.net
 
 # Debian 12
 [bookworm]
 bitwarden.karlsbakk.net
 crpi.karlsbakk.net
 francesco.karlsbakk.net
+grafana.karlsbakk.net
 irc.karlsbakk.net
-#koding.karlsbakk.net
-#lists.karlsbakk.net
 litenskjerm1.local
 motion.karlsbakk.net
 mqtt.karlsbakk.net
@@ -109,8 +106,8 @@ restic.karlsbakk.net
 rtorrent.karlsbakk.net
 snaptest.karlsbakk.net
 ssh.karlsbakk.net
-upbox-pi.local
-zabbix-new.karlsbakk.net
+# upbox-pi.local
+zabbix5.karlsbakk.net
 zabbix7.karlsbakk.net
 
 [mail]
