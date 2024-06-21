@@ -88,7 +88,6 @@ apache.karlsbakk.net
 homearse.karlsbakk.net
 # IKKE snart på bookworm mail.karlsbakk.net - fikk ikke til roundcube
 mail.karlsbakk.net
-mariadb.karlsbakk.net
 # IKKE snart på bookworm ns2.karlsbakk.net - rulla tilbake der også - trur feilen ligger hos afraid.org, da, men, får se
 ns2.karlsbakk.net
 postgresql.karlsbakk.net
@@ -101,6 +100,7 @@ francesco.karlsbakk.net
 grafana.karlsbakk.net
 irc.karlsbakk.net
 litenskjerm1.local
+mariadb.karlsbakk.net
 motion.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
