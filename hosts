@@ -86,9 +86,10 @@ docker.karlsbakk.net
 [bullseye]
 apache.karlsbakk.net
 homearse.karlsbakk.net
-# Snart bookworm mail.karlsbakk.net - neppe - fikk ikke til roundcube
+# IKKE snart på bookworm mail.karlsbakk.net - fikk ikke til roundcube
 mail.karlsbakk.net
 mariadb.karlsbakk.net
+# IKKE snart på bookworm ns2.karlsbakk.net - rulla tilbake der også - trur feilen ligger hos afraid.org, da, men, får se
 ns2.karlsbakk.net
 postgresql.karlsbakk.net
 
