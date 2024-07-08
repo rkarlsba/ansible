@@ -60,6 +60,7 @@
         - mosh
         - nfs-common
         - pastebinit
+        - perl-doc
         - postfix
         - psmisc
         - pwgen

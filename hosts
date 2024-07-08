@@ -90,7 +90,6 @@ homearse.karlsbakk.net
 mail.karlsbakk.net
 # IKKE snart på bookworm ns2.karlsbakk.net - rulla tilbake der også - trur feilen ligger hos afraid.org, da, men, får se
 ns2.karlsbakk.net
-postgresql.karlsbakk.net
 
 # Debian 12
 [bookworm]
@@ -99,14 +98,17 @@ crpi.karlsbakk.net
 francesco.karlsbakk.net
 grafana.karlsbakk.net
 irc.karlsbakk.net
+koding.karlsbakk.net
 litenskjerm1.local
 mariadb.karlsbakk.net
 motion.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
 plex.karlsbakk.net
+postgresql.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
+savapage.karlsbakk.net
 snaptest.karlsbakk.net
 ssh.karlsbakk.net
 # upbox-pi.local
