@@ -94,7 +94,8 @@ ns2.karlsbakk.net
 # Debian 12
 [bookworm]
 bitwarden.karlsbakk.net
-crpi.karlsbakk.net
+# Midlertidig nede for telling
+# crpi.karlsbakk.net 
 francesco.karlsbakk.net
 grafana.karlsbakk.net
 irc.karlsbakk.net
