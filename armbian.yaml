@@ -1,0 +1,501 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: bookworm
+  strategy: free
+  vars:
+    http_port: 80
+    max_clients: 200
+    zabbix7_ipv4: '2.58.14.136'
+    zabbix7_ipv6: '2a0a:51c0:0:1f:4ca5::2'
+  remote_user: root
+  tasks:
+  - name: Replace sources.list with a sane one
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list-bookworm
+      dest: /etc/apt/sources.list
+      backup: true
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Add backports
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list.d/backports.list-bookworm
+      dest: /etc/apt/sources.list.d/backports.list
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: apt-get full-upgrade
+    ansible.builtin.apt:
+      update_cache: true
+      upgrade: dist
+      autoremove: true
+
+  - name: Install the normal stuff
+    ansible.builtin.apt:
+      name:
+        - apt-transport-https
+        - avahi-daemon
+        - bc
+        - binutils
+        - curl
+        - debian-security-support
+        - etckeeper
+        - fail2ban
+        - finger
+        - git
+        - htop
+        - locales-all
+        - lshw
+        - mailutils
+        - mlocate
+        - mosh
+        - nfs-common
+        - pastebinit
+        - perl-doc
+        - postfix
+        - psmisc
+        - pwgen
+        - restic
+        - rsync
+        - sudo
+        - sysstat
+        - telnet
+        - time
+        - tmux
+        - tshark
+        - ufw
+        - unzip
+        - unattended-upgrades
+        - uptimed
+        - vim
+        - virt-what
+      state: latest
+
+  - name: Log everything to smilla
+    ansible.builtin.copy:
+      src: files/etc/rsyslog.d/01-smilla.conf
+      dest: /etc/rsyslog.d/01-smilla.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - restart rsyslog
+
+# Unattended upgrades
+  - name: "Enable unattended upgrades for everything except 'proposed'"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'origin=Debian,codename=\${distro_codename}-updates'
+      line: "        \"origin=Debian,codename=${distro_codename}-updates\";"
+
+  - name: "Set email address for unattended upgrades report"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'Unattended-Upgrade::Mail '
+      line: 'Unattended-Upgrade::Mail "roy@karlsbakk.net";'
+
+  - name: "Set when to report upgrades"
+    lineinfile:
+      path: /etc/apt/apt.conf.d/50unattended-upgrades
+      regex: 'Unattended-Upgrade::MailReport '
+      line: 'Unattended-Upgrade::MailReport "only-on-error";'
+
+  - name: "Turn on unattended upgrades"
+    ansible.builtin.blockinfile:
+      path: "/etc/apt/apt.conf.d/20auto-upgrades"
+      create: yes
+      marker: "// {mark} ANSIBLE MANAGED BLOCK"
+      block: |
+        // Actually enable unattended upgrades
+        APT::Periodic::Update-Package-Lists "1";
+        APT::Periodic::Unattended-Upgrade "1";
+
+  - name: Install some sysctl files
+    ansible.builtin.copy:
+      src: 'files/etc/sysctl.d/{{ item }}'
+      dest: '/etc/sysctl.d/{{ item }}'
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      - 01-kernel.conf
+      - 02-vm.conf
+
+  - name: Enable sysstat in config file
+    ansible.builtin.lineinfile:
+      path: /etc/default/sysstat
+      regexp: '^ENABLED='
+      line: 'ENABLED="true"'
+
+  - name: Enable sysstat in systemd
+    ansible.builtin.systemd:
+      name: sysstat
+      enabled: true
+    notify:
+      - restart sysstat
+
+  - name: Make sure roy is member of sudo
+    ansible.builtin.user:
+      name: roy
+      groups: sudo,users
+      append: true
+
+  - name: update /root/.tmux.conf
+    ansible.builtin.blockinfile:
+      dest: /root/.tmux.conf
+      block: |
+        set -g prefix C-a
+        unbind-key C-b
+        bind-key C-a send-prefix
+        setw -g mode-keys vi
+      create: true
+
+  - name: Add relevant keys to \$HOME/.ssh/authorized_keys
+    ansible.builtin.blockinfile:
+      path: '{{ item.filename }}'
+      create: true
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      block: |
+        ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFacCLY5ycpi4k3c4DS11jF/5AvpMW6UUQ8q7esNU/ej root@smilla
+        ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMgw0uoiK3hBkuJ/2PNmPCO8lAKUwJ9k551ni0XC/Vx3 roysk@oslomet.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHgvHmjGfZgw1tT3zC88dPWEH+mxykfGvE+S8atcfdAl/3Zjcp48UGk0otL4v+9rdIo1/PwOL/aUR3D19GyQtWycO32wyNNr6N5DQNo64YAfI6unxLceiRWqWEEhEHSfKbVVjUyQllhjhzoyLxQ7OMBVVdIbTFRqAYIKXnLDD9uuC6fpcGTGDEc28Y3gz1Q1i3D55bIXF5Usd1BSP3D2FRgjDRX+0xGCvavWG548p1Y0tbbWbL+t+gXbHwRQtg2eqcd5nM1QdS0EX/r/9eOu715UMtiSk+NW6I8PzJN/KmO9PxJ9KLKOtBYfx4kXGVPk3e4O8ZpExHa4e4nzwYibCv roysk@oslomet.no
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCqbzUA7TXuzcYjHnWEA5uWOJfLAUqzTQnDi9HATYeg5xTNoUZ53gkUS2vUK1mpHDWUM7twXiVN9PFKuQHDVC7t2A3xCzi3RVRoLJhOpV3pSGtYRLClWP5SoAzgE0G6kOtRyWjzUKoEm6kL4sOSCHfIloXnrU1+9PbB0bBCdMTA0XBSMYwxvt5HbWJp3T3cqsjdz9OVihZ21thvEHLRSDkcEUcSBpyuxiCpi3xX4hNd5Ek4KgnbktyqqPsTYHIxaBA0wCaRODyqInFmgqGjCtvDOB/IXl1KXHhxngWHuUd1O+Q+OXizVcICsaNLjEDc46XEwTAFT5KfjRWG+Vty1iiX root@smilla.karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAvlfCc6RoDq7jzSy1svNMPcusSkCMefCZE6aT12I7KgPOXUdvGfPqexZhMEO0ooW9+hIwa0NXozEB39Wl8QonsMNtkaJ68KnLAzh6acEFfhzBlSMgjh8EFErD9Td3MFOEZlPApwgIc4H1P7pmhAri3rYN2kWkcD1M2yATMsa7g7PSM9Lq4ol65lf7pFtk/KP6jW5g9HCR0lXllX1RCMCv3iozd8eUApatP3SmkY4UIChPrhefbOrdDIevTxjL7LKXo8Ojv3qbu2H34NdI+y6JDZh9SWJZNIE0bSj9FnO0ZlYXigL2z+xgqfpNSMXnuYc0/zPyot0dLYLFRFhSBjUYnQ== roy@karlsbakk.net
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsWphX2V5mwtwpEYA8SMC0jsIyRIP2CR3aD7Wf6lrIgiNZvrPM8JzvxMhUctpKL1asULV0yyJMQDjFJ2G2mwDz0ejVPo5JMgIPdnsPS7raX8yejXPEcRsoCE0nYTcvHo6JFhy0zJNEQgtJJgpHTs4QmkPQRwqUUplTl7hE1V1We63Zjws5dJpnfErGHy6gEEVxd0fVwxDHCdG2/h6MrVv9zfFCc60tYY03yQZlTGma7ZEUILl8jPv6B63PTFWaXGM9uv+0gPb4Z4WocNany2J5pctIXJes0l/9/I0J9o+LtF9Hl1JXIDrYMg8HytQOh9yvKSupB9Qe3IMh9XrgU3/v roy@smilla.karlsbakk.net
+    with_items:
+      - { filename: '/root/.ssh/authorized_keys', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.ssh/authorized_keys', owner: 'roy', group: 'roy' }
+      
+  - name: update/create ~/.vimrc
+    ansible.builtin.blockinfile:
+      dest: '{{ item.filename }}'
+      create: true
+      owner: '{{ item.owner }}'
+      group: '{{ item.group }}'
+      marker: '" {mark} ANSIBLE MANAGED BLOCK'
+      block: |
+        set modeline
+        set modelines=5
+        set incsearch
+        set nohlsearch
+        syntax on
+        set background=dark
+        set ruler
+        set mouse=
+        set ttymouse=
+
+        if has("autocmd")
+          au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+          filetype plugin indent on
+        endif
+
+        \" ABEL
+        au BufNewFile,BufRead *.gcode setf gcode
+        let g:autoclose_on = 0
+        let g:AutoPairs = {}
+    with_items:
+      - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
+      - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }
+
+  - name: update /home/roy/.bashrc
+    ansible.builtin.blockinfile:
+      dest: /home/roy/.bashrc
+      create: true
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto -F'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+        alias df='df -x tmpfs -x devtmpfs'
+
+        set -o vi
+
+        [ -f $HOME/.aliases ] && source $HOME/.aliases
+
+  - name: update /root/.bashrc
+    ansible.builtin.blockinfile:
+      dest: /root/.bashrc
+      create: true
+      block: |
+        # Ansible was here!!!!
+        export LS_OPTIONS='--color=auto -F'
+        eval "`dircolors`"
+        alias ls='ls $LS_OPTIONS'
+        alias l='ls $LS_OPTIONS -l'
+        alias df='df -x tmpfs -x devtmpfs'
+
+        set -o vi
+        export EDITOR='vi'
+
+        [ -f $HOME/.aliases ] && source $HOME/.aliases
+
+  - name: set timezone to Europe/Oslo
+    timezone:
+      name: Europe/Oslo
+
+  - name: UFW - Allow ports
+    ufw:
+      rule: 'allow'
+      port: '{{ item.port }}'
+      proto: '{{ item.proto }}'
+      comment: '{{ item.comment }}'
+    with_items:
+      - { port: '22', proto: 'tcp', comment: 'Allow SSH' }
+
+  - name: UFW - Allow to
+    ufw:
+      rule: allow
+      to_ip: '{{ item.ip }}'
+      comment: '{{ item.comment }}'
+    with_items:
+      - { ip: '224.0.0.0/4', comment: 'Allow IPv4 Multicast' }
+      - { ip: 'ff00::/8', comment: 'Allow IPv6 Multicast' }
+
+  - name: UFW - Allow from 
+    ufw:
+      rule: allow
+      from_ip: '{{ item.ip }}'
+      comment: '{{ item.comment }}'
+    with_items:
+      - { ip: '192.168.10.0/23', comment: 'Allow from local network (IPv4)' }
+      - { ip: '2a01:79c:cebe:d8d0::/62', comment: 'Allow from local network (IPv6)' }
+
+  - name: UFW - Allow UDP traffic for mosh
+    ufw:
+        rule: allow
+        port: 60000:60049
+        proto: udp
+        comment: Allow mosh traffic
+
+  - name: Enable UFW and disable logging
+    ufw:
+        state: enabled
+        logging: "off"
+
+  - name: Creates an entry like "PATH=/opt/bin" on top of crontab
+    cron:
+        name: PATH
+        env: true
+        job: /sbin:/usr/sbin:$PATH
+        state: present
+
+  - name: Crontab for fstrim - daily
+    cron:
+      name: "fstrim for everything supported @ 01:00"
+      minute: "0"
+      hour: "1"
+      job: "fstrim -a"
+      state: present
+
+  - name: Crontab for fstrim at bootup
+    cron:
+      name: "fstrim for everything supported @reboot"
+      special_time: reboot
+      job: "fstrim -a"
+      state: present
+
+# <zabbix>
+  - name: Install zabbix-agent2
+    ansible.builtin.apt:
+      name:
+        - zabbix-agent2
+      state: latest
+
+  - name: Remove old zabbix-agent
+    ansible.builtin.apt:
+      name: 
+        - zabbix-agent
+      state: absent
+
+  - name: UFW - clean up old rules related to zabbix
+    ufw:
+      rule: allow
+      delete: true
+      from_ip: "{{ item.ip_addr }}"
+      proto: "{{ item.proto }}"
+      port: "{{ item.port }}"
+      comment: "{{ item.comment }}"
+    with_items:
+      - { ip_addr: "{{ zabbix7_ipv4 }}", proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix7.karlsbakk.net (IPv4)' }
+      - { ip_addr: "{{ zabbix7_ipv4 }}", proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix7.karlsbakk.net (IPv6)' }
+
+  - name: UFW - Allow zabbix traffic from zabbix
+    ufw:
+      rule: allow
+      from_ip: "{{ item.ip_addr }}"
+      proto: "{{ item.proto }}"
+      port: "{{ item.port }}"
+      comment: "{{ item.comment }}"
+    with_items:
+      - { ip_addr: "{{ zabbix7_ipv4 }}", proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix7.karlsbakk.net (IPv4)' }
+      - { ip_addr: "{{ zabbix7_ipv4 }}", proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix7.karlsbakk.net (IPv6)' }
+
+  - name: Copy plugins
+    ansible.builtin.copy:
+      src: 'files/usr/local/bin/{{ item.filename }}'
+      dest: '/usr/local/bin/{{ item.filename }}'
+      owner: root
+      group: root
+      mode: 0755
+    with_items:
+      - { filename: 'check-dns.sh' }
+      - { filename: 'zabbix_check_linux_updates.sh' }
+      - { filename: 'zabbix_check_needs_reboot.sh' }
+      - { filename: 'zabbix_checkro.pl' }
+      - { filename: 'zabbix_linux_distro_check.pl' }
+      - { filename: 'zabbix_kernelversioncheck.sh' }
+
+  - name: Create custom Zabbix agent config
+    ansible.builtin.blockinfile:
+      path: /etc/zabbix/zabbix_agent2.d/karlsbakk.conf
+      block: |
+        # vim:isfname-==:isfname-=,
+
+        # General settings - oppdatere dette litt naar ipv6-adr kommer
+        # zabbix-new.karlsbakk.net has address 2.58.14.136
+        #Server=77.40.158.123,2001:8c0:9302:4::123,193.29.58.196,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
+        #ServerActive=2001:8c0:9302:4::123,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
+        Server={{zabbix7_ipv6}},{{zabbix7_ipv4}}
+        ServerActive={{zabbix7_ipv6}},{{zabbix7_ipv4}}
+
+        Hostname={{inventory_hostname}}
+        Timeout=30
+
+        # Distro plugin
+        UserParameter=custom.distro.name,/usr/local/bin/zabbix_linux_distro_check.pl --name
+        UserParameter=custom.distro.version,/usr/local/bin/zabbix_linux_distro_check.pl --vers
+        UserParameter=custom.distro.arch,/usr/local/bin/zabbix_linux_distro_check.pl --arch
+        UserParameter=custom.distro.friendlyname,/usr/local/bin/zabbix_linux_distro_check.pl --friendly
+
+        # Reboot check
+        UserParameter=custom.rebootcheck,/usr/local/bin/zabbix_check_needs_reboot.sh --local
+
+        # Update check
+        UserParameter=custom.yumupdatescheck,/usr/local/bin/zabbix_check_linux_updates.sh
+
+        # Read only check
+        # UserParameter=custom.fsrocheck,/usr/local/bin/zabbix_check_fs_ro.pl
+        UserParameter=custom.fsrocheck,/usr/local/bin/zabbix_checkro.pl
+        UserParameter=vfs.fs.discovery_custom,/usr/local/bin/zabbix_check_fs_ro_lld.pl
+
+        # Kernel updates
+        UserParameter=custom.kernelversioncheck,/usr/local/bin/zabbix_kernelversioncheck.sh --local
+
+        # Check if server can do DNS lookups
+        UserParameter=custom.dnslookup,/usr/local/bin/check-dns.sh google.com
+      create: yes
+    notify:
+    - restart zabbix_agent2
+
+# <smtp>
+  - name: Comment out old SMTP Relay
+    ansible.builtin.replace:
+      path: /etc/postfix/main.cf
+      regexp: '^(relayhost .*)$'
+      replace: '# \1'
+    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and
+      ansible_facts['fqdn'] != "mta.karlsbakk.net" and
+      ansible_facts['fqdn'] != "litenskjerm1.local" and
+      ansible_facts['fqdn'] != "upbox-pi.local"
+
+  - name: Set SMTP Relay
+    ansible.builtin.lineinfile:
+      path: /etc/postfix/main.cf
+      regexp: '^relayhost'
+      line: relayhost = [mta.karlsbakk.net]:26
+    when: ansible_facts['fqdn'] != "mail.karlsbakk.net" and
+      ansible_facts['fqdn'] != "mta.karlsbakk.net" and
+      ansible_facts['fqdn'] != "litenskjerm1.local" and
+      ansible_facts['fqdn'] != "upbox-pi.local"
+    notify:
+      - reload postfix
+# </smtp>
+
+# <restic>
+  - name: Do a restic self-update
+    ansible.builtin.command: restic self-update
+
+  - name: Copy restic files
+    ansible.builtin.copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+      mode: '{{ item.mode }}'
+      force: '{{ item.force }}'
+      owner: root
+      group: root
+    with_items:
+      - { src: 'files/etc/default/restic', dest: '/etc/default/restic', mode: '0644', force: 'yes' }
+      - { src: 'files/usr/local/bin/backup-to-restic.sh', dest: '/usr/local/bin/backup-to-restic.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/bin/restic-backup-pre-exec.sh', dest: '/usr/local/bin/restic-backup-pre-exec.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/bin/restic-backup-post-exec.sh', dest: '/usr/local/bin/restic-backup-post-exec.sh', mode: '0755', force: 'no' }
+      - { src: 'files/usr/local/etc/restic-excludes.txt', dest: '/usr/local/etc/restic-excludes.txt', mode: '0644', force: 'no' }
+
+# - name: Configure ssh with backup host
+#   ansible.builtin.blockinfile:
+#     path: /root/.ssh/config
+#     create: yes
+#     block: |
+#       # host restic
+#       #     Hostname restic.karlsbakk.net
+#       #     User {{ ansible_hostname }}-bk
+
+  - name: Crontab for backup
+    cron:
+      name: "Backup to Restic at 0100 each night"
+      minute: "0"
+      hour: "1"
+      job: "/usr/local/bin/backup-to-restic.sh"
+      state: present
+# </restic>
+
+  - name: updatedb
+    ansible.builtin.command:
+      cmd: /usr/bin/updatedb
+
+  - name: Check if reboot required
+    stat:
+      path: /var/run/reboot-required
+    register: reboot_required_file
+
+  - name: Reboot if required
+    reboot:
+    when: reboot_required_file.stat.exists == true
+
+  handlers:
+    - name: restart zabbix_agent2
+      ansible.builtin.systemd:
+        name: zabbix-agent2
+        enabled: true
+        state: restarted
+
+    - name: restart fail2ban
+      ansible.builtin.systemd:
+        name: fail2ban
+        enabled: true
+        state: restarted
+
+    - name: reload postfix
+      ansible.builtin.systemd:
+        name: postfix
+        enabled: true
+        state: reloaded
+
+    - name: restart rsyslog
+      ansible.builtin.systemd:
+        name: rsyslog
+        state: restarted
+
+    - name: restart sysstat
+      ansible.builtin.systemd:
+        name: sysstat
+        state: restarted
+
+    - name: updatedb
+      command:
+        cmd: /usr/bin/updatedb
+
+
