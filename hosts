@@ -1,7 +1,7 @@
 # vim:ft=dosini:fdm=marker
 
 [armbian]
-192.168.10.204
+armbian-pi1.local
 
 [fail2ban]
 #francesco.karlsbakk.net

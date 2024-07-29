@@ -35,6 +35,8 @@
       name:
         - apt-transport-https
         - bc
+        - bind9-dnsutils
+        - bind9-host
         - binutils
         - curl
         - debian-security-support

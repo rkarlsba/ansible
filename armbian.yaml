@@ -1,6 +1,6 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
 
-- hosts: bookworm
+- hosts: armbian
   strategy: free
   vars:
     http_port: 80
@@ -38,6 +38,8 @@
         - apt-transport-https
         - avahi-daemon
         - bc
+        - bind9-dnsutils
+        - bind9-host
         - binutils
         - curl
         - debian-security-support
