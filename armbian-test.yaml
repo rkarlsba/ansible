@@ -1,0 +1,20 @@
+# vim:ts=2:sw=2:sts=2:et:ai:fdm=marker
+
+- hosts: armbian
+  strategy: free
+  vars:
+    testvar:
+      navn: jabbadabbaballestein
+      tekst: 'jabbadabbadoo - heter det visst - '
+  remote_user: root
+  tasks:
+  - name: Replace sources.list with a sane one
+    ansible.builtin.copy:
+      src: files/tmp/{{ testvar.navn }}
+      dest: /tmp/{{ testvar.navn }}
+      backup: false
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Add back
