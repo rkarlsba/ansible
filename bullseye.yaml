@@ -210,6 +210,9 @@
         au BufNewFile,BufRead *.gcode setf gcode
         let g:autoclose_on = 0
         let g:AutoPairs = {}
+
+        \" Maps
+        map <Esc>j :!python3 -m json.tool<CR>
     with_items:
       - { filename: '/root/.vimrc', owner: 'root', group: 'root' }
       - { filename: '/home/roy/.vimrc', owner: 'roy', group: 'roy' }

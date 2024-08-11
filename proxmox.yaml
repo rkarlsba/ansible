@@ -109,6 +109,8 @@
         let g:autoclose_on = 0
         let g:AutoPairs = {}
 
+        \" Maps
+        map <Esc>j :!python3 -m json.tool<CR>
   - name: update/create ~/.vimrc
     blockinfile:
       dest: /home/roy/.vimrc
