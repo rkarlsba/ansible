@@ -8,6 +8,7 @@
 ```
 ## 14:36
 Fra [feilmelding](feilmelding.txt)
+```json
 {
     "changed": false,
     "msg": "'/usr/bin/apt-get dist-upgrade --auto-remove' failed: E: Sub-process /usr/bin/dpkg returned an error code (1)\n",
