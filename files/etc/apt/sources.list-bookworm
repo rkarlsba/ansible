@@ -1,10 +1,10 @@
 # vim:ft=debsources
 
-deb http://deb.debian.org/debian/ bookworm main non-free-firmware contrib non-free
-deb-src http://deb.debian.org/debian/ bookworm main non-free-firmware contrib non-free
+deb http://deb.debian.org/debian/ bookworm main contrib non-free-firmware non-free
+deb-src http://deb.debian.org/debian/ bookworm main contrib non-free-firmware non-free
 
-deb http://security.debian.org/debian-security bookworm-security main non-free-firmware contrib non-free
-deb-src http://security.debian.org/debian-security bookworm-security main non-free-firmware contrib non-free
+deb http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware non-free
+deb-src http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware non-free
 
-deb http://deb.debian.org/debian/ bookworm-updates main non-free-firmware contrib non-free
-deb-src http://deb.debian.org/debian/ bookworm-updates main non-free-firmware contrib non-free
+deb http://deb.debian.org/debian/ bookworm-updates main contrib non-free-firmware non-free
+deb-src http://deb.debian.org/debian/ bookworm-updates main contrib non-free-firmware non-free
