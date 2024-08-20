@@ -455,7 +455,8 @@
 
 # <restic>
   - name: Do a restic self-update
-    ansible.builtin.command: restic self-update
+    ansible.builtin.command:
+      cmd: restic self-update
 
   - name: Copy restic files
     ansible.builtin.copy:
