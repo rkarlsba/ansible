@@ -54,7 +54,7 @@ homearse.karlsbakk.net
 
 [pi_bookworm]
 litenskjerm1.local
-upbox-pi.local
+# upbox-pi.local
 
 [dhcp_server]
 dhcp-server.karlsbakk.net
@@ -113,11 +113,11 @@ postgresql.karlsbakk.net
 raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
-savapage.karlsbakk.net
-snaptest.karlsbakk.net
+# savapage.karlsbakk.net
+# snaptest.karlsbakk.net
 ssh.karlsbakk.net
 # upbox-pi.local
-zabbix5.karlsbakk.net
+# zabbix5.karlsbakk.net
 zabbix7.karlsbakk.net
 
 [mail]
