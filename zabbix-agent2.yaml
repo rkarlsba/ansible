@@ -4,10 +4,29 @@
   strategy: free
   remote_user: root
   tasks:
-  - name: Add backports
+# Add zabbix key {{{
+#
+# - name: Add zabbix key
+#   ansible.builtin.copy:
+#     src: files/etc/apt/trusted.gpg.d/zabbix-official-repo.key
+#     dest: /etc/apt/trusted.gpg.d/zabbix-official-repo.key
+#     owner: root
+#     group: root
+#     mode: 0644
+#
+# }}}
+  - name: Add zabbix GPG key
     ansible.builtin.copy:
-      src: files/etc/apt/sources.list.d/backports.list
-      dest: /etc/apt/sources.list.d/backports.list
+      src: files/etc/apt/trusted.gpg.d/zabbix-official-repo-apr2024.gpg
+      dest: /etc/apt/trusted.gpg.d/zabbix-official-repo-apr2024.gpg
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Add zabbix APT list
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list.d/zabbix.list
+      dest: /etc/apt/sources.list.d/zabbix.list
       owner: root
       group: root
       mode: 0644
@@ -30,13 +49,14 @@
         - zabbix-agent
       state: absent
 
-  - name: UFW - Allow zabbix traffic from zabbix
-    ufw:
+  - name: UFW - Delete old zabbix traffic from zabbix
+    community.general.ufw:
       rule: allow
       from_ip: "{{ item.ip_addr }}"
       proto: "{{ item.proto }}"
       port: "{{ item.port }}"
       comment: "{{ item.comment }}"
+      delete: true
     with_items:
       - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
       - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)' }
@@ -44,6 +64,17 @@
       - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv6)' }
       - { ip_addr: '80.213.160.61', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv4)' }
       - { ip_addr: '2001:4641:4dfa::2ab1', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv6)' }
+
+  - name: UFW - Allow zabbix traffic from zabbix
+    community.general.ufw:
+      rule: allow
+      from_ip: "{{ item.ip_addr }}"
+      proto: "{{ item.proto }}"
+      port: "{{ item.port }}"
+      comment: "{{ item.comment }}"
+    with_items:
+      - { ip_addr: '2.58.14.136', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a07:efc0:1001:bcb0::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)' }
 
   - name: Copy plugins
     ansible.builtin.copy:
@@ -68,8 +99,9 @@
         # vim:isfname-==:isfname-=,
 
         # General settings
-        Server=127.0.0.1,::1,77.40.158.123,2001:8c0:9302:4::123,80.213.160.61,2001:4641:4dfa::2ab1,193.29.58.196,2a0a:51c0:0:1f:4ca5::2
-        ServerActive=2001:8c0:9302:4::123,2001:4641:4dfa::2ab1,2a0a:51c0:0:1f:4ca5::2
+        Server=2a07:efc0:1001:bcb0::2
+        ServerActive=2a07:efc0:1001:bcb0::2
+
         Hostname={{inventory_hostname}}
         Timeout=30
 

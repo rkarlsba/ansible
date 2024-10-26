@@ -113,7 +113,9 @@ postgresql.karlsbakk.net
 raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
-# savapage.karlsbakk.net
+savapage.karlsbakk.net
+squid.karlsbakk.net
+sympa.karlsbakk.net
 # snaptest.karlsbakk.net
 ssh.karlsbakk.net
 # upbox-pi.local
@@ -235,7 +237,7 @@ postgresql.karlsbakk.net
 #raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
-# smilla.karlsbakk.net
+smilla.karlsbakk.net
 ssh.karlsbakk.net
 # zabbix.karlsbakk.net
 zabbix7.karlsbakk.net

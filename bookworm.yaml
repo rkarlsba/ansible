@@ -343,36 +343,32 @@
         - zabbix-agent
       state: absent
 
-  - name: UFW - clean up old rules related to zabbix
-    ufw:
+  - name: UFW - Delete old zabbix traffic from zabbix
+    community.general.ufw:
       rule: allow
-      delete: true
       from_ip: "{{ item.ip_addr }}"
       proto: "{{ item.proto }}"
       port: "{{ item.port }}"
       comment: "{{ item.comment }}"
+      delete: true
     with_items:
       - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk5.net (IPv6)' }
+      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)' }
       - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv4)' }
       - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix2.karlsbakk.net (IPv6)' }
       - { ip_addr: '80.213.160.61', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv4)' }
       - { ip_addr: '2001:4641:4dfa::2ab1', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.malinux.no (IPv6)' }
 
   - name: UFW - Allow zabbix traffic from zabbix
-    ufw:
+    community.general.ufw:
       rule: allow
       from_ip: "{{ item.ip_addr }}"
       proto: "{{ item.proto }}"
       port: "{{ item.port }}"
       comment: "{{ item.comment }}"
     with_items:
-      - { ip_addr: '77.40.158.123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2001:8c0:9302:4::123', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix5.karlsbakk5.net (IPv6)' }
-      - { ip_addr: '193.29.58.196', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2a0a:51c0:0:1f:4ca5::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix6.karlsbakk.net (IPv6)' }
-      - { ip_addr: '2.58.14.136', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from new zabbix7.karlsbakk.net (IPv4)' }
-      - { ip_addr: '2a07:efc0:1001:bcb0::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from new zabbix7.karlsbakk.net (IPv6)' }
+      - { ip_addr: '2.58.14.136', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv4)' }
+      - { ip_addr: '2a07:efc0:1001:bcb0::2', proto: 'tcp', port: '10050', comment: 'Allow zabbix traffic from zabbix.karlsbakk.net (IPv6)' }
 
   - name: Copy plugins
     ansible.builtin.copy:
@@ -397,8 +393,8 @@
 
         # General settings - oppdatere dette litt naar ipv6-adr kommer
         # zabbix-new.karlsbakk.net has address 2.58.14.136
-        Server=77.40.158.123,2001:8c0:9302:4::123,193.29.58.196,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
-        ServerActive=2001:8c0:9302:4::123,2a0a:51c0:0:1f:4ca5::2,2a07:efc0:1001:bcb0::2
+        Server=2a07:efc0:1001:bcb0::2,2.58.14.136
+        ServerActive=2a07:efc0:1001:bcb0::2
 
         Hostname={{inventory_hostname}}
         Timeout=30
