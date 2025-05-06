@@ -6,6 +6,7 @@
     http_port: 80
     max_clients: 200
   remote_user: root
+# import_playbook: zabbix-agent2.yaml
   tasks:
   - name: Replace sources.list with a sane one
     ansible.builtin.copy:
@@ -38,12 +39,14 @@
         - bind9-dnsutils
         - bind9-host
         - binutils
+        - btop
         - curl
         - debian-security-support
         - etckeeper
         - fail2ban
         - finger
         - git
+        - gpg
         - htop
         - locales-all
         - lshw
@@ -248,6 +251,8 @@
 
         [ -f $HOME/.aliases ] && source $HOME/.aliases
 
+        PS1='${debian_chroot:+($debian_chroot)}\u@\H:\w\$ '
+
   - name: update /root/.bashrc
     ansible.builtin.blockinfile:
       dest: /root/.bashrc
@@ -264,6 +269,8 @@
         export EDITOR='vi'
 
         [ -f $HOME/.aliases ] && source $HOME/.aliases
+
+        PS1='${debian_chroot:+($debian_chroot)}\u@\H:\w\$ '
 
   - name: set timezone to Europe/Oslo
     timezone:
@@ -331,6 +338,15 @@
       state: present
 
 # <zabbix>
+  - name: fix sudoers
+    ansible.builtin.copy:
+      src: files/etc/sudoers.d/01zabbix
+      dest: /etc/sudoers.d/01zabbix
+      backup: true
+      owner: root
+      group: root
+      mode: 0644
+
   - name: Install zabbix-agent2
     ansible.builtin.apt:
       name:
@@ -424,6 +440,7 @@
       create: yes
     notify:
     - restart zabbix_agent2
+# </zabbix>
 
 # <smtp>
   - name: Comment out old SMTP Relay
@@ -469,14 +486,14 @@
       - { src: 'files/usr/local/bin/restic-backup-post-exec.sh', dest: '/usr/local/bin/restic-backup-post-exec.sh', mode: '0755', force: 'no' }
       - { src: 'files/usr/local/etc/restic-excludes.txt', dest: '/usr/local/etc/restic-excludes.txt', mode: '0644', force: 'no' }
 
-# - name: Configure ssh with backup host
-#   ansible.builtin.blockinfile:
-#     path: /root/.ssh/config
-#     create: yes
-#     block: |
-#       # host restic
-#       #     Hostname restic.karlsbakk.net
-#       #     User {{ ansible_hostname }}-bk
+  - name: Configure ssh with backup host
+    ansible.builtin.blockinfile:
+      path: /root/.ssh/config
+      create: yes
+      block: |
+        # host restic
+        #     Hostname restic.karlsbakk.net
+        #     User {{ ansible_hostname }}-bk
 
   - name: Crontab for backup
     cron:

@@ -1,20 +1,5 @@
 # vim:ts=2:sw=2:sts=2:et:ai:fdm=marker:isfname-==:isfname-=,
 
-- hosts: zabagt2
-  strategy: free
-  remote_user: root
-  tasks:
-# Add zabbix key {{{
-#
-# - name: Add zabbix key
-#   ansible.builtin.copy:
-#     src: files/etc/apt/trusted.gpg.d/zabbix-official-repo.key
-#     dest: /etc/apt/trusted.gpg.d/zabbix-official-repo.key
-#     owner: root
-#     group: root
-#     mode: 0644
-#
-# }}}
   - name: Add zabbix GPG key
     ansible.builtin.copy:
       src: files/etc/apt/trusted.gpg.d/zabbix-official-repo-apr2024.gpg
@@ -91,14 +76,6 @@
       - { filename: 'zabbix_linux_distro_check.pl' }
       - { filename: 'zabbix_kernelversioncheck.sh' }
       - { filename: 'smartctl-disks-discovery.pl' }
-
-  - name: Copy needed sudo config for zabbix-agent2
-    ansible.builtin.copy:
-      src: 'files/etc/sudoers.d/01zabbix'
-      dest: '/etc/sudoers.d/01zabbix'
-      owner: root
-      group: root
-      mode: 0600
 
   - name: Create custom Zabbix agent config
     ansible.builtin.blockinfile:

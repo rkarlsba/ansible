@@ -97,30 +97,37 @@ ns2.karlsbakk.net
 # Debian 12
 [bookworm]
 bitwarden.karlsbakk.net
+butikk.karlsbakk.net
 # Midlertidig nede for telling
+canvas.karlsbakk.net
 # crpi.karlsbakk.net 
-francesco.karlsbakk.net
+daabloe.karlsbakk.net
+# francesco.karlsbakk.net
 grafana.karlsbakk.net
 irc.karlsbakk.net
 koding.karlsbakk.net
 litenskjerm1.local
 mariadb.karlsbakk.net
+moodle.karlsbakk.net
 motion.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
+openvas.karlsbakk.net
 plex.karlsbakk.net
 postgresql.karlsbakk.net
 raidtest.karlsbakk.net
 restic.karlsbakk.net
 rtorrent.karlsbakk.net
 savapage.karlsbakk.net
-squid.karlsbakk.net
-sympa.karlsbakk.net
+# smilla.karlsbakk.net
+# squid.karlsbakk.net
+# sympa.karlsbakk.net
 # snaptest.karlsbakk.net
 ssh.karlsbakk.net
 # upbox-pi.local
 # zabbix5.karlsbakk.net
 zabbix7.karlsbakk.net
+192.168.10.204
 
 [mail]
 mail.karlsbakk.net
@@ -167,17 +174,23 @@ mqtt.karlsbakk.net
 [langchange]
 ipa.karlsbakk.net
 
+[sahkku]
+mikkel.karlsbakk.net
+
 [restic]
 #apache.karlsbakk.net
 #bitwarden.karlsbakk.net
+daabloe.karlsbakk.net
 #hjemmehjelp.karlsbakk.net
 #homearse.karlsbakk.net
 #irc.karlsbakk.net
+openvas.karlsbakk.net
 #mail.karlsbakk.net
 #mangopi1.karlsbakk.net
 #mangopi2.karlsbakk.net
 #mariadb.karlsbakk.net
-motion.karlsbakk.net
+#moodle.karlsbakk.net
+#motion.karlsbakk.net
 #mqtt.karlsbakk.net
 #ns2.karlsbakk.net
 #plex.karlsbakk.net

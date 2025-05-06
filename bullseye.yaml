@@ -46,6 +46,7 @@
         - apt-transport-https
         - bc
         - binutils
+        - btop
         - curl
         - debian-security-support
         - etckeeper
