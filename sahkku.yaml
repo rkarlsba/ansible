@@ -1,0 +1,30 @@
+# vim:ts=2:sw=2:sts=2:et:ai
+
+- hosts: sahkku
+  strategy: free
+
+  remote_user: root
+  vars:
+    custom_packages:
+    - apt-forktracer
+    - certbot
+    - nginx
+    - python3-certbot-nginx
+    - npm
+
+  tasks:
+  - name: Install nvm
+    ansible.builtin.shell: >
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    args:
+      creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+  - name: UFW - Allow ports
+    ufw:
+      rule: 'allow'
+      port: '{{ item.port }}'
+      proto: '{{ item.proto }}'
+      comment: '{{ item.comment }}'
+    with_items:
+      - { port: '80', proto: 'tcp', comment: 'Allow HTTP' }
+      - { port: '443', proto: 'tcp', comment: 'Allow HTTPS' }

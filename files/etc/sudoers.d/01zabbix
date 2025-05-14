@@ -1,0 +1,13 @@
+# vim:ft=sudoers
+#
+Defaults:zabbix !requiretty
+
+Cmnd_Alias FAIL2BAN = /usr/bin/fail2ban-client, /usr/local/bin/check_fail2ban.pl
+Cmnd_Alias SMARTCTL = /usr/sbin/smartctl, /sbin/smartctl
+Cmnd_Alias SMARTCTL_DISCOVERY = /etc/zabbix/scripts/smartctl-disks-discovery.pl, /usr/local/bin/smartctl-disks-discovery.pl
+
+zabbix ALL= (ALL) NOPASSWD: FAIL2BAN, SMARTCTL, SMARTCTL_DISCOVERY
+
+Defaults!FAIL2BAN !logfile, !syslog, !pam_session
+Defaults!SMARTCTL !logfile, !syslog, !pam_session
+Defaults!SMARTCTL_DISCOVERY !logfile, !syslog, !pam_session
