@@ -34,6 +34,7 @@
   - name: Install the normal stuff
     ansible.builtin.apt:
       name:
+        - apt-forktracer
         - apt-transport-https
         - bc
         - bind9-dnsutils
@@ -59,6 +60,7 @@
         - postfix
         - psmisc
         - pwgen
+        - resolvconf
         - restic
         - rsync
         - rsyslog
@@ -69,8 +71,8 @@
         - tmux
         - tshark
         - ufw
-        - unzip
         - unattended-upgrades
+        - unzip
         - uptimed
         - vim
         - virt-what
