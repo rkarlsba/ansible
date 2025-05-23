@@ -254,7 +254,8 @@
 
         [ -f $HOME/.aliases ] && source $HOME/.aliases
 
-        PS1='${debian_chroot:+($debian_chroot)}\u@\H:\w\$ '
+        BASH_FQDN=$( hostname -f )
+        PS1='${debian_chroot:+($debian_chroot)}\u@$BASH_FQDN:\w\$ '
 
   - name: update /root/.bashrc
     ansible.builtin.blockinfile:
@@ -273,7 +274,8 @@
 
         [ -f $HOME/.aliases ] && source $HOME/.aliases
 
-        PS1='${debian_chroot:+($debian_chroot)}\u@\H:\w\$ '
+        BASH_FQDN=$( hostname -f )
+        PS1='${debian_chroot:+($debian_chroot)}\u@$BASH_FQDN:\w\$ '
 
   - name: set timezone to Europe/Oslo
     timezone:
