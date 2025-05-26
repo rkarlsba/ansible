@@ -88,9 +88,7 @@ docker.karlsbakk.net
 # Debian 11
 [bullseye]
 apache.karlsbakk.net
-homearse.karlsbakk.net
-# IKKE snart på bookworm mail.karlsbakk.net - fikk ikke til roundcube
-mail.karlsbakk.net
+# homearse.karlsbakk.net
 # IKKE snart på bookworm ns2.karlsbakk.net - rulla tilbake der også - trur feilen ligger hos afraid.org, da, men, får se
 ns2.karlsbakk.net
 
@@ -99,6 +97,7 @@ ns2.karlsbakk.net
 bitwarden.karlsbakk.net
 # butikk.karlsbakk.net
 # canvas.karlsbakk.net
+collabora.karlsbakk.net
 # crpi.karlsbakk.net 
 daabloe.karlsbakk.net
 # francesco.karlsbakk.net
@@ -179,11 +178,11 @@ mikkel.karlsbakk.net
 [restic]
 #apache.karlsbakk.net
 #bitwarden.karlsbakk.net
-daabloe.karlsbakk.net
+#collabora.karlsbakk.net
+#daabloe.karlsbakk.net
 #hjemmehjelp.karlsbakk.net
 #homearse.karlsbakk.net
 #irc.karlsbakk.net
-openvas.karlsbakk.net
 #mail.karlsbakk.net
 #mangopi1.karlsbakk.net
 #mangopi2.karlsbakk.net
@@ -192,11 +191,12 @@ openvas.karlsbakk.net
 #motion.karlsbakk.net
 #mqtt.karlsbakk.net
 #ns2.karlsbakk.net
+#openvas.karlsbakk.net
 #plex.karlsbakk.net
-#rtorrent.karlsbakk.net
 #postgresql.karlsbakk.net
-#zabbix7.karlsbakk.net
 #retropie.local
+#rtorrent.karlsbakk.net
+#zabbix7.karlsbakk.net
 
 [zabbix_server]
 zabbix-dev2.karlsbakk.net
