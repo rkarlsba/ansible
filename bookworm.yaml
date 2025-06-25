@@ -64,6 +64,7 @@
         - restic
         - rsync
         - rsyslog
+        - strace
         - sudo
         - sysstat
         - telnet
@@ -352,6 +353,12 @@
       group: root
       mode: 0644
 
+  - name: For some reason, restart networking
+    ansible.builtin.systemd:
+      name: networking
+      enabled: true
+      state: restarted
+
   - name: Install zabbix-agent2
     ansible.builtin.apt:
       name:
@@ -474,7 +481,7 @@
 # <restic>
   - name: Do a restic self-update
     command:
-      cmd: restic self-update
+      cmd: sh -c 'restic self-update || true'
 
   - name: Copy restic files
     ansible.builtin.copy:

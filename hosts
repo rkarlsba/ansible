@@ -104,6 +104,7 @@ daabloe.karlsbakk.net
 grafana.karlsbakk.net
 irc.karlsbakk.net
 # koding.karlsbakk.net
+ldap-back-sql.karlsbakk.net
 litenskjerm1.local
 mariadb.karlsbakk.net
 # moodle.karlsbakk.net
@@ -126,6 +127,7 @@ ssh.karlsbakk.net
 # zabbix5.karlsbakk.net
 zabbix7.karlsbakk.net
 # 192.168.10.204
+qbittorrent.karlsbakk.net
 
 [mail]
 mail.karlsbakk.net
@@ -196,6 +198,7 @@ mikkel.karlsbakk.net
 #postgresql.karlsbakk.net
 #retropie.local
 #rtorrent.karlsbakk.net
+qbittorrent.karlsbakk.net
 #zabbix7.karlsbakk.net
 
 [zabbix_server]
