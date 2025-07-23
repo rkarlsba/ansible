@@ -360,23 +360,62 @@
       group: root
       mode: 0644
 
-  - name: For some reason, restart networking
+  - name: For some reason, restart networking???
     ansible.builtin.systemd:
       name: networking
       enabled: true
       state: restarted
-
-  - name: Install zabbix-agent2
-    ansible.builtin.apt:
-      name:
-        - zabbix-agent2
-      state: latest
 
   - name: Remove old zabbix-agent
     ansible.builtin.apt:
       name: 
         - zabbix-agent
       state: absent
+
+  - name: Add zabbix repo
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list.d/zabbix.list
+      dest: /etc/apt/sources.list.d/zabbix.list
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Add GPG key for the zabbix repo
+    ansible.builtin.copy:
+      src: files/etc/apt/trusted.gpg.d/zabbix-official-repo-apr2024.gpg
+      dest: /etc/apt/trusted.gpg.d/zabbix-official-repo-apr2024.gpg
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Add zabbix-tools repo
+    ansible.builtin.copy:
+      src: files/etc/apt/sources.list.d/zabbix-tools.list
+      dest: /etc/apt/sources.list.d/zabbix-tools.list
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Add GPG key for the zabbix-tools repo
+    ansible.builtin.copy:
+      src: files/etc/apt/trusted.gpg.d/zabbix-tools.gpg
+      dest: /etc/apt/trusted.gpg.d/zabbix-tools.gpg
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Install zabbix-agent2
+    ansible.builtin.apt:
+      name:
+        - zabbix-agent2
+      state: latest
+      update_cache: true
+
+# - name: And do a full upgrade to get the real shit
+#   ansible.builtin.apt:
+#     update_cache: true
+#     upgrade: dist
+#     autoremove: true
 
   - name: UFW - Delete old zabbix traffic from zabbix
     community.general.ufw:
