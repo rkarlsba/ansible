@@ -54,7 +54,6 @@ homearse.karlsbakk.net
 
 [pi_bookworm]
 litenskjerm1.local
-# upbox-pi.local
 
 [dhcp_server]
 dhcp-server.karlsbakk.net
@@ -102,6 +101,7 @@ collabora.karlsbakk.net
 daabloe.karlsbakk.net
 # francesco.karlsbakk.net
 grafana.karlsbakk.net
+homearse.karlsbakk.net
 irc.karlsbakk.net
 # koding.karlsbakk.net
 ldap-back-sql.karlsbakk.net

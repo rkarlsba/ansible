@@ -6,7 +6,6 @@
     http_port: 80
     max_clients: 200
   remote_user: root
-# import_playbook: zabbix-agent2.yaml
   tasks:
   - name: Replace sources.list with a sane one
     ansible.builtin.copy:
@@ -41,6 +40,7 @@
         - bind9-host
         - binutils
         - btop
+        - command-not-found
         - curl
         - debian-security-support
         - etckeeper
@@ -60,7 +60,6 @@
         - postfix
         - psmisc
         - pwgen
-        - resolvconf
         - restic
         - rsync
         - rsyslog
@@ -78,6 +77,14 @@
         - vim
         - virt-what
       state: latest
+
+  - name: apt-get update before running update-command-not-found
+    ansible.builtin.apt:
+      update_cache: true
+
+  - name: Run update-command-not-found
+    ansible.builtin.command:
+      cmd: update-command-not-found
 
   - name: Log everything to smilla
     ansible.builtin.copy:
@@ -118,15 +125,6 @@
         APT::Periodic::Update-Package-Lists "1";
         APT::Periodic::Unattended-Upgrade "1";
 
-# This is handled by resolvconf
-# - name: Install a sane resolv.conf
-#   ansible.builtin.copy:
-#     src: files/etc/resolv.conf
-#     dest: /etc/resolv.conf
-#     owner: root
-#     group: root
-#     mode: 0644
-
   - name: Install some sysctl files
     ansible.builtin.copy:
       src: 'files/etc/sysctl.d/{{ item }}'
@@ -160,6 +158,15 @@
       enabled: true
     notify:
       - restart sysstat
+
+  - name: Install datedist tool
+    ansible.builtin.copy:
+      src: files/usr/local/bin/datedist.pl
+      dest: /usr/local/bin/datedist
+      backup: false
+      owner: root
+      group: root
+      mode: 0755
 
   - name: Create group roy if it doesn't exist
     ansible.builtin.group:
@@ -480,7 +487,7 @@
 
 # <restic>
   - name: Do a restic self-update
-    command:
+    ansible.builtin.command:
       cmd: sh -c 'restic self-update || true'
 
   - name: Copy restic files
@@ -517,7 +524,7 @@
 # </restic>
 
   - name: updatedb
-    command:
+    ansible.builtin.command:
       cmd: /usr/bin/updatedb
 
   - name: Check if reboot required
@@ -559,7 +566,7 @@
         state: restarted
 
     - name: updatedb
-      command:
+      ansible.builtin.command:
         cmd: /usr/bin/updatedb
 
 
