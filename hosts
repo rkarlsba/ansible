@@ -84,15 +84,12 @@ docker.karlsbakk.net
 [buster]
 # Tomt!
 
-# Debian 11
+# Debian 11 (tomt)
 [bullseye]
-apache.karlsbakk.net
-# homearse.karlsbakk.net
-# IKKE snart på bookworm ns2.karlsbakk.net - rulla tilbake der også - trur feilen ligger hos afraid.org, da, men, får se
-ns2.karlsbakk.net
 
 # Debian 12
 [bookworm]
+apache.karlsbakk.net
 bitwarden.karlsbakk.net
 # butikk.karlsbakk.net
 # canvas.karlsbakk.net
@@ -111,6 +108,7 @@ mariadb.karlsbakk.net
 # motion.karlsbakk.net
 mqtt.karlsbakk.net
 mta.karlsbakk.net
+ns2.karlsbakk.net
 openvas.karlsbakk.net
 # plex.karlsbakk.net
 postgresql.karlsbakk.net
@@ -121,13 +119,16 @@ savapage.karlsbakk.net
 # smilla.karlsbakk.net
 # squid.karlsbakk.net
 # sympa.karlsbakk.net
-# snaptest.karlsbakk.net
+snaptest.karlsbakk.net
 ssh.karlsbakk.net
 # upbox-pi.local
 # zabbix5.karlsbakk.net
 zabbix7.karlsbakk.net
 # 192.168.10.204
 qbittorrent.karlsbakk.net
+
+# Debian 13
+[trixie]
 
 [mail]
 mail.karlsbakk.net
